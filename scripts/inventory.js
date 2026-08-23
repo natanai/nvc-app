@@ -5222,6 +5222,9 @@ function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
   const allEntries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
   const hasJournalEntries = allEntries.length > 0;
+  if (document.documentElement) {
+    document.documentElement.setAttribute('data-journal-state', hasJournalEntries ? 'populated' : 'empty');
+  }
   if (state.journalFiltersForm) state.journalFiltersForm.hidden = !hasJournalEntries;
   syncJournalHistoryFilterOptions();
   updateJournalFiltersResetVisibility();

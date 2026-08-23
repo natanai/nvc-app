@@ -45,6 +45,12 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(runtime.includes("state.journalFiltersForm.hidden = !hasJournalEntries"), 'filters must disappear when there is nothing to filter');
   assert.ok(runtime.includes("control.hidden = entries.length === 0"), 'empty filter dimensions must stay out of the UI');
   assert.ok(runtime.includes("'No matches'"), 'filtered-empty history must distinguish no matches from no entries');
+  assert.ok(build.includes('function journalHistoryPrepaintScript()'), 'Journal must classify local entry state before first paint');
+  assert.ok(build.includes("prepaintExtras: journalHistoryPrepaintScript()"), 'Journal must use the prepaint hook rather than a post-paint normalizer');
+  assert.ok(html.includes('data-journal-prepaint'), 'generated Journal must ship the tiny state bootstrap');
+  assert.ok(html.indexOf('data-journal-prepaint') < html.indexOf('styles/shared-density.css'), 'Journal state bootstrap must run before render-blocking page styles');
+  assert.ok(html.includes("html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history-controls"), 'empty Journal filters must be hidden by first-paint CSS');
+  assert.ok(runtime.includes("document.documentElement.setAttribute('data-journal-state'"), 'runtime must keep the prepaint state attribute synchronized after saves/deletes');
 
   // Regression target: populated Journal filters must fit the viewport by
   // construction. A wide horizontal select rail proved capable of exporting

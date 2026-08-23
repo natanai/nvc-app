@@ -241,6 +241,29 @@
         }
       })();
     </script>
+    <script data-journal-prepaint>
+      (function() {
+        var root = document.documentElement;
+        if (!root) return;
+        var hasEntries = false;
+        try {
+          var storage = window.localStorage;
+          var keys = ['journal:v2', 'nvcApp.journal', 'alexithymiaSupportJournal'];
+          for (var i = 0; i < keys.length; i += 1) {
+            var raw = storage && storage.getItem ? storage.getItem(keys[i]) : '';
+            if (!raw) continue;
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              hasEntries = true;
+              break;
+            }
+          }
+        } catch (error) {
+          hasEntries = false;
+        }
+        root.setAttribute('data-journal-state', hasEntries ? 'populated' : 'empty');
+      })();
+    <\/script>
     <style>:root {
   --plum: #74569b;
   --lavender: #ede4ff;
@@ -859,11 +882,11 @@ button.site-nav__magnet {
         gap: clamp(0.65rem, 1.8vw, 0.95rem);
       }
 
-      /* Journal inline-size containment contract. Populated History introduces
-         a horizontally scrollable filter rail, while Patterns and entry text
-         add intrinsic content. Every nested grid/flex item in that path must
-         be allowed to shrink to the viewport so intrinsic width stays inside
-         the component instead of widening the document on mobile Safari. */
+      /* Journal inline-size containment contract. Populated History adds a
+         bounded responsive filter grid, while Patterns and entry text add
+         intrinsic content. Every nested grid/flex item in that path must be
+         allowed to shrink to the viewport so intrinsic width stays inside the
+         component instead of widening the document on mobile Safari. */
       .page-wrapper,
       main[data-page-id='inventory-journal'],
       main[data-page-id='inventory-journal'] .journal-page,
@@ -926,6 +949,22 @@ button.site-nav__magnet {
 
       main[data-page-id='inventory-journal'] .journal-history-controls[hidden],
       main[data-page-id='inventory-journal'] .journal-history-control[hidden] {
+        display: none !important;
+      }
+
+      /* The Journal store is local browser state, but its empty/populated
+         classification is known synchronously. A tiny head bootstrap sets this
+         before first paint so the static shell never flashes the wrong state. */
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history-controls,
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history {
+        display: none !important;
+      }
+
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-empty--history {
+        display: grid !important;
+      }
+
+      html[data-journal-state='populated'] main[data-page-id='inventory-journal'] .journal-empty--history {
         display: none !important;
       }
 

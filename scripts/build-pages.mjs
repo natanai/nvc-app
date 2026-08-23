@@ -836,6 +836,7 @@ function htmlPage({
   socialImage = SOCIAL_CARD_SRC,
   twitterImage = TWITTER_CARD_SRC,
   socialAlt = 'Three colorful doorways symbolizing allneeds.app',
+  prepaintExtras = '',
   headExtras = '',
   bodyExtras = '',
   includeInventoryRuntime = true,
@@ -914,6 +915,7 @@ function htmlPage({
   const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
   const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
+  const prepaintHead = prepaintExtras ? `\n${prepaintExtras}` : '';
   const extraHead = headExtras ? `\n${headExtras}` : '';
   const extraBody = bodyExtras ? `${bodyExtras}\n` : '';
 
@@ -956,7 +958,7 @@ function htmlPage({
     <meta name="twitter:url" content="${canonicalUrl}" />
     <meta name="twitter:image" content="${twitterImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
-        ${themePreloadScript(basePath)}
+        ${themePreloadScript(basePath)}${prepaintHead}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -3215,6 +3217,32 @@ function renderInventoryPage() {
   writePage('inventory/index.html', html);
 }
 
+function journalHistoryPrepaintScript() {
+  return String.raw`    <script data-journal-prepaint>
+      (function() {
+        var root = document.documentElement;
+        if (!root) return;
+        var hasEntries = false;
+        try {
+          var storage = window.localStorage;
+          var keys = ['journal:v2', 'nvcApp.journal', 'alexithymiaSupportJournal'];
+          for (var i = 0; i < keys.length; i += 1) {
+            var raw = storage && storage.getItem ? storage.getItem(keys[i]) : '';
+            if (!raw) continue;
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              hasEntries = true;
+              break;
+            }
+          }
+        } catch (error) {
+          hasEntries = false;
+        }
+        root.setAttribute('data-journal-state', hasEntries ? 'populated' : 'empty');
+      })();
+    <\/script>`;
+}
+
 function renderInventoryJournalPage(needsList = []) {
   const needsDataset = needsList
     .map((need) => ({ slug: need.slug, title: need.title }))
@@ -3310,11 +3338,11 @@ function renderInventoryJournalPage(needsList = []) {
         gap: clamp(0.65rem, 1.8vw, 0.95rem);
       }
 
-      /* Journal inline-size containment contract. Populated History introduces
-         a horizontally scrollable filter rail, while Patterns and entry text
-         add intrinsic content. Every nested grid/flex item in that path must
-         be allowed to shrink to the viewport so intrinsic width stays inside
-         the component instead of widening the document on mobile Safari. */
+      /* Journal inline-size containment contract. Populated History adds a
+         bounded responsive filter grid, while Patterns and entry text add
+         intrinsic content. Every nested grid/flex item in that path must be
+         allowed to shrink to the viewport so intrinsic width stays inside the
+         component instead of widening the document on mobile Safari. */
       .page-wrapper,
       main[data-page-id='inventory-journal'],
       main[data-page-id='inventory-journal'] .journal-page,
@@ -3377,6 +3405,22 @@ function renderInventoryJournalPage(needsList = []) {
 
       main[data-page-id='inventory-journal'] .journal-history-controls[hidden],
       main[data-page-id='inventory-journal'] .journal-history-control[hidden] {
+        display: none !important;
+      }
+
+      /* The Journal store is local browser state, but its empty/populated
+         classification is known synchronously. A tiny head bootstrap sets this
+         before first paint so the static shell never flashes the wrong state. */
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history-controls,
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history {
+        display: none !important;
+      }
+
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-empty--history {
+        display: grid !important;
+      }
+
+      html[data-journal-state='populated'] main[data-page-id='inventory-journal'] .journal-empty--history {
         display: none !important;
       }
 
@@ -3851,6 +3895,7 @@ function renderInventoryJournalPage(needsList = []) {
     ],
     main,
     mainAttributes: 'data-page-id="inventory-journal"',
+    prepaintExtras: journalHistoryPrepaintScript(),
     headExtras: journalPageStyles,
     scripts: [
       { src: 'assets/js/journal/store.js', type: 'module', beforeBase: true },
