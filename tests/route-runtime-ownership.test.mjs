@@ -37,7 +37,8 @@ test('routes with immediately visible controller-owned features remain eager', a
 
   assert.ok(hasInventoryScript(need, '../../scripts/inventory.js'), 'Need detail pages expose an immediately usable strategy form');
   assert.ok(need.includes('data-strategy-form'), 'Need fixture must continue proving the visible strategy feature exists');
-  assert.ok(need.includes('class="strategy-card__save"'), 'Need fixture must continue proving visible strategy-save controls exist');
+  assert.ok(need.includes('data-save-to-device-button="true"'), 'Need fixture must continue proving compiler-authored visible strategy-save controls exist');
+  assert.ok(need.includes('data-save-to-profile-button="true"'), 'Need fixture must continue proving the Profile save control exists before runtime binding');
 
   assert.ok(hasInventoryScript(inventory, '../scripts/inventory.js'), 'Inventory workspace must keep its canonical controller eager');
   assert.ok(inventory.includes('id="inventory-list"'), 'Inventory fixture should remain the actual workspace');
