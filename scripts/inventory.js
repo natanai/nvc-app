@@ -3762,7 +3762,6 @@ function setupJournalSection() {
     if (typeof renderJournalForm === 'function' && mount) {
       try {
         renderJournalForm(mount, {
-          variant: mount.dataset.journalVariant || 'inventory',
           idPrefix: mount.dataset.journalIdPrefix || 'journal',
         });
       } catch (error) {
@@ -4098,7 +4097,6 @@ function setupStandaloneJournalOverlay() {
     const module = document.createElement('div');
     module.className = 'journal-module';
     module.dataset.journalModule = '';
-    module.dataset.journalVariant = 'inventory';
     module.dataset.journalIdPrefix = 'journal';
 
     formSection.append(module);
@@ -4110,7 +4108,6 @@ function setupStandaloneJournalOverlay() {
     mount = document.createElement('div');
     mount.className = 'journal-module';
     mount.dataset.journalModule = '';
-    mount.dataset.journalVariant = 'inventory';
     mount.dataset.journalIdPrefix = 'journal';
     formSection.append(mount);
   }
@@ -4122,7 +4119,6 @@ function setupStandaloneJournalOverlay() {
     if (typeof renderJournalForm === 'function') {
       try {
         renderJournalForm(mount, {
-          variant: mount.dataset.journalVariant || 'inventory',
           idPrefix: mount.dataset.journalIdPrefix || 'journal',
         });
       } catch (error) {

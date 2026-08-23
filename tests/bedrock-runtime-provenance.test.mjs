@@ -64,3 +64,48 @@ test('global Menu defers optional Bluesky loading until Account & data intent', 
   assert.ok(setupIndex >= 0 && drillIndex > setupIndex && ensureIndex > drillIndex);
   assert.equal(shell.slice(setupIndex, drillIndex).includes('ensureBlueskyModule(rootUrl);'), false);
 });
+
+
+test('Journal form semantics have one canonical owner', () => {
+  const moduleSource = read('assets/js/journal/module.js');
+  const inventory = read('scripts/inventory.js');
+  const support = read('scripts/alexithymia-support.js');
+  const pages = read('scripts/build-pages.mjs');
+  const journal = read('inventory/journal/index.html');
+  const supportPage = read('alexithymia-support/index.html');
+
+  assert.equal(moduleSource.includes('JOURNAL_VARIANT_CONFIG'), false, 'parallel Journal semantic variants must stay retired');
+  assert.equal(moduleSource.includes('journalVariant'), false, 'Journal module must not branch semantics by context name');
+  assert.equal((moduleSource.match(/Optional reflection prompts/g) || []).length, 1, 'generic Journal copy must have one canonical owner');
+  for (const duplicateChannel of [
+    'journalPromptsHeading',
+    'journalPrompts',
+    'journalNotesPlaceholder',
+    'journalNotesLabel',
+    'journalTagsPlaceholder',
+    'journalNeedsPlaceholder',
+    'journalSubmitLabel',
+    'journalClearLabel',
+    'journalOpenLabel',
+  ]) {
+    assert.equal(moduleSource.includes(duplicateChannel), false, duplicateChannel + ' must not reopen per-mount semantic drift');
+  }
+
+  assert.equal(inventory.includes('journalVariant'), false, 'shared runtime binds the canonical Journal without selecting a variant');
+  assert.equal(pages.includes('data-journal-variant='), false, 'compiler must not serialize semantic Journal variants');
+  assert.equal(journal.includes('data-journal-variant='), false, 'generated Journal must not ship a semantic variant marker');
+  assert.ok(pages.includes('data-journal-notes-rows=\"5\"'), 'fallback may keep context-specific density without redefining Journal semantics');
+
+  for (const duplicateImplementation of [
+    'journalController',
+    'renderJournalForm',
+    'handleJournalSubmit',
+    'gatherSupportJournalData',
+    'createLaneEntry',
+    'renderJournalHistory',
+  ]) {
+    assert.equal(support.includes(duplicateImplementation), false, 'Alexithymia must not maintain a parallel Journal implementation: ' + duplicateImplementation);
+  }
+  assert.ok(supportPage.includes('data-support-journal-open'), 'Alexithymia keeps only its contextual entry point into the shared Journal');
+  assert.ok(supportPage.includes('same Journal history as entries made elsewhere'), 'Alexithymia context must describe shared Journal ownership explicitly');
+});

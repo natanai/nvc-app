@@ -3422,7 +3422,7 @@ function renderInventoryJournalPage(needsList = []) {
                 <div class="journal-form-section__header">
                   <h2 id="journal-form-heading" class="section-title">New entry</h2>
                 </div>
-                <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
+                <div class="journal-module" data-journal-module data-journal-id-prefix="journal">
                   <noscript><p class="journal-status">Enable JavaScript to use the journal form.</p></noscript>
                 </div>
               </section>

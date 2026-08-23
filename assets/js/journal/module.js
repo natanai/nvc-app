@@ -164,7 +164,6 @@ const deepMerge = (...sources) => {
 };
 
 const JOURNAL_BASE_CONFIG = {
-  variant: 'inventory',
   idPrefix: 'journal',
   needsMode: 'catalog-multiselect',
   intensityRange: { min: 0, max: 10, defaultValue: DEFAULT_INTENSITY },
@@ -254,102 +253,30 @@ const JOURNAL_BASE_CONFIG = {
   },
 };
 
-const JOURNAL_VARIANT_CONFIG = {
-  inventory: {},
-  support: {
-    variant: 'support',
-    idPrefix: 'support-journal',
-    needsMode: 'catalog-multiselect',
-    hints: {
-      emotion: '',
-      needs: '',
-      tags: 'Separate tags with commas to group related reflections.',
-    },
-    placeholders: {
-      needs: 'Choose needs',
-      notes: 'Let your reflection spill across the page…',
-    },
-    notes: { rows: 12 },
-    labels: {
-      notes: 'Reflection (saved only on this device)',
-    },
-    prompts: {
-      heading: 'Optional reflection prompts',
-      items: [
-        'What did you notice in your body, thoughts, or emotions?',
-        'What was happening when you first noticed it?',
-        'Which feeling or need best fits what you noticed?',
-        'What response or support would be useful now?',
-      ],
-    },
-    footnote: {
-      text: 'Saved reflections now appear in the Inventory journal tab so you can review or export them later.',
-      classes: ['support-note', 'support-note--subtle'],
-    },
-  },
-};
-
 const parseDatasetOptions = (dataset = {}) => {
   const options = {};
-  if (dataset.journalVariant) {
-    options.variant = dataset.journalVariant;
-  }
   if (dataset.journalIdPrefix) {
     options.idPrefix = dataset.journalIdPrefix;
-  }
-  if (dataset.journalNeedsMode) {
-    options.needsMode = dataset.journalNeedsMode;
-  }
-  if (dataset.journalSubmitLabel) {
-    options.actions = options.actions || {};
-    options.actions.submitLabel = dataset.journalSubmitLabel;
-  }
-  if (dataset.journalClearLabel) {
-    options.actions = options.actions || {};
-    options.actions.clearLabel = dataset.journalClearLabel;
-  }
-  if (dataset.journalOpenLabel) {
-    options.actions = options.actions || {};
-    options.actions.openLink = options.actions.openLink || {};
-    options.actions.openLink.label = dataset.journalOpenLabel;
-  }
-  if (dataset.journalFootnote) {
-    options.footnote = options.footnote || {};
-    options.footnote.text = dataset.journalFootnote;
-  }
-  if (dataset.journalPromptsHeading) {
-    options.prompts = options.prompts || {};
-    options.prompts.heading = dataset.journalPromptsHeading;
-  }
-  if (dataset.journalPrompts) {
-    options.prompts = options.prompts || {};
-    options.prompts.items = dataset.journalPrompts
-      .split('|')
-      .map((item) => item.trim())
-      .filter(Boolean);
-  }
-  if (dataset.journalNotesPlaceholder) {
-    options.placeholders = options.placeholders || {};
-    options.placeholders.notes = dataset.journalNotesPlaceholder;
   }
   if (dataset.journalNotesRows) {
     const rows = Number.parseInt(dataset.journalNotesRows, 10);
     if (Number.isFinite(rows) && rows > 0) {
-      options.notes = options.notes || {};
-      options.notes.rows = Math.min(24, rows);
+      options.notes = { rows: Math.min(24, rows) };
     }
   }
-  if (dataset.journalNotesLabel) {
-    options.labels = options.labels || {};
-    options.labels.notes = dataset.journalNotesLabel;
+  return options;
+};
+
+const normalizeRenderContext = (context = {}) => {
+  const options = {};
+  if (typeof context.idPrefix === 'string' && context.idPrefix.trim()) {
+    options.idPrefix = context.idPrefix.trim();
   }
-  if (dataset.journalTagsPlaceholder) {
-    options.placeholders = options.placeholders || {};
-    options.placeholders.tags = dataset.journalTagsPlaceholder;
-  }
-  if (dataset.journalNeedsPlaceholder) {
-    options.placeholders = options.placeholders || {};
-    options.placeholders.needs = dataset.journalNeedsPlaceholder;
+  if (context.notesRows !== undefined) {
+    const rows = Number.parseInt(context.notesRows, 10);
+    if (Number.isFinite(rows) && rows > 0) {
+      options.notes = { rows: Math.min(24, rows) };
+    }
   }
   return options;
 };
@@ -662,7 +589,7 @@ const buildActions = (config) => {
   return { container, statusEl, openLink };
 };
 
-export function renderJournalForm(root, overrides = {}) {
+export function renderJournalForm(root, context = {}) {
   if (typeof document === 'undefined') {
     return null;
   }
@@ -671,20 +598,16 @@ export function renderJournalForm(root, overrides = {}) {
     throw new Error('renderJournalForm requires a valid root element');
   }
   const datasetOptions = parseDatasetOptions(container.dataset || {});
-  const variantKey = overrides.variant || datasetOptions.variant || container.dataset?.journalVariant || 'inventory';
-  const variantConfig = JOURNAL_VARIANT_CONFIG[variantKey] || {};
-  const config = deepMerge(JOURNAL_BASE_CONFIG, variantConfig, datasetOptions, overrides || {});
+  const contextOptions = normalizeRenderContext(context || {});
+  const config = deepMerge(JOURNAL_BASE_CONFIG, datasetOptions, contextOptions);
 
   container.classList.add(...(config.classes.container || []));
-  container.dataset.journalVariant = config.variant;
   container.innerHTML = '';
 
   const form = createElement('form', {
     classes: config.classes.form || [],
     attrs: { 'data-journal-form': '', novalidate: true },
   });
-  form.dataset.journalVariant = config.variant;
-
   const grid = createElement('div', { classes: ['journal-meta-group'] });
 
   grid.append(buildFeelingField(config), buildNeedsField(config), buildTagsField(config));

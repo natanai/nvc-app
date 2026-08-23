@@ -86,19 +86,9 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     compassTouched: false,
     energyValue: 0,
     valenceValue: 0,
-    draftPath: typeof window !== 'undefined' ? window.location.pathname : '',
-    draftTimer: null,
-    savedFeedbackTimer: null,
-    lastSavedEntryId: '',
-    saveButtonDefaultLabel: '',
-    journalController: null,
-    needs: [],
-    feelings: [],
     bodyCandidates: [],
     compassCandidates: [],
     candidateEmotions: [],
-    selectedEmotionConfidence: null,
-    regulationLog: new Set(),
     preferredBreathPattern: 'slow_446',
     bodySuggestionMeta: null,
     compassSuggestionMeta: null,
@@ -115,75 +105,15 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
   const compassRoot = document.querySelector('[data-compass]');
   const emotionLibrary = document.querySelector('[data-emotion-library]');
 
-  let journalForm = null;
-  let journalStatus = null;
-  let journalHistory = null;
-  let regulationCard = null;
-  let communicationCard = null;
-  let supportJournalEmotion = null;
-  let supportJournalIntensity = null;
-  let supportJournalIntensityDisplay = null;
-  let supportJournalNeedsInput = null;
-  let supportJournalTagsInput = null;
-  let supportJournalNotes = null;
-  let supportJournalSubmit = null;
-  let supportJournalOpenLink = null;
+  const regulationCard = document.querySelector('[data-regulation-card]');
+  const communicationCard = document.querySelector('[data-communication-card]');
   let evidencePopover = null;
   let evidencePopoverContent = null;
   let evidencePopoverClose = null;
   let evidencePopoverOverlay = null;
   let evidencePopoverFocusReturn = null;
 
-  const DRAFT_DEBOUNCE_MS = 1200;
-
-  const journalStep = document.querySelector('[data-step="journal"]');
-  const journalMount = journalStep?.querySelector('[data-journal-module]') || null;
-  const renderJournalForm = window.NVCJournal?.renderForm;
-  if (journalMount && typeof renderJournalForm === 'function') {
-    try {
-      renderJournalForm(journalMount, {
-        variant: journalMount.dataset.journalVariant || 'support',
-        idPrefix: journalMount.dataset.journalIdPrefix || 'support-journal',
-      });
-    } catch (error) {
-      console.warn('Unable to render lane journal form', error);
-    }
-  }
-  const baseJournalForm = journalMount?.querySelector('[data-journal-form]') || journalStep?.querySelector('[data-journal-form]');
-  if (journalStep && baseJournalForm && typeof window.NVCJournal?.createForm === 'function') {
-    try {
-      state.journalController = window.NVCJournal.createForm(journalStep, {
-        draftPath: state.draftPath,
-        autoDraft: false,
-      });
-    } catch (error) {
-      console.warn('Unable to initialise lane journal module', error);
-      state.journalController = null;
-    }
-  }
-
-  journalForm = state.journalController?.form || baseJournalForm || null;
-  journalStatus = state.journalController?.statusEl || journalStep?.querySelector('[data-journal-status]');
-  journalHistory = document.querySelector('[data-journal-history]');
-  regulationCard = document.querySelector('[data-regulation-card]');
-  communicationCard = document.querySelector('[data-communication-card]');
-  supportJournalEmotion = state.journalController?.emotionInput || journalStep?.querySelector('[data-journal-emotion]');
-  supportJournalIntensity = state.journalController?.intensityInput || journalStep?.querySelector('[data-journal-intensity]');
-  supportJournalIntensityDisplay =
-    state.journalController?.intensityDisplay || journalStep?.querySelector('[data-journal-intensity-display]');
-  supportJournalNeedsInput = state.journalController?.needsSelect || journalStep?.querySelector('[data-journal-needs]');
-  supportJournalTagsInput = state.journalController?.tagsInput || journalStep?.querySelector('[data-journal-tags]');
-  supportJournalNotes = state.journalController?.notesInput || journalStep?.querySelector('[data-journal-notes]');
-  supportJournalSubmit = state.journalController?.saveButton || journalStep?.querySelector('[data-journal-submit]');
-  supportJournalOpenLink = journalStep?.querySelector('[data-journal-open-link]');
-
-  state.saveButtonDefaultLabel = supportJournalSubmit?.textContent || 'Save reflection';
-
   let breathingTimer = null;
-
-  function getJournalStore() {
-    return window.NVCJournalStore || window.NVCJournal?.store || null;
-  }
 
   function showOnlyStep(key) {
     const active = steps[key];
@@ -399,7 +329,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     const sequence = BREATH_PATTERNS[patternKey] || BREATH_PATTERNS.slow_446;
     const label = BREATH_PATTERN_LABELS[patternKey] || 'Guided breath';
     state.preferredBreathPattern = patternKey;
-    state.regulationLog.add(patternKey);
     let elapsed = 0;
     let phaseIndex = 0;
     let remaining = sequence[phaseIndex].seconds;
@@ -791,8 +720,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       updateRegionSummary(option.regionId);
     }
     if (!skipDraft) {
-      resetLaneSaveButton();
-      scheduleLaneDraftSave();
     }
   }
 
@@ -867,8 +794,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     if (option) {
       updateRegionSummary(option.regionId);
     }
-    resetLaneSaveButton();
-    scheduleLaneDraftSave();
   }
 
   function handleSensationSubmit(event) {
@@ -980,8 +905,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     state.quadrant = mergeCompassAndInferredZone(state.compassQuadrant, null);
     updateBreathingPatternFromZone();
     updateCandidateSnapshot();
-    resetLaneSaveButton();
-    scheduleLaneDraftSave();
     regionElements.forEach((_, regionId) => {
       collapseRegion(regionId);
       setRegionToggleState(regionId, { completed: false });
@@ -1407,9 +1330,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     setActiveTag(sourceTag);
     state.selectedEmotion = emotionKey;
     const candidate = state.candidateEmotions.find((item) => item.key === emotionKey);
-    state.selectedEmotionConfidence = candidate ? candidate.confidence ?? null : null;
-    state.regulationLog.add('labeling');
-    prefillSupportEmotion(emotionKey, { force: true });
 
     const html = `
       <div class="emotion-detail">
@@ -1727,460 +1647,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     statusNode.textContent = 'Playing the sentence out loud—pause or stop if you prefer to speak it yourself.';
   }
 
-  function renderJournalHistory() {
-    if (!journalHistory) return;
-    const store = getJournalStore();
-    const entries = store ? store.list() : [];
-    journalHistory.innerHTML = '';
-    if (!entries.length) {
-      const empty = document.createElement('p');
-      empty.className = 'support-note';
-      empty.textContent = 'Your saved reflections will appear here and in the Inventory journal tab.';
-      journalHistory.appendChild(empty);
-      return;
-    }
-    const title = document.createElement('p');
-    title.className = 'journal-history__title';
-    title.textContent = 'Recent reflections on this device';
-    journalHistory.appendChild(title);
-    const list = document.createElement('ul');
-    list.className = 'journal-history';
-    entries
-      .slice(0, 5)
-      .forEach((entry) => {
-        const item = document.createElement('li');
-        item.className = 'journal-history__item';
-        const date = entry.dateISO ? new Date(entry.dateISO).toLocaleString() : '';
-        const emotion = entry.emotion ? `${EMOTION_LIBRARY[entry.emotion]?.name ?? entry.emotion} — ` : '';
-        item.textContent = `${date}: ${emotion}${entry.notes || ''}`;
-        list.appendChild(item);
-      });
-    journalHistory.appendChild(list);
-    const link = document.createElement('a');
-    link.className = 'support-button support-button--link support-button--ghost';
-    link.href = `${basePath}inventory/journal/`;
-    link.textContent = 'Open full Journal History';
-    journalHistory.appendChild(link);
-  }
-
-  function normalizeJournalTagsValue(value) {
-    if (window.NVCJournal?.normalizeJournalTags) {
-      return window.NVCJournal.normalizeJournalTags(value);
-    }
-    if (!value) {
-      return [];
-    }
-    const segments = value.split(',');
-    const seen = new Set();
-    const tags = [];
-    segments.forEach((segment) => {
-      const trimmed = segment.replace(/^#/, '').trim();
-      if (!trimmed) {
-        return;
-      }
-      const key = trimmed.toLowerCase();
-      if (seen.has(key)) {
-        return;
-      }
-      seen.add(key);
-      tags.push(trimmed);
-    });
-    return tags;
-  }
-
-  function joinJournalTagsValue(tags, { trailing = false } = {}) {
-    if (window.NVCJournal?.joinJournalTags) {
-      return window.NVCJournal.joinJournalTags(tags, { trailing });
-    }
-    const list = Array.isArray(tags) ? tags.filter(Boolean) : [];
-    if (!list.length) {
-      return '';
-    }
-    const joined = list.join(', ');
-    return trailing ? `${joined}, ` : joined;
-  }
-
-  function updateLaneIntensityDisplay(value) {
-    if (state.journalController && typeof state.journalController.updateIntensityDisplay === 'function') {
-      state.journalController.updateIntensityDisplay(value);
-      return;
-    }
-    if (!supportJournalIntensityDisplay) {
-      return;
-    }
-    const displayValue = Number.isFinite(value) ? Math.max(0, Math.min(10, Math.round(value))) : 0;
-    supportJournalIntensityDisplay.textContent = `${displayValue}/10`;
-  }
-
-  function handleLaneIntensityInput(event) {
-    const value = Number(event.target?.value);
-    updateLaneIntensityDisplay(value);
-    resetLaneSaveButton();
-    scheduleLaneDraftSave();
-  }
-
-  function gatherSupportJournalData() {
-    if (state.journalController && typeof state.journalController.collectData === 'function') {
-      return state.journalController.collectData();
-    }
-    const notes = supportJournalNotes?.value || '';
-    const emotionValue = supportJournalEmotion?.value || '';
-    const intensityValue = supportJournalIntensity ? Number(supportJournalIntensity.value) : undefined;
-    const intensity =
-      Number.isFinite(intensityValue) && intensityValue >= 0
-        ? Math.min(10, Math.round(intensityValue))
-        : undefined;
-    const tags = normalizeJournalTagsValue(supportJournalTagsInput?.value || '');
-    const needs = supportJournalNeedsInput
-      ? (supportJournalNeedsInput.value || '')
-          .split(',')
-          .map((value) => value.trim())
-          .filter(Boolean)
-      : [];
-    return {
-      notes,
-      emotion: emotionValue.trim(),
-      intensity,
-      needs,
-      tags,
-    };
-  }
-
-  function createLaneEntry(overrides = {}) {
-    const factory = window.NVCJournal?.makeEntry || window.NVCJournal?.emptyEntry;
-    if (typeof factory === 'function') {
-      return factory({ ...overrides });
-    }
-    const fallback = {
-      id: `lane-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`,
-      dateISO: new Date().toISOString(),
-      emotion: '',
-      intensity: undefined,
-      confidence: undefined,
-      sensations: [],
-      needs: [],
-      strategies: [],
-      tags: [],
-      notes: '',
-      energy: undefined,
-      valence: undefined,
-      zone: null,
-      emotionCandidates: [],
-      chosenEmotionConfidence: undefined,
-      regulationUsed: [],
-      source: 'lane',
-    };
-    return { ...fallback, ...overrides };
-  }
-
-  function setSupportOpenLink(id) {
-    if (!supportJournalOpenLink) {
-      return;
-    }
-    if (!id) {
-      clearSupportOpenLink();
-      return;
-    }
-    state.lastSavedEntryId = id;
-    supportJournalOpenLink.href = `${basePath}inventory/journal/?e=${encodeURIComponent(id)}#edit`;
-    supportJournalOpenLink.hidden = false;
-  }
-
-  function clearSupportOpenLink() {
-    if (!supportJournalOpenLink) {
-      return;
-    }
-    state.lastSavedEntryId = '';
-    supportJournalOpenLink.hidden = true;
-    supportJournalOpenLink.removeAttribute('href');
-  }
-
-  function resetLaneSaveButton() {
-    if (!supportJournalSubmit) {
-      return;
-    }
-    if (state.savedFeedbackTimer) {
-      clearTimeout(state.savedFeedbackTimer);
-      state.savedFeedbackTimer = null;
-    }
-    supportJournalSubmit.textContent = state.saveButtonDefaultLabel;
-    supportJournalSubmit.disabled = false;
-    supportJournalSubmit.removeAttribute('aria-disabled');
-  }
-
-  function showLaneSavedFeedback() {
-    if (!supportJournalSubmit) {
-      return;
-    }
-    resetLaneSaveButton();
-    supportJournalSubmit.textContent = 'Saved ✓';
-    supportJournalSubmit.disabled = true;
-    supportJournalSubmit.setAttribute('aria-disabled', 'true');
-    state.savedFeedbackTimer = setTimeout(() => {
-      supportJournalSubmit.textContent = state.saveButtonDefaultLabel;
-      supportJournalSubmit.disabled = false;
-      supportJournalSubmit.removeAttribute('aria-disabled');
-      state.savedFeedbackTimer = null;
-    }, 1500);
-  }
-
-  function scheduleLaneDraftSave() {
-    const store = getJournalStore();
-    if (!store) {
-      return;
-    }
-    if (state.draftTimer) {
-      clearTimeout(state.draftTimer);
-    }
-    state.draftTimer = setTimeout(() => {
-      state.draftTimer = null;
-      saveLaneDraft();
-    }, DRAFT_DEBOUNCE_MS);
-  }
-
-  function saveLaneDraft() {
-    const store = getJournalStore();
-    if (!store || !journalForm) {
-      return;
-    }
-    const data = gatherSupportJournalData();
-    const selections = getSelectedSensations();
-    const sensations = serializeSensationSelections(selections);
-    const hasContent =
-      data.notes.trim().length > 0 ||
-      data.emotion ||
-      (Array.isArray(data.tags) && data.tags.length > 0) ||
-      (Array.isArray(data.needs) && data.needs.length > 0);
-    if (!hasContent) {
-      store.clearDraft(state.draftPath);
-      return;
-    }
-    const draft = {
-      notes: data.notes,
-      emotion: data.emotion,
-      intensity: data.intensity,
-      tags: data.tags,
-      needs: data.needs,
-      energy: state.energyValue,
-      valence: state.valenceValue,
-      sensations,
-    };
-    store.saveDraft(state.draftPath, draft);
-  }
-
-  function applyLaneDraft() {
-    const store = getJournalStore();
-    if (!store || !journalForm) {
-      return;
-    }
-    const draft = store.loadDraft(state.draftPath);
-    if (!draft) {
-      return;
-    }
-    const draftTags = Array.isArray(draft.tags)
-      ? draft.tags
-      : typeof draft.tags === 'string'
-      ? normalizeJournalTagsValue(draft.tags)
-      : [];
-    const draftData = {
-      notes: typeof draft.notes === 'string' ? draft.notes : '',
-      emotion: typeof draft.emotion === 'string' ? draft.emotion : '',
-      intensity: Number.isFinite(draft.intensity) ? Number(draft.intensity) : undefined,
-      tags: draftTags,
-      needs: Array.isArray(draft.needs) ? draft.needs : [],
-    };
-    if (state.journalController && typeof state.journalController.setValues === 'function') {
-      state.journalController.setValues(draftData, { trailingTags: draftTags.length > 0 });
-    } else {
-      if (supportJournalNotes) {
-        supportJournalNotes.value = draftData.notes;
-      }
-      if (supportJournalEmotion) {
-        supportJournalEmotion.value = draftData.emotion;
-      }
-      if (supportJournalIntensity && Number.isFinite(draftData.intensity)) {
-        supportJournalIntensity.value = Math.max(0, Math.min(10, Math.round(draftData.intensity)));
-        updateLaneIntensityDisplay(Number(supportJournalIntensity.value));
-      }
-      if (supportJournalNeedsInput) {
-        supportJournalNeedsInput.value = draftData.needs.length ? `${draftData.needs.join(', ')}` : '';
-      }
-      if (supportJournalTagsInput) {
-        supportJournalTagsInput.value = joinJournalTagsValue(draftTags, { trailing: draftTags.length > 0 });
-      }
-    }
-    if (!state.journalController && supportJournalIntensity) {
-      const current = Number(supportJournalIntensity.value);
-      updateLaneIntensityDisplay(Number.isFinite(current) ? current : 5);
-    }
-    if (supportJournalEmotion && draftData.emotion) {
-      supportJournalEmotion.dataset.autofill = 'false';
-    }
-    if (typeof draft.energy === 'number') {
-      state.energyValue = draft.energy;
-    }
-    if (typeof draft.valence === 'number') {
-      state.valenceValue = draft.valence;
-    }
-    if (Array.isArray(draft.sensations)) {
-      restoreSensationSelections(draft.sensations);
-    } else {
-      restoreSensationSelections([]);
-    }
-    if (draft.notes) {
-      journalStatus.textContent = 'Draft restored. Save when you are ready.';
-    }
-  }
-
-  function handleJournalSubmit(event) {
-    event.preventDefault();
-    const store = getJournalStore();
-    if (!store || !journalForm) {
-      journalStatus.textContent = 'Saving is unavailable right now. Try reloading and saving again.';
-      return;
-    }
-    const data = gatherSupportJournalData();
-    const trimmedNotes = data.notes.trim();
-    const emotionName = state.selectedEmotion
-      ? EMOTION_LIBRARY[state.selectedEmotion]?.name ?? state.selectedEmotion
-      : '';
-    const emotionValue = data.emotion || emotionName;
-    const hasContent =
-      trimmedNotes ||
-      emotionValue ||
-      (Array.isArray(data.tags) && data.tags.length) ||
-      (Array.isArray(data.needs) && data.needs.length);
-    if (!hasContent) {
-      journalStatus.textContent = 'Add a few notes, an emotion, or a tag before saving.';
-      return;
-    }
-    const typedNeeds = Array.isArray(data.needs) ? data.needs : [];
-    const suggestedNeeds = state.selectedEmotion ? EMOTION_LIBRARY[state.selectedEmotion]?.needs ?? [] : [];
-    const mergedNeedsRaw = normalizeNeeds([...typedNeeds, ...suggestedNeeds]);
-    const mergedNeeds = [];
-    const seenNeeds = new Set();
-    mergedNeedsRaw.forEach((need) => {
-      const label = need?.label || '';
-      if (!label) {
-        return;
-      }
-      const key = label.toLowerCase();
-      if (seenNeeds.has(key)) {
-        return;
-      }
-      seenNeeds.add(key);
-      mergedNeeds.push(label);
-    });
-
-    const selections = getSelectedSensations();
-    const serializedSensations = serializeSensationSelections(selections);
-
-    const entry = createLaneEntry({
-      emotion: emotionValue,
-      intensity: data.intensity,
-      tags: data.tags,
-      notes: trimmedNotes,
-      energy: Number.isFinite(state.energyValue) ? state.energyValue : undefined,
-      valence: Number.isFinite(state.valenceValue) ? state.valenceValue : undefined,
-      sensations: serializedSensations,
-      needs: mergedNeeds,
-      zone: state.quadrant || null,
-      emotionCandidates: state.candidateEmotions.slice(0, 5).map(({ key, confidence }) => ({
-        emotion: key,
-        confidence: Number.isFinite(confidence) ? Number(confidence) : null,
-      })),
-      chosenEmotionConfidence: Number.isFinite(state.selectedEmotionConfidence)
-        ? Number(state.selectedEmotionConfidence)
-        : undefined,
-      regulationUsed: Array.from(state.regulationLog || []).filter(Boolean),
-      source: 'lane',
-    });
-    const saved = store.create(entry);
-    resetLaneSaveButton();
-    showLaneSavedFeedback();
-    setSupportOpenLink(saved?.id);
-    store.clearDraft(state.draftPath);
-    if (state.journalController && typeof state.journalController.resetForm === 'function') {
-      state.journalController.resetForm();
-    } else {
-      if (supportJournalNotes) {
-        supportJournalNotes.value = '';
-      }
-      if (supportJournalTagsInput) {
-        supportJournalTagsInput.value = '';
-      }
-      if (supportJournalIntensity) {
-        supportJournalIntensity.value = 5;
-        updateLaneIntensityDisplay(5);
-      } else {
-        updateLaneIntensityDisplay(5);
-      }
-      if (supportJournalEmotion) {
-        supportJournalEmotion.value = '';
-      }
-    }
-    if (supportJournalEmotion) {
-      delete supportJournalEmotion.dataset.autofill;
-    }
-    if (supportJournalNotes) {
-      supportJournalNotes.focus();
-    }
-    prefillSupportEmotion(state.selectedEmotion, { force: false });
-    state.journalController?.hideTagSuggestions?.();
-    renderJournalHistory();
-    journalStatus.textContent = 'Saved locally. Open in Journal to continue or edit.';
-    state.regulationLog = new Set();
-    state.selectedEmotionConfidence = null;
-  }
-
-  function handleJournalClear() {
-    if (state.journalController && typeof state.journalController.resetForm === 'function') {
-      state.journalController.resetForm();
-    } else {
-      if (supportJournalEmotion) {
-        supportJournalEmotion.value = '';
-      }
-      if (supportJournalIntensity) {
-        supportJournalIntensity.value = 5;
-        updateLaneIntensityDisplay(5);
-      } else {
-        updateLaneIntensityDisplay(5);
-      }
-      if (supportJournalNeedsInput) {
-        supportJournalNeedsInput.value = '';
-      }
-      if (supportJournalTagsInput) {
-        supportJournalTagsInput.value = '';
-      }
-      if (supportJournalNotes) {
-        supportJournalNotes.value = '';
-      }
-    }
-    state.journalController?.hideTagSuggestions?.();
-    if (supportJournalEmotion) {
-      delete supportJournalEmotion.dataset.autofill;
-    }
-    journalStatus.textContent = '';
-    resetLaneSaveButton();
-    clearSupportOpenLink();
-    const store = getJournalStore();
-    store?.clearDraft?.(state.draftPath);
-    prefillSupportEmotion(state.selectedEmotion, { force: false });
-    state.regulationLog = new Set();
-  }
-
-  function prefillSupportEmotion(emotionKey, { force = false } = {}) {
-    if (!supportJournalEmotion || !emotionKey) {
-      return;
-    }
-    const emotion = EMOTION_LIBRARY[emotionKey];
-    const label = emotion?.name || emotionKey;
-    if (force || !supportJournalEmotion.value || supportJournalEmotion.dataset.autofill === 'true') {
-      supportJournalEmotion.value = label;
-      supportJournalEmotion.dataset.autofill = 'true';
-    }
-  }
-
   function handleSuggestionClick(event) {
     const rejectButton = event.target.closest('[data-emotion-reject]');
     if (rejectButton) {
@@ -2215,40 +1681,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     }
   }
 
-  function loadLaneReferenceData() {
-    const loadNeeds = window.NVCJournal?.loadNeedsList;
-    const loadFeelings = window.NVCJournal?.loadFeelingsList;
-    if (typeof loadNeeds !== 'function' && typeof loadFeelings !== 'function') {
-      return;
-    }
-    const needsPromise = typeof loadNeeds === 'function' ? loadNeeds({ basePath }) : Promise.resolve([]);
-    const feelingsPromise = typeof loadFeelings === 'function' ? loadFeelings({ basePath }) : Promise.resolve([]);
-    Promise.all([
-      needsPromise.catch((error) => {
-        console.warn('Support lane: unable to load needs list', error);
-        return [];
-      }),
-      feelingsPromise.catch((error) => {
-        console.warn('Support lane: unable to load feelings list', error);
-        return [];
-      }),
-    ]).then(([needs, feelings]) => {
-      if (Array.isArray(needs) && needs.length) {
-        state.needs = needs;
-        if (state.journalController && typeof state.journalController.setNeedsOptions === 'function') {
-          state.journalController.setNeedsOptions(needs);
-          supportJournalNeedsInput = state.journalController.needsSelect || supportJournalNeedsInput;
-        }
-      }
-      if (Array.isArray(feelings) && feelings.length) {
-        state.feelings = feelings;
-        if (state.journalController && typeof state.journalController.setEmotionOptions === 'function') {
-          state.journalController.setEmotionOptions(feelings);
-        }
-      }
-    });
-  }
-
   function init() {
     showOnlyStep(state.activeStep);
 
@@ -2279,46 +1711,6 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
     bodySuggestions?.addEventListener('click', handleSuggestionClick);
     compassSuggestions?.addEventListener('click', handleSuggestionClick);
 
-    if (journalForm) {
-      journalForm.addEventListener('submit', handleJournalSubmit);
-    }
-    if (supportJournalNotes) {
-      supportJournalNotes.addEventListener('input', () => {
-        resetLaneSaveButton();
-        scheduleLaneDraftSave();
-      });
-    }
-    if (supportJournalEmotion) {
-      supportJournalEmotion.setAttribute('aria-autocomplete', 'list');
-      supportJournalEmotion.addEventListener('input', () => {
-        supportJournalEmotion.dataset.autofill = 'false';
-        resetLaneSaveButton();
-        scheduleLaneDraftSave();
-      });
-    }
-    if (supportJournalIntensity) {
-      supportJournalIntensity.addEventListener('input', handleLaneIntensityInput);
-      const initialIntensity = Number(supportJournalIntensity.value);
-      updateLaneIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
-    } else {
-      updateLaneIntensityDisplay(5);
-    }
-    if (supportJournalTagsInput) {
-      supportJournalTagsInput.addEventListener('input', () => {
-        resetLaneSaveButton();
-        scheduleLaneDraftSave();
-      });
-    }
-    if (!state.journalController && supportJournalNeedsInput) {
-      supportJournalNeedsInput.setAttribute('aria-autocomplete', 'list');
-      supportJournalNeedsInput.addEventListener('input', () => {
-        resetLaneSaveButton();
-        scheduleLaneDraftSave();
-      });
-    }
-    const journalClear = journalStep?.querySelector('[data-journal-clear]');
-    journalClear?.addEventListener('click', handleJournalClear);
-
     communicationCard?.addEventListener('click', handleCommunicationClick);
 
     renderSuggestionBlock(
@@ -2337,20 +1729,7 @@ export { REVIEW_DATE, EMOTION_EVIDENCE_MAP, EVIDENCE_REGISTRY } from './evidence
       ensureEvidencePopover();
       maybeShowEvidenceNote();
     }
-    applyLaneDraft();
-    loadLaneReferenceData();
-    renderJournalHistory();
     updateStepControls();
-    if (!getJournalStore() && typeof window !== 'undefined') {
-      window.addEventListener(
-        'nvc-journal-store-ready',
-        () => {
-          applyLaneDraft();
-          renderJournalHistory();
-        },
-        { once: true }
-      );
-    }
   }
 
   if (document.readyState === 'loading') {
