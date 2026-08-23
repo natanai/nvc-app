@@ -1,16 +1,17 @@
 name: One-time immediate response branch runner
 
 on:
-  push:
+  pull_request:
     branches:
       - inventory-core-overhaul
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   migrate:
-    if: github.event.head_commit.message == 'Run immediate response branch runner'
+    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1' && github.event.pull_request.head.sha == 'c507358a22a64d9215dac6f971d1ab26d7af6ac2'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -96,5 +97,3 @@ jobs:
           git rm .github/workflows/run-immediate-response-branch.yml
           git commit -m "Remove one-time immediate response branch runner"
           git push origin HEAD:inventory-core-overhaul
-
-# Trigger after the runner is installed on the default branch.
