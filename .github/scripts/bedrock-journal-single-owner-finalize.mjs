@@ -107,18 +107,18 @@ function cutBetween(source, startMarker, endMarker, replacement, label) {
 {
   const path = 'scripts/inventory.js';
   let source = read(path);
-  const variantArgument = /^\s*variant: mount\.dataset\.journalVariant \|\| 'inventory',\n/gm;
-  const variantMarkers = /^\s*module\.dataset\.journalVariant = 'inventory';\n/gm;
-  if (!variantArgument.test(source)) {
-    throw new Error('Missing Inventory Journal variant argument');
+  const variantLine = "          variant: mount.dataset.journalVariant || 'inventory',\n";
+  const moduleMarker = "    module.dataset.journalVariant = 'inventory';\n";
+  const mountMarker = "    mount.dataset.journalVariant = 'inventory';\n";
+  const argumentCount = source.split(variantLine).length - 1;
+  const moduleCount = source.split(moduleMarker).length - 1;
+  const mountCount = source.split(mountMarker).length - 1;
+  if (argumentCount !== 2 || moduleCount !== 1 || mountCount !== 1) {
+    throw new Error(`Unexpected Inventory Journal variant ownership: args=${argumentCount}, module=${moduleCount}, mount=${mountCount}`);
   }
-  variantArgument.lastIndex = 0;
-  source = source.replace(variantArgument, '');
-  if (!variantMarkers.test(source)) {
-    throw new Error('Missing Inventory Journal variant marker');
-  }
-  variantMarkers.lastIndex = 0;
-  source = source.replace(variantMarkers, '');
+  source = source.replaceAll(variantLine, '');
+  source = source.replaceAll(moduleMarker, '');
+  source = source.replaceAll(mountMarker, '');
   if (source.includes('journalVariant')) {
     throw new Error('Shared runtime still branches Journal semantics by variant');
   }
