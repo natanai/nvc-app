@@ -1,5 +1,7 @@
 # UI Screenshots
 
+> Historical manual-capture note. It is not a current visual acceptance baseline.
+
 These screenshots capture the current alexithymia support experience:
 
 - **Home page:** Overview of the Nonviolent Communication tools and entry points.

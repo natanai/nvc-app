@@ -32,6 +32,12 @@ Use sentence case for task actions. Primary actions can span the available phone
 
 Do not use a disabled primary button as a persistent status badge. Use compact metadata or plain status text instead.
 
+## Overlay and sheet dismissal
+
+Every modal, popover, full-screen sheet, or long scrolling menu has one clearly labelled close control with a minimum 44px touch target. The control belongs to a non-scrolling or sticky header so it remains available throughout the content on phone and desktop. Do not make a user scroll back to the beginning to leave an overlay.
+
+An opener may change visual state while its overlay is active, but it must not become a second competing close button beside the overlay's own close control. When an anchored desktop launcher would remain visible immediately beside the open sheet, hide that launcher until the sheet closes. Escape and backdrop dismissal remain useful secondary paths, not substitutes for the visible close control.
+
 ## Typography
 
 Phone page titles use the compact, non-uppercase app-screen treatment established on Inventory. Section labels may use the small uppercase grouped-section style. Row titles and action labels use sentence case. Do not introduce a new display treatment for every component.

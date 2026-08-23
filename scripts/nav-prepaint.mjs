@@ -301,11 +301,9 @@ export const magnetPrefillScript = (storageKey) => String.raw`
             boardRect.height || board.clientHeight || cssMinHeight || 1,
             cssMinHeight || 1
           );
-          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
-          }
+          // Navigation positions are responsive percentages. The current
+          // canonical CSS owns the board height; restoring a historical height
+          // lets an older route permanently enlarge the shared navigation lane.
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;

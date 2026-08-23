@@ -34,6 +34,11 @@ test('Bedrock preserves persisted presentation-state namespaces and responsive f
   assert.ok(navPrepaint.includes("var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';"));
   assert.ok(navPrepaint.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
   assert.ok(navPrepaint.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
+  assert.equal(
+    navPrepaint.includes('parsed.boardHeight'),
+    false,
+    'responsive navigation prepaint must not restore a route-specific historical board height',
+  );
   assert.ok(buildPages.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!buildPages.includes("magnetPrefillScript(type + '-hub-v4'"));
   assert.ok(navPrepaint.includes("var storageKey = 'nvcApp.navSettings';"));

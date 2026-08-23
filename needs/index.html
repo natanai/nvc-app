@@ -725,7 +725,10 @@ button.site-nav__magnet {
   }
 
   .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(12rem, 45vw, 12rem);
+    /* Supplemental mobile navigation needs a real canvas, not another
+       compressed row. Scale with the phone width so normalized user
+       positions restore against the same usable aspect ratio after reload. */
+    min-height: clamp(20rem, 105vw, 23rem);
     padding-block-end: 0.75rem;
   }
 
@@ -1277,11 +1280,9 @@ button.site-nav__magnet {
             boardRect.height || board.clientHeight || cssMinHeight || 1,
             cssMinHeight || 1
           );
-          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
-          }
+          // Navigation positions are responsive percentages. The current
+          // canonical CSS owns the board height; restoring a historical height
+          // lets an older route permanently enlarge the shared navigation lane.
           var magnets = board.querySelectorAll('[data-magnet-id]');
           if (!magnets.length) {
             return;

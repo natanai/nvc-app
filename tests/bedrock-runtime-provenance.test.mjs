@@ -1,11 +1,63 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync, readdirSync } from 'node:fs';
+import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (path) => readFileSync(join(root, path), 'utf8');
+
+function readMarkedRegion(source, startMarker, endMarker, label) {
+  const startIndex = source.indexOf(startMarker);
+  const endIndex = source.indexOf(endMarker);
+  assert.ok(startIndex >= 0, `${label} is missing its start marker`);
+  assert.ok(endIndex > startIndex, `${label} is missing its end marker`);
+  return source.slice(startIndex + startMarker.length, endIndex).trim();
+}
+
+function listHtmlFiles(directory) {
+  const files = [];
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if (entry.name === '.git' || entry.name === 'node_modules') continue;
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...listHtmlFiles(path));
+    else if (entry.isFile() && entry.name.endsWith('.html')) files.push(path);
+  }
+  return files;
+}
+
+test('hand-owned routes embed the canonical shared navigation critical CSS', () => {
+  const navCriticalCss = read('styles/nav-critical.css').trim();
+  const startMarker = '<!-- shared-nav-critical:start -->';
+  const endMarker = '<!-- shared-nav-critical:end -->';
+
+  for (const route of ['observations/index.html', 'alexithymia-support/index.html', 'feed/index.html']) {
+    const embedded = readMarkedRegion(read(route), startMarker, endMarker, route);
+    assert.equal(
+      embedded,
+      `<style>${navCriticalCss}</style>`,
+      `${route} must not retain a route-local copy of shared navigation critical CSS`,
+    );
+  }
+});
+
+test('every app-shell page embeds the same canonical navigation critical CSS', () => {
+  const navCriticalCss = read('styles/nav-critical.css').trim();
+  const canonicalBlock = `<style>${navCriticalCss}</style>`;
+  const shellPages = listHtmlFiles(root).filter((path) => readFileSync(path, 'utf8').includes('data-magnet-board'));
+
+  assert.ok(shellPages.length >= 180, 'expected the generated and hand-owned app-shell routes');
+  for (const path of shellPages) {
+    const html = readFileSync(path, 'utf8');
+    const label = relative(root, path);
+    assert.ok(html.includes(canonicalBlock), `${label} must embed the canonical navigation critical CSS`);
+    assert.equal(
+      html.includes('media="print" onload="this.media=\'all\'"'),
+      false,
+      `${label} must not initialize shared behavior against transitional deferred layout`,
+    );
+  }
+});
 
 test('deterministic styles are parser-discovered rather than injected by browser JavaScript', () => {
   const inference = read('scripts/feeling-reverse-inference.js');

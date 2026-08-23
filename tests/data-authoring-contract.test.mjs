@@ -96,6 +96,27 @@ assert.match(
   'the observation cue compiler entrypoint must run on Windows and POSIX paths.',
 );
 
+const citationExtractorSource = readFileSync(join(root, 'scripts/extract-citations.mjs'), 'utf8');
+assert.match(
+  citationExtractorSource,
+  /path\.relative\(REPO_ROOT, file\)/,
+  'citation extraction must derive source labels relative to the repository root.',
+);
+assert.match(
+  citationExtractorSource,
+  /relativeFile\.split\(path\.sep\)\.join\("\/"\)/,
+  'citation source labels must use portable repository separators.',
+);
+
+const citationRecords = readJson('_evidence/citations.json');
+assert.ok(citationRecords.length > 0, 'citation evidence must not be empty.');
+for (const record of citationRecords) {
+  assert.equal(typeof record.file, 'string', 'citation evidence must identify its repository source.');
+  assert.doesNotMatch(record.file, /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/, 'citation evidence must not expose an absolute path.');
+  assert.doesNotMatch(record.file, /\\/, 'citation evidence paths must use forward slashes.');
+  assert.match(record.file, /^needs\//, 'citation evidence sources must remain inside the scanned needs tree.');
+}
+
 const feelingsCsv = readFileSync(join(root, 'data/Feelings.csv'), 'utf8').replace(/^\ufeff/, '');
 const cueRows = parseCsv(feelingsCsv).filter(
   (row) => String(row['Row Type'] || '').trim().toLowerCase() === 'cue',

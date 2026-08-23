@@ -1,5 +1,7 @@
 # Bedrock Home runtime canary
 
+> Historical canary record. Branch names and acceptance state below describe that completed pass, not the current release target.
+
 The Home route is the first ordinary content route on the Bedrock branch that does not parser-load the large shared `scripts/inventory.js` controller.
 
 This is deliberately a canary, not a catalog-wide rollout. Inventory and Need surfaces remain eager while Home is validated in real browsers.

@@ -83,7 +83,7 @@ Two earlier controller extractions also reduced shared ownership without changin
 
 The shared stylesheet is still broad, but its dependency graph is no longer hidden behind serial CSS imports. `styles.css` contains no `@import` rules. The page compiler exposes Google Fonts, Feeling magnet icons, Need magnet icons, shared density, and Inventory shell styles directly in HTML before the main stylesheet, preserving cascade order while making those requests parser-discoverable immediately.
 
-The explicit hand-owned surfaces follow the same ownership rule: Feed, Observations, and the standalone Emotions Wheel declare the same blocking dependency order directly; Alexithymia Support declares the same graph through its existing non-blocking `media="print"`/`onload` strategy and mirrors it in its `<noscript>` fallback.
+The explicit hand-owned surfaces follow the same ownership rule: Feed, Observations, the standalone Emotions Wheel, and Alexithymia Support declare the same blocking dependency order directly. Alexithymia keeps an eager magnet and Journal runtime because those interactions are visible immediately, so its shared layout CSS must also settle before those runtimes measure the page; the former route-only `media="print"`/`onload` exception is retired.
 
 Every page that requests the Google Fonts stylesheet preconnects to both `fonts.googleapis.com` and `fonts.gstatic.com` first. `tests/font-delivery.test.mjs` enforces that ordering for every committed Google Fonts consumer and for the canonical page compiler.
 

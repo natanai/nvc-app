@@ -2525,7 +2525,6 @@ function buildPaletteUi() {
   });
 
   header.append(title, subtitle, closeButton);
-  form.appendChild(header);
 
   const presetField = document.createElement('label');
   presetField.className = 'palette-form__field palette-form__field--select';
@@ -2801,7 +2800,7 @@ function buildPaletteUi() {
   panelScroll.className = 'palette-corner__panel-scroll';
   panelScroll.appendChild(form);
 
-  panel.appendChild(panelScroll);
+  panel.append(header, panelScroll);
   container.append(toggle, panel);
   if (!container.isConnected) {
     document.body.appendChild(container);

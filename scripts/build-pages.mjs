@@ -15,6 +15,8 @@ const bodyRegionsPath = join(rootDir, 'data', 'body-regions.json');
 const bodyRegions = JSON.parse(readFileSync(bodyRegionsPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
+const SHARED_NAV_CRITICAL_START = '<!-- shared-nav-critical:start -->';
+const SHARED_NAV_CRITICAL_END = '<!-- shared-nav-critical:end -->';
 
 const KNOWN_SCOPES = new Set([
   'home',
@@ -3129,15 +3131,16 @@ function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
-function updateSupportLaneNav() {
-  const supportPath = join(rootDir, 'alexithymia-support', 'index.html');
+function updateHandOwnedRouteNav(routeParts, { label, activeNav = null } = {}) {
+  const routePath = join(rootDir, ...routeParts);
+  const routeLabel = label || routeParts.join('/');
   let contents;
 
   try {
-    contents = readFileSync(supportPath, 'utf8');
+    contents = readFileSync(routePath, 'utf8');
   } catch (error) {
     if (typeof console !== 'undefined' && console.warn) {
-      console.warn('Unable to read Alexithymia Support page for nav update', error);
+      console.warn(`Unable to read ${routeLabel} page for nav update`, error);
     }
     return;
   }
@@ -3147,24 +3150,49 @@ function updateSupportLaneNav() {
 
   if (!match) {
     if (typeof console !== 'undefined' && console.warn) {
-      console.warn('Alexithymia Support page is missing the primary nav block; skipped nav sync.');
+      console.warn(`${routeLabel} page is missing the primary nav block; skipped nav sync.`);
     }
     return;
   }
 
   const indent = match[1] ?? '';
-  const navMarkup = renderNav('../', 'feelings');
+  const navMarkup = renderNav('../', activeNav);
   const replacement = indentBlock(navMarkup, indent);
 
-  if (match[0] === replacement) {
-    return;
+  let updated = match[0] === replacement
+    ? contents
+    : contents.replace(navPattern, replacement);
+
+  const criticalStartIndex = updated.indexOf(SHARED_NAV_CRITICAL_START);
+  const criticalEndIndex = updated.indexOf(SHARED_NAV_CRITICAL_END);
+  if (
+    criticalStartIndex === -1
+    || criticalEndIndex === -1
+    || criticalEndIndex < criticalStartIndex
+  ) {
+    throw new Error(`${routeLabel} page is missing shared navigation critical CSS ownership markers.`);
   }
 
-  const updated = contents.replace(navPattern, replacement);
+  const criticalBefore = updated.slice(0, criticalStartIndex + SHARED_NAV_CRITICAL_START.length);
+  const criticalAfter = updated.slice(criticalEndIndex);
+  updated = `${criticalBefore}\n    <style>${navCriticalCss}</style>\n    ${criticalAfter}`;
 
   if (updated !== contents) {
-    writeFileSync(supportPath, updated);
+    writeFileSync(routePath, updated);
   }
+}
+
+function updateSupportLaneNav() {
+  updateHandOwnedRouteNav(['alexithymia-support', 'index.html'], {
+    label: 'Alexithymia Support',
+    activeNav: 'feelings',
+  });
+}
+
+function updateFeedNav() {
+  updateHandOwnedRouteNav(['feed', 'index.html'], {
+    label: 'Shared Strategies',
+  });
 }
 
 function build(scopeSet) {
@@ -3177,6 +3205,7 @@ function build(scopeSet) {
   const buildInventory = shouldBuild('inventory');
   const buildObservationGuide = shouldBuild('observation-guide');
   const buildSupportLane = shouldBuild('support-lane');
+  const buildFeed = shouldBuild('feed');
 
   if (buildHome) {
     renderHome();
@@ -3224,6 +3253,10 @@ function build(scopeSet) {
 
   if (buildSupportLane) {
     updateSupportLaneNav();
+  }
+
+  if (buildFeed) {
+    updateFeedNav();
   }
 }
 
