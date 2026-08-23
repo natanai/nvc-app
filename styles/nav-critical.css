@@ -39,10 +39,6 @@
 
 html {
   scrollbar-gutter: auto;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--plum) 65%, #000 5%) 0%,
-      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
-      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
-  background-attachment: fixed;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -244,13 +240,6 @@ button,
 .site-nav__board-wrapper {
   position: relative;
   padding-top: 0.75rem;
-}
-
-.magnet-board:not([data-ready='1']) .magnet {
-  position: absolute;
-  touch-action: none;
-  transition: none;
-  visibility: hidden;
 }
 
 .site-nav__board {

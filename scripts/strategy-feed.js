@@ -1,13 +1,195 @@
-import './inventory.js?v=2026-08-19-feed-ui';
-
-import {
-  initBlueskyOAuth,
-  getCurrentBlueskySession,
-  ensureBackendSession,
-  BACKEND_BASE_URL,
-} from './bluesky-oauth.js?v=2024-07-11';
-
+const BACKEND_BASE_URL = 'https://backend.allneeds.app/api';
+const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
+const SESSION_HINT_ACTIVE = 'active';
+const SESSION_HINT_NONE = 'none';
 const FEED_ASSET_VERSION = '2026-08-19-static-feed';
+const INVENTORY_RUNTIME_URL = new URL('./inventory.js?v=2026-08-19-feed-ui', import.meta.url).href;
+const INVENTORY_RUNTIME_WARM_SELECTOR = [
+  '[data-palette-toggle]',
+  '[data-support-journal-open]',
+  '[data-menu-drill="account-data"]',
+  '[data-menu-action="share-with-nat"]',
+  '#inventory-export',
+  '#inventory-import-trigger',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+].join(',');
+const INVENTORY_RUNTIME_REPLAY_SELECTOR = [
+  '[data-palette-toggle]',
+  '[data-support-journal-open]',
+  '[data-menu-action="share-with-nat"]',
+  '#inventory-export',
+  '#inventory-import-trigger',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+].join(',');
+
+let oauthModulePromise = null;
+let inventoryRuntimePromise = null;
+let inventoryRuntimeReady = false;
+
+function finishAfterInventoryInitialization(resolve) {
+  const finish = () => {
+    inventoryRuntimeReady = true;
+    resolve();
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', finish, { once: true });
+  } else {
+    finish();
+  }
+}
+
+function ensureInventoryClassicRuntime() {
+  if (inventoryRuntimeReady || typeof window.handleExportInventory === 'function') {
+    inventoryRuntimeReady = true;
+    return Promise.resolve();
+  }
+  if (inventoryRuntimePromise) {
+    return inventoryRuntimePromise;
+  }
+
+  inventoryRuntimePromise = new Promise((resolve, reject) => {
+    const finish = () => finishAfterInventoryInitialization(resolve);
+    const fail = () => {
+      inventoryRuntimePromise = null;
+      reject(new Error('Unable to load shared Inventory runtime'));
+    };
+
+    const existing = Array.from(document.scripts).find((script) => {
+      if (!script.src) return false;
+      try {
+        const url = new URL(script.src, window.location.href);
+        return /\/scripts\/inventory\.js$/i.test(url.pathname);
+      } catch (error) {
+        return false;
+      }
+    });
+
+    if (existing) {
+      if (typeof window.handleExportInventory === 'function') {
+        finish();
+        return;
+      }
+      existing.addEventListener('load', finish, { once: true });
+      existing.addEventListener('error', fail, { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = INVENTORY_RUNTIME_URL;
+    script.async = true;
+    script.dataset.feedInventoryRuntime = 'true';
+    script.addEventListener('load', finish, { once: true });
+    script.addEventListener('error', fail, { once: true });
+    document.body.appendChild(script);
+  });
+
+  return inventoryRuntimePromise;
+}
+
+function closestInventoryRuntimeTrigger(target, selector) {
+  return target instanceof Element ? target.closest(selector) : null;
+}
+
+function warmInventoryRuntime(event) {
+  if (inventoryRuntimeReady) return;
+  if (closestInventoryRuntimeTrigger(event.target, INVENTORY_RUNTIME_WARM_SELECTOR)) {
+    ensureInventoryClassicRuntime().catch(() => {});
+  }
+}
+
+function installInventoryRuntimeIntentLoader() {
+  document.addEventListener('pointerover', warmInventoryRuntime, { capture: true, passive: true });
+  document.addEventListener('focusin', warmInventoryRuntime, { capture: true });
+
+  document.addEventListener('click', async (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target || inventoryRuntimeReady) return;
+
+    const warmTrigger = target.closest(INVENTORY_RUNTIME_WARM_SELECTOR);
+    if (!warmTrigger) return;
+
+    const runtime = ensureInventoryClassicRuntime();
+    const replayTrigger = target.closest(INVENTORY_RUNTIME_REPLAY_SELECTOR);
+    if (!replayTrigger) {
+      runtime.catch(() => {});
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try {
+      await runtime;
+      window.requestAnimationFrame(() => replayTrigger.click());
+    } catch (error) {
+      console.error('Unable to prepare shared allneeds controls', error);
+    }
+  }, true);
+}
+
+function readSessionHint() {
+  try {
+    const hint = window.localStorage?.getItem(SESSION_HINT_STORAGE_KEY);
+    return hint === SESSION_HINT_ACTIVE || hint === SESSION_HINT_NONE ? hint : '';
+  } catch (error) {
+    return '';
+  }
+}
+
+function hasLoginIntent() {
+  try {
+    return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
+  } catch (error) {
+    return false;
+  }
+}
+
+function isOAuthReturn() {
+  try {
+    const params = new URL(window.location.href).searchParams;
+    return params.has('state') && (params.has('code') || params.has('error') || params.has('iss'));
+  } catch (error) {
+    return false;
+  }
+}
+
+function shouldLoadFeedOAuth() {
+  return readSessionHint() !== SESSION_HINT_NONE || hasLoginIntent() || isOAuthReturn();
+}
+
+function loadFeedOAuthRuntime() {
+  if (!oauthModulePromise) {
+    oauthModulePromise = import('./bluesky-oauth.js?v=2024-07-11').catch((error) => {
+      oauthModulePromise = null;
+      throw error;
+    });
+  }
+  return oauthModulePromise;
+}
+
+async function loadFeedSession() {
+  if (!shouldLoadFeedOAuth()) {
+    return null;
+  }
+
+  try {
+    const oauth = await loadFeedOAuthRuntime();
+    let session = await oauth.initBlueskyOAuth();
+    if (!session) {
+      session = oauth.getCurrentBlueskySession();
+    }
+    if (session) {
+      await oauth.ensureBackendSession(session);
+    }
+    return session || null;
+  } catch (error) {
+    console.warn('Could not initialize Bluesky OAuth session', error);
+    return null;
+  }
+}
 
 const state = {
   strategies: [],
@@ -281,10 +463,31 @@ async function fetchAndRenderFeed() {
   }
 }
 
-function applySession(session) {
+function publishGlobalSession(session) {
+  const normalized = session?.did
+    ? { did: session.did, handle: session.handle || null }
+    : null;
+  const previous = window.allneedsSession || null;
+  const changed = previous?.did !== normalized?.did || previous?.handle !== normalized?.handle;
+
+  window.allneedsSession = normalized;
+  if (!changed) return;
+
+  window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
+    detail: {
+      ...(normalized || {}),
+      reason: normalized ? 'feed-restore' : 'feed-signout',
+    },
+  }));
+}
+
+function applySession(session, { publish = false } = {}) {
   state.session = session?.did ? session : null;
   setAuthHint(state.session);
   setScopeAvailability(state.session);
+  if (publish) {
+    publishGlobalSession(state.session);
+  }
 }
 
 async function init() {
@@ -298,23 +501,8 @@ async function init() {
     document.documentElement.dataset.strategyFeedVersion = FEED_ASSET_VERSION;
   }
 
-  let session = null;
-  try {
-    session = await initBlueskyOAuth();
-    if (session) await ensureBackendSession(session);
-  } catch (error) {
-    console.warn('Could not initialize Bluesky OAuth session', error);
-  }
-
-  if (!session) {
-    try {
-      session = getCurrentBlueskySession();
-    } catch (error) {
-      session = null;
-    }
-  }
-
-  applySession(session);
+  const session = await loadFeedSession();
+  applySession(session, { publish: true });
 
   state.scopeSelect?.addEventListener('change', () => {
     setScopeAvailability(state.session);
@@ -330,8 +518,5 @@ async function init() {
   await fetchAndRenderFeed();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', init, { once: true });
-} else {
-  init();
-}
+installInventoryRuntimeIntentLoader();
+init();

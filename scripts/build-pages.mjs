@@ -1,8 +1,9 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { updateObservationGuidePage } from './observation-guide.mjs';
+import { renderCatalogMultiselectMarkup } from '../assets/js/catalog-multiselect.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
@@ -22,23 +23,6 @@ const KNOWN_SCOPES = new Set([
   'inventory',
   'observation-guide',
   'support-lane',
-]);
-
-const DEFAULT_SCOPES = [
-  'home',
-  'faux-feelings',
-  'feelings',
-  'needs',
-  'inventory',
-  'observation-guide',
-  'support-lane',
-];
-
-const DIRECTORIES_BY_SCOPE = new Map([
-  ['faux-feelings', ['faux-feelings']],
-  ['feelings', ['feelings']],
-  ['needs', ['needs']],
-  ['inventory', ['inventory']],
 ]);
 
 function parseScopeArgs(argv) {
@@ -86,20 +70,6 @@ function parseScopeArgs(argv) {
 }
 
 const requestedScopes = parseScopeArgs(process.argv.slice(2));
-const activeScopes = requestedScopes ? Array.from(requestedScopes) : DEFAULT_SCOPES;
-const directoriesToResetSet = new Set();
-
-for (const scope of activeScopes) {
-  const directories = DIRECTORIES_BY_SCOPE.get(scope);
-  if (!directories) {
-    continue;
-  }
-  for (const directory of directories) {
-    directoriesToResetSet.add(directory);
-  }
-}
-
-const directoriesToReset = Array.from(directoriesToResetSet);
 
 const HOME_ICON_INLINE = (basePath = '') => {
   const normalizedBase = basePath || '';
@@ -110,14 +80,13 @@ const HOME_ICON_INLINE = (basePath = '') => {
 };
 
 const NAV_MAGNET_STORAGE_KEY = 'site-nav';
-
-const navPrefillScript = () => String.raw`
+const magnetPrefillScript = (storageKey) => String.raw`
       <script>
         (function() {
           if (typeof window === 'undefined' || typeof document === 'undefined') {
             return;
           }
-          var root = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
+          var root = document.querySelector('[data-magnet-root][data-magnet-key="${storageKey}"]');
           if (!root) {
             return;
           }
@@ -125,13 +94,24 @@ const navPrefillScript = () => String.raw`
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:${NAV_MAGNET_STORAGE_KEY}';
+          var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';
+          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
+          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
           var raw;
           try {
             if (!('localStorage' in window)) {
               return;
             }
             raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
+              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+              if (legacyRaw) {
+                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
+                raw = legacyRaw;
+              }
+              window.localStorage.setItem(MIGRATION_KEY, bucket);
+            }
           } catch (error) {
             return;
           }
@@ -795,10 +775,6 @@ const themePreloadScript = (basePath) => {
       })();
     </script>`;
 };
-for (const dir of directoriesToReset) {
-  rmSync(join(rootDir, dir), { recursive: true, force: true });
-}
-
 function basePathFromDepth(depth) {
   return depth === 0 ? '' : '../'.repeat(depth);
 }
@@ -806,14 +782,23 @@ function basePathFromDepth(depth) {
 const localStorageReminderHtml =
   '<p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>';
 
-function normalizeScripts(scripts) {
+const customizerShellPlaceholderHtml = `    <div class="palette-corner" data-shell-customizer-placeholder>
+      <button type="button" class="palette-corner__toggle" aria-haspopup="dialog" aria-expanded="false">
+        <span class="palette-corner__glyph">+</span>
+        <span class="visually-hidden">Open customizer</span>
+      </button>
+    </div>`;
+
+function normalizeScripts(scripts, options = {}) {
+  const includeInventoryRuntime = options.includeInventoryRuntime !== false;
   const baseScripts = [
-    { src: 'assets/js/journal/store.js', module: true },
+    ...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : []),
     { src: 'scripts/inventory-core-shell.js', defer: true },
-    { src: 'scripts/inventory.js', defer: true },
     { src: 'scripts/magnets.js', module: true },
   ];
-  const entries = [...baseScripts, ...scripts];
+  const beforeBaseScripts = scripts.filter((entry) => entry && typeof entry === 'object' && entry.beforeBase === true);
+  const regularScripts = scripts.filter((entry) => !(entry && typeof entry === 'object' && entry.beforeBase === true));
+  const entries = [...beforeBaseScripts, ...baseScripts, ...regularScripts];
   const seen = new Set();
   const normalized = [];
   for (const entry of entries) {
@@ -863,7 +848,10 @@ function htmlPage({
   socialImage = SOCIAL_CARD_SRC,
   twitterImage = TWITTER_CARD_SRC,
   socialAlt = 'Three colorful doorways symbolizing allneeds.app',
+  prepaintExtras = '',
   headExtras = '',
+  bodyExtras = '',
+  includeInventoryRuntime = true,
 }) {
   const basePath = basePathFromDepth(depth);
   const cssHref = `${basePath}styles.css`;
@@ -907,7 +895,7 @@ function htmlPage({
       </nav>`
     : '';
 
-  const scriptEntries = normalizeScripts(scripts);
+  const scriptEntries = normalizeScripts(scripts, { includeInventoryRuntime });
   const scriptsHtml = scriptEntries
     .map((script) => {
       const attrs = [`src="${basePath}${script.src}"`];
@@ -939,7 +927,9 @@ function htmlPage({
   const normalizedMainAttrs = mainAttributes ? ` ${mainAttributes.trim()}` : '';
   const mainClassAttr = mainClass ? ` class="${mainClass}"` : '';
   const criticalStyles = navCriticalCss ? `    <style>${navCriticalCss}</style>` : '';
+  const prepaintHead = prepaintExtras ? `\n${prepaintExtras}` : '';
   const extraHead = headExtras ? `\n${headExtras}` : '';
+  const extraBody = bodyExtras ? `${bodyExtras}\n` : '';
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -980,8 +970,15 @@ function htmlPage({
     <meta name="twitter:url" content="${canonicalUrl}" />
     <meta name="twitter:image" content="${twitterImageUrl}" />
     <meta name="twitter:image:alt" content="${socialAltEscaped}" />
-        ${themePreloadScript(basePath)}
+        ${themePreloadScript(basePath)}${prepaintHead}
 ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cssHref}" as="style" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" />
+    <link rel="stylesheet" href="${basePath}styles/feelings-magnet-icons.css" />
+    <link rel="stylesheet" href="${basePath}styles/needs-magnet-icons.css" />
+    <link rel="stylesheet" href="${basePath}styles/shared-density.css" />
+    <link rel="stylesheet" href="${basePath}styles/inventory-core-shell.css" />
     <link rel="stylesheet" href="${cssHref}" fetchpriority="high" />${extraHead}
   </head>
   <body data-base-path="${basePath}">
@@ -993,7 +990,7 @@ ${criticalStyles ? `${criticalStyles}\n` : ''}    <link rel="preload" href="${cs
         ${main}
       </main>
     </div>
-${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
+${extraBody}${scriptsHtml ? `${scriptsHtml}\n` : ''}  </body>
 </html>
 `;
 }
@@ -1093,7 +1090,7 @@ function renderNav(basePath, activeNav, options = {}) {
     .join('\n');
 
   const navVisibilityBootstrap = navVisibilityBootstrapScript();
-  const prefill = navPrefillScript();
+  const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);
 
   return `<nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="${NAV_MAGNET_STORAGE_KEY}">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
@@ -1271,35 +1268,31 @@ function renderStrategyForm({
   includeVisibilitySelect = false,
   notice = '',
   includeLocalStorageReminder = false,
+  includeSaveTargets = false,
 }) {
-  const needOptions = data.needs
-    .map(
-      (need) =>
-        `<option value="${escapeHtml(need.slug)}"${
-          need.slug === defaultNeedSlug ? ' selected' : ''
-        }>${escapeHtml(need.title)}</option>`
-    )
-    .join('');
-
-  const placeholderOption = includePlaceholderOption
-    ? `<option value="" disabled${!needSelectMultiple && !defaultNeedSlug ? ' selected' : ''}>Select a need</option>`
-    : '';
-
-  const multipleAttr = needSelectMultiple ? ' multiple' : '';
-  const needHintId = `${idPrefix}-need-hint`;
-  const needDescribedByAttr = ` aria-describedby="${needHintId}"`;
+  const needOptions = data.needs.map((need) => ({
+    label: need.title,
+    value: need.slug,
+    slug: need.slug,
+  }));
 
   const needField = includeNeedSelect
     ? `
-        <div class="strategy-form__field">
-          <label for="${idPrefix}-need">Primary need</label>
-          <p id="${needHintId}" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need"${multipleAttr}${needDescribedByAttr} required>
-              ${placeholderOption}
-              ${needOptions}
-            </select>
-          </div>
+        <div class="strategy-form__field strategy-form__field--needs">
+          <label for="${idPrefix}-need-trigger">Needs</label>
+          ${renderCatalogMultiselectMarkup({
+            inputId: `${idPrefix}-need`,
+            name: 'need',
+            kind: 'needs',
+            placeholder: 'Choose needs',
+            ariaLabel: 'Choose one or more needs',
+            transport: 'select',
+            delimiter: '|',
+            options: needOptions,
+            selectedValues: defaultNeedSlug ? [defaultNeedSlug] : [],
+            classes: ['strategy-card', 'strategy-card--input', 'strategy-need-catalog'],
+            attributes: { 'data-strategy-need-catalog': '' },
+          })}
         </div>`
     : '';
 
@@ -1351,6 +1344,18 @@ function renderStrategyForm({
             ${localStorageReminderHtml}`
     : '';
 
+  const saveActions = includeSaveTargets
+    ? `
+            <input type="hidden" name="save-target" value="device" />
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+              <button type="submit" class="strategy-form__submit strategy-form__submit--secondary strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
+            </div>`
+    : `
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
+            </div>`;
+
   return `
       <div class="strategy-form__container" data-strategy-form-container>
         <div class="strategy-card strategy-card--form">
@@ -1370,9 +1375,7 @@ function renderStrategyForm({
             ${needField}
             ${contactFields}
             ${visibilityField}
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
-            </div>
+            ${saveActions}
             ${localStorageNote}
           </form>
         </div>
@@ -1381,9 +1384,8 @@ function renderStrategyForm({
       </div>`;
 }
 
-function buildPersonalStrategyNotice(basePath, suffix = '') {
-  const safeSuffix = suffix ? ` ${suffix}` : '';
-  return `<p class="strategy-form__notice">Personal strategies you add stay on this browser. Visit the <a href="${basePath}inventory/">inventory screen</a> to export them if you would like a backup.${safeSuffix}</p>`;
+function buildPersonalStrategyNotice() {
+  return '<p class="strategy-form__notice">Backup, restore, and account sync are in Menu → Account &amp; data.</p>';
 }
 
 function buildPersonalStrategyFormOptions({
@@ -1395,7 +1397,7 @@ function buildPersonalStrategyFormOptions({
   return {
     formId,
     idPrefix,
-    submitLabel: '💾 Save to device',
+    submitLabel: 'Save to device',
     titleLabel: 'Strategy name',
     descriptionLabel: 'How do you put it into practice?',
     includePlaceholderOption: true,
@@ -1406,6 +1408,7 @@ function buildPersonalStrategyFormOptions({
     includeMessage: true,
     notice,
     includeLocalStorageReminder: false,
+    includeSaveTargets: true,
   };
 }
 
@@ -1461,8 +1464,11 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
+    scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],
     activeNav: 'home',
     canonicalPath: '/',
+    bodyExtras: customizerShellPlaceholderHtml,
+    includeInventoryRuntime: false,
   });
 
   writePage('index.html', html);
@@ -1924,6 +1930,7 @@ function renderFeeling(item) {
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
     description: item.description,
+    headExtras: '    <link rel="stylesheet" href="../../styles/feeling-inference-mobile.css" />',
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -1941,20 +1948,14 @@ function renderNeed(item, allStrategies) {
   const displayTitle = hasPrefix ? item.title.replace(/^Need for\s*/i, '') : item.title;
   const fullTitle = `Need for ${displayTitle}`;
 
-  const strategiesNote = `          ${localStorageReminderHtml}`;
-
   const strategiesHtml = strategiesForNeed.length
     ? `<section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
-          <div class="strategy-deck-header">
-            <button
-              type="button"
-              class="strategy-deck__shuffle"
-              data-strategy-shuffle
-            >
-              Shuffle cards
-            </button>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-deck-header" aria-label="Strategy browsing controls">
+              <button type="button" class="strategy-deck__shuffle" data-strategy-shuffle aria-label="Shuffle strategy cards">Shuffle</button>
+              <button type="button" class="strategy-deck__toggle" data-strategy-toggle aria-pressed="false">View all</button>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
@@ -2001,8 +2002,9 @@ ${strategiesNote}
                         <p class="strategy-card__description">${escapeHtml(description)}</p>
                         ${contributorHtml}
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   `;
@@ -2035,7 +2037,6 @@ ${strategiesNote}
         </section>`
     : `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
           <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
 
@@ -2088,6 +2089,7 @@ ${strategiesNote}
     ],
     main,
         scripts: [
+      { src: 'scripts/strategy-deck.js', defer: true },
       { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
     ],
     mainAttributes: `data-need-slug="${escapeHtml(item.slug)}" data-need-name="${escapeHtml(displayTitle)}" data-need-title="${escapeHtml(fullTitle)}"`,
@@ -2192,10 +2194,7 @@ function renderNeedEvidence(item) {
 
 function renderInventoryPage() {
   const basePath = basePathFromDepth(1);
-  const inventoryFormNotice = buildPersonalStrategyNotice(
-    basePath,
-    'Use the export tools above whenever you would like a backup.'
-  );
+  const inventoryFormNotice = buildPersonalStrategyNotice();
   const personalStrategyForm = renderStrategyForm(
     buildPersonalStrategyFormOptions({
       formId: 'inventory-form',
@@ -2204,205 +2203,8 @@ function renderInventoryPage() {
     })
   );
 
-  const blueskyPanelStyles = `    <style>
-           /* Optional Bluesky sync panel */
-
-      .inventory-bluesky-panel {
-        margin-top: 1.75rem;
-        border: 3px solid var(--outline);
-        border-radius: var(--radius-xl);
-        background: color-mix(in srgb, var(--lavender) 65%, #ffffff 35%);
-        box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-        overflow: hidden;
-      }
-
-      .inventory-bluesky-panel__summary {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 0.9rem;
-        padding: 1rem 1.1rem;
-        cursor: pointer;
-        list-style: none;
-      }
-
-      .inventory-bluesky-panel__summary::-webkit-details-marker {
-        display: none;
-      }
-
-      .inventory-bluesky-panel__titles {
-        display: grid;
-        gap: 0.15rem;
-      }
-
-      .inventory-bluesky-panel__title {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: 1.05rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .inventory-bluesky-panel__subtitle {
-        margin: 0;
-        font-size: 0.9rem;
-        color: var(--ink-soft);
-        max-width: 32rem;
-      }
-
-      .inventory-bluesky-panel__chevron {
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        border: 2px solid var(--outline);
-        background: rgba(255, 255, 255, 0.9);
-        font-size: 0.9rem;
-        transform: rotate(90deg);
-        transition: transform 0.18s ease, background 0.18s ease;
-      }
-
-      .inventory-bluesky-panel[open] .inventory-bluesky-panel__chevron {
-        transform: rotate(270deg);
-        background: color-mix(in srgb, var(--sky) 45%, #ffffff 55%);
-      }
-
-      .inventory-bluesky-panel__content {
-        padding: 1rem 1.1rem 1.1rem;
-        border-top: 3px solid var(--outline);
-        background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
-        display: grid;
-        gap: 1rem;
-        max-width: 100%;
-        border-bottom-left-radius: var(--radius-xl);
-        border-bottom-right-radius: var(--radius-xl);
-      }
-
-      .inventory-bluesky-panel__content p,
-      .inventory-bluesky-panel__content li {
-        margin: 0.25rem 0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        color: var(--ink-soft);
-        max-width: 100%;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-      }
-
-      .inventory-bluesky-panel__content ul {
-        padding-left: 1.15rem;
-      }
-
-      /* Card-like sections inside the panel */
-
-      .inventory-auth-panel,
-      .inventory-backend-sync {
-        border-radius: var(--radius-lg);
-        border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
-        background: rgba(255, 255, 255, 0.85);
-        padding: 0.9rem 0.9rem 0.95rem;
-        display: grid;
-        gap: 0.55rem;
-      }
-
-      .inventory-auth-panel h2,
-      .inventory-backend-sync__heading {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: 0.9rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .inventory-auth-note {
-        font-size: 0.85rem;
-        color: var(--ink-soft);
-      }
-
-      .inventory-auth-note ul {
-        margin: 0.4rem 0 0;
-        padding-left: 1.15rem;
-      }
-
-      .inventory-auth-warning {
-        margin: 0.35rem 0 0;
-        padding: 0.5rem 0.6rem;
-        border-radius: var(--radius-md);
-        border: 2px dashed color-mix(in srgb, var(--outline) 60%, transparent);
-        background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
-        font-size: 0.8rem;
-        color: color-mix(in srgb, var(--ink) 80%, #000 20%);
-      }
-
-      .inventory-auth-panel__field {
-        flex: 1 1 12rem;
-        min-width: 0;
-      }
-
-      .inventory-auth-panel__field label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-bottom: 0.2rem;
-      }
-
-      .inventory-auth-panel__field input[type='text'] {
-        width: 100%;
-        padding: 0.45rem 0.75rem;
-        border-radius: var(--radius-pill);
-        border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
-        background: rgba(255, 255, 255, 0.95);
-        font: inherit;
-        color: inherit;
-      }
-
-      .inventory-auth-panel__field input[type='text']:focus-visible {
-        outline: 3px solid color-mix(in srgb, var(--sky) 70%, transparent);
-        outline-offset: 1px;
-      }
-
-      /* Backend save/load + feed sections */
-
-      .inventory-backend-sync__buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.35rem;
-      }
-
-      .inventory-backend-sync__status {
-        font-size: 0.8rem;
-        color: var(--ink-soft);
-        min-height: 1.1em;
-        margin-top: 0.25rem;
-      }
-
-      /* Small screens */
-
-      @media (max-width: 720px) {
-        .inventory-bluesky-panel__summary {
-          align-items: center;
-        }
-
-        .inventory-bluesky-panel__title {
-          font-size: 0.98rem;
-        }
-
-        .inventory-bluesky-panel__subtitle {
-          font-size: 0.85rem;
-        }
-
-        .inventory-auth-panel,
-        .inventory-backend-sync {
-          padding: 0.85rem 0.8rem 0.9rem;
-        }
-      }
-
-
-      /* Inventory UX first pass v2 — inline pre-paint overrides */
+  const inventoryPageStyles = `    <style>
+           /* Inventory UX first pass v2 — inline pre-paint base styles */
       .inventory-header {
         gap: clamp(0.85rem, 2vw, 1.25rem);
       }
@@ -2422,48 +2224,18 @@ function renderInventoryPage() {
         line-height: 1.45;
       }
 
-      /* Journal stays immediately available without competing with the
-         Inventory's primary task. */
-      .inventory-journal-button {
-        min-height: 44px;
-        padding: 0.42rem 0.72rem;
-        border-width: 2px;
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, var(--sky) 32%, #ffffff 68%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-        font-weight: 700;
-      }
-
-      .inventory-journal-button:hover,
-      .inventory-journal-button:focus-visible {
-        transform: translateY(-1px);
-        box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-      }
-
-      .inventory-journal-button__icon {
-        width: 1.35rem;
-        height: 1.35rem;
-      }
-
-      .inventory-journal-button__label {
-        font-size: 0.82rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-      }
-
       /* One task hierarchy: add is primary; saved/community destinations are
          quieter utilities. */
       .inventory-header__quick-actions {
         display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.9fr);
+        grid-template-columns: minmax(0, 18rem);
         gap: clamp(0.55rem, 1.5vw, 0.8rem);
         margin: 0.15rem 0 0;
         align-items: stretch;
         width: 100%;
       }
 
-      .inventory-header__quick-actions .strategy-quick-actions__link,
-      .inventory-header__quick-actions .inventory-shared-button {
+      .inventory-header__quick-actions .strategy-quick-actions__link {
         width: 100%;
         min-height: 52px;
         margin: 0;
@@ -2486,166 +2258,7 @@ function renderInventoryPage() {
         box-shadow: 0 11px 0 color-mix(in srgb, var(--outline) 40%, transparent);
       }
 
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--sky) 46%, #ffffff 54%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-        font-size: 0.9rem;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--lavender) 55%, #ffffff 45%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary:hover,
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary:focus-visible,
-      .inventory-header__quick-actions .inventory-shared-button:hover,
-      .inventory-header__quick-actions .inventory-shared-button:focus-visible {
-        transform: translateY(-1px);
-        box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-      }
-
-      .inventory-header__quick-actions .strategy-quick-actions__icon,
-      .inventory-header__quick-actions .inventory-shared-button__icon {
-        flex: 0 0 auto;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__text {
-        gap: 0.05rem;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__eyebrow {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__label {
-        font-size: 0.84rem;
-        line-height: 1.2;
-      }
-
-      /* Sync is useful but optional. Give it the visual weight of settings
-         rather than another primary destination. */
-      .inventory-bluesky-panel {
-        margin-top: 0.45rem;
-        border-width: 2px;
-        border-radius: var(--radius-lg);
-        background: color-mix(in srgb, var(--lavender) 45%, #ffffff 55%);
-        box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-      }
-
-      .inventory-bluesky-panel__summary {
-        gap: 0.7rem;
-        padding: 0.72rem 0.85rem;
-        align-items: center;
-      }
-
-      .inventory-bluesky-panel__titles {
-        gap: 0.08rem;
-      }
-
-      .inventory-bluesky-panel__title {
-        font-size: 0.86rem;
-        letter-spacing: 0.05em;
-      }
-
-      .inventory-bluesky-panel__subtitle {
-        font-size: 0.78rem;
-        line-height: 1.35;
-      }
-
-      .inventory-bluesky-panel__chevron {
-        flex: 0 0 auto;
-      }
-
-      @media (max-width: 760px) {
-        .inventory-header__quick-actions {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        }
-
-        .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-          grid-column: 1 / -1;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .inventory-header {
-          gap: 0.8rem;
-        }
-
-        .inventory-header__title-row {
-          grid-template-columns: minmax(0, 1fr);
-          grid-template-areas:
-            'title'
-            'button';
-          gap: 0.5rem;
-          align-items: start;
-        }
-
-        .inventory-journal-button {
-          justify-self: start;
-          width: auto;
-          margin: 0;
-        }
-
-        .inventory-header .page-description {
-          font-size: 0.9rem;
-          line-height: 1.4;
-        }
-
-        .inventory-header__quick-actions {
-          grid-template-columns: minmax(0, 1fr);
-          gap: 0.5rem;
-          margin-top: 0.1rem;
-        }
-
-        .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-          grid-column: auto;
-          min-height: 54px;
-          justify-content: center;
-        }
-
-        .inventory-header__quick-actions .strategy-quick-actions__link--secondary,
-        .inventory-header__quick-actions .inventory-shared-button {
-          min-height: 46px;
-          padding: 0.52rem 0.7rem;
-          justify-content: flex-start;
-        }
-
-        .inventory-header__quick-actions .strategy-quick-actions__link--secondary {
-          font-size: 0.86rem;
-        }
-
-        .inventory-header__quick-actions .inventory-shared-button__eyebrow {
-          display: none;
-        }
-
-        .inventory-header__quick-actions .inventory-shared-button__label {
-          font-size: 0.86rem;
-        }
-
-        .inventory-bluesky-panel {
-          margin-top: 0.3rem;
-        }
-
-        .inventory-bluesky-panel__summary {
-          padding: 0.65rem 0.75rem;
-        }
-
-        .inventory-bluesky-panel__title {
-          font-size: 0.82rem;
-        }
-
-        .inventory-bluesky-panel__subtitle {
-          font-size: 0.74rem;
-        }
-      }
-
-
-
-      /* Inventory model prototype v1 */
+      /* Inventory model prototype v1 — base presentation only. */
       .inventory-main {
         display: flex;
         flex-direction: column;
@@ -2657,7 +2270,7 @@ function renderInventoryPage() {
       .inventory-actions { order: 3; }
 
       .inventory-header__quick-actions {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 18rem);
       }
 
       .inventory-view-switch {
@@ -3017,189 +2630,12 @@ function renderInventoryPage() {
       }
 
       .inventory-actions--collapsible .inventory-actions__header .section-title { display: none; }
-
-      @media (max-width: 640px) {
-      /* Inventory is the app surface on phones, not a card inside the page. */
-      .inventory-page {
-        width: calc(100% + 2rem);
-        margin-inline: -1rem;
-        padding: 1rem 0 2rem;
-        border: 0;
-        border-radius: 0;
-        box-shadow: none;
-        gap: 1rem;
-      }
-
-      .inventory-page .inventory-header,
-      .inventory-page .inventory-form--collapsible,
-      .inventory-page .inventory-actions--collapsible {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-main {
-        gap: 1rem;
-      }
-
-      .inventory-page .inventory-overview {
-        padding: 0;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        box-shadow: none;
-        gap: 0.75rem;
-      }
-
-      .inventory-page .inventory-view-switch,
-      .inventory-page .inventory-view-panel__header,
-      .inventory-page .inventory-overview__tools,
-      .inventory-page .inventory-strategy-search {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-view-panel__header {
-        align-items: start;
-      }
-
-      .inventory-page .inventory-summary {
-        border-left: 0;
-        border-right: 0;
-        border-radius: 0;
-        border-top: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-        border-bottom: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      .inventory-page .inventory-summary {
-
-
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__focus {
-
-
-        min-width: 0;
-
-
-        min-height: 60px;
-
-
-        padding: 0.68rem 0.7rem;
-
-
-        gap: 0.45rem;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__status {
-
-
-        width: 0.72rem;
-
-
-        height: 0.72rem;
-
-
-        flex: 0 0 auto;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__text {
-
-
-        min-width: 0;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__label {
-
-
-        font-size: 0.9rem;
-
-
-        line-height: 1.16;
-
-
-        letter-spacing: -0.01em;
-
-
-        text-wrap: balance;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__label--compact {
-
-
-        font-size: 0.82rem;
-
-
-        letter-spacing: -0.025em;
-
-
-        white-space: nowrap;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__count {
-
-
-        font-size: 0.72rem;
-
-
-        line-height: 1.2;
-
-
-      }
-
-
-
-      .inventory-page .inventory-summary__chevron {
-
-
-        font-size: 1.08rem;
-
-
-        flex: 0 0 auto;
-
-
-      }
-
-      .inventory-page .inventory-summary__detail {
-        padding: 0.72rem 1rem;
-      }
-
-      .inventory-page .inventory-list-panel {
-        margin-inline: 1rem;
-      }
-
-      .inventory-page .inventory-needs-status,
-      .inventory-page .inventory-strategy-count {
-        font-size: 0.72rem;
-      }
-
-      .inventory-page .inventory-header__quick-actions {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
     </style>`;
+
+  /* Keep the phone stylesheet after the shared graph and Inventory base styles so
+     its <=640px rules are the final, single owner of the phone presentation. */
+  const inventoryMobileStyles =
+    '    <link rel="stylesheet" href="../styles/inventory-mobile.css" media="(max-width: 640px)" />';
 
   const main = `
       <header class="page-header inventory-header">
@@ -3207,15 +2643,6 @@ function renderInventoryPage() {
           <div class="inventory-header__content">
             <div class="inventory-header__title-row">
               <h1 class="page-title">Strategy inventory</h1>
-              <a class="inventory-journal-button" href="./journal/">
-                <img
-                  src="../icons/journal-32bit.svg"
-                  class="inventory-journal-button__icon"
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span class="inventory-journal-button__label">Journal</span>
-              </a>
             </div>
             <p class="page-description">
               Build a personal library of strategies that help you care for your needs. Browse by need or review everything you have saved.
@@ -3225,151 +2652,13 @@ function renderInventoryPage() {
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
                 <span>Add strategy</span>
               </a>
-              <a class="inventory-shared-button" href="../feed/">
-                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
-                <span class="inventory-shared-button__text">
-                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
-                  <span class="inventory-shared-button__label">View shared strategies</span>
-                </span>
-              </a>
             </div>
-
-            <details class="inventory-bluesky-panel">
-              <summary class="inventory-bluesky-panel__summary">
-                <div class="inventory-bluesky-panel__titles">
-                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-                  <p class="inventory-bluesky-panel__subtitle">
-                    Sign in to unlock profile saves and backend load, or keep everything local.
-                  </p>
-                </div>
-                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
-              </summary>
-
-              <div class="inventory-bluesky-panel__content">
-                <p class="inventory-bluesky-panel__intro">
-                  Use Bluesky sign-in if you want profile save/load. You can still keep everything local using export/import only.
-                </p>
-
-                <!-- OAuth sign-in / sign-out -->
-                <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-                  <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
-
-                  <p class="inventory-auth-note">
-                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-                    After a fresh sign-in, the app loads your backend snapshot once. Then you can save either to device only or to profile (which also syncs backend).
-                  </p>
-
-                  <div class="inventory-auth-panel__field" data-bluesky-handle-field>
-                    <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-                    <input id="bluesky-handle-input" type="text" autocomplete="username" />
-                  </div>
-                  <button
-                    id="bluesky-auth-button"
-                    type="button"
-                    class="inventory-button inventory-button--compact"
-                  >
-                    <span class="inventory-button__text">Sign in</span>
-                  </button>
-                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
-
-                  <p class="inventory-auth-warning">
-                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
-                    You can ignore this sign-in and keep everything local if you prefer.
-                  </p>
-                </section>
-
-                <!-- Optional backend save/load -->
-                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-                    Optional backend save/load
-                  </h3>
-                  <p>
-                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-                    (the same data you can export as a file). Profile saves also trigger backend save automatically, while
-                    device saves remain local-only. Use “Load data from allneeds backend” any time you want to pull the latest snapshot manually.
-                  </p>
-                  <p>
-                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
-                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
-                    feel right for you, keep using the local export/import buttons instead.
-                  </p>
-
-                  <div class="inventory-backend-sync__buttons">
-                    <button
-                      type="button"
-                      data-backend-save-button
-                      class="inventory-button inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Save current data to allneeds backend</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-backend-load-button
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Load data from allneeds backend</span>
-                    </button>
-                  </div>
-
-                  <div
-                    class="inventory-backend-sync__status"
-                    data-backend-sync-status
-                    aria-live="polite"
-                  ></div>
-                </section>
-
-              </div>
-            </details>
           </div>
         </div>
       </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
-        <details class="inventory-actions inventory-actions--collapsible">
-          <summary class="inventory-disclosure-summary">
-            <span>Backup &amp; restore</span>
-            <span class="inventory-disclosure-summary__glyph" aria-hidden="true">+</span>
-          </summary>
-          <div class="inventory-disclosure-body">
-          <div class="inventory-actions__header">
-            <h2 id="inventory-actions-heading" class="visually-hidden">Backup and restore</h2>
-            <p class="inventory-actions__hint">
-              Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
-            </p>
-          </div>
-          <div class="inventory-actions__buttons">
-            <button
-              type="button"
-              id="inventory-export"
-              class="inventory-button inventory-button--compact"
-              aria-label="Export localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export localStorage</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Export personal strategies and email them to Nat"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import localStorage</span>
-            </button>
-            <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
-          </div>
-          <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-          </div>
-        </details>
+        <p class=\"inventory-message inventory-page__status\" data-inventory-message hidden aria-live=\"polite\"></p>
 
         <section class="inventory-overview" aria-label="Strategy inventory views">
         <div class="inventory-view-switch" role="tablist" aria-label="Inventory view">
@@ -3473,8 +2762,11 @@ function renderInventoryPage() {
       { label: 'Home', href: '../' },
       { label: 'Inventory' },
     ],
-    scripts: [{ src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true }],
-    headExtras: blueskyPanelStyles,
+    scripts: [
+      { src: 'scripts/inventory-legacy-journal-redirect.js', defer: true, beforeBase: true },
+      { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
+    ],
+    headExtras: `${inventoryPageStyles}\n${inventoryMobileStyles}`,
     main,
     mainClass: 'page inventory-page',
     activeNav: 'inventory',
@@ -3484,31 +2776,64 @@ function renderInventoryPage() {
   writePage('inventory/index.html', html);
 }
 
+function journalHistoryPrepaintScript() {
+  return String.raw`    <script data-journal-prepaint>
+      (function() {
+        var root = document.documentElement;
+        if (!root) return;
+        var hasEntries = false;
+        try {
+          var storage = window.localStorage;
+          var keys = ['journal:v2', 'nvcApp.journal', 'alexithymiaSupportJournal'];
+          for (var i = 0; i < keys.length; i += 1) {
+            var raw = storage && storage.getItem ? storage.getItem(keys[i]) : '';
+            if (!raw) continue;
+            var parsed = JSON.parse(raw);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              hasEntries = true;
+              break;
+            }
+          }
+        } catch (error) {
+          hasEntries = false;
+        }
+        root.setAttribute('data-journal-state', hasEntries ? 'populated' : 'empty');
+      })();
+    </script>`;
+}
+
 function renderInventoryJournalPage(needsList = []) {
   const needsDataset = needsList
     .map((need) => ({ slug: need.slug, title: need.title }))
     .filter((item) => item.slug && item.title);
   const needsJson = JSON.stringify(needsDataset);
   const journalPageStyles = `    <style>
-      /* Journal UX first pass v1 — inline pre-paint overrides */
+      /* Journal final shell: history first, compact controls, secondary disclosures. */
       main[data-page-id='inventory-journal'] {
-        gap: clamp(1rem, 2.4vw, 1.5rem);
+        gap: clamp(0.65rem, 1.8vw, 0.95rem);
+      }
+
+      @media (max-width: 720px) {
+        main[data-page-id='inventory-journal'].page {
+          padding-inline: max(0.78rem, env(safe-area-inset-left));
+        }
       }
 
       main[data-page-id='inventory-journal'] .journal-page-header {
-        padding: clamp(1rem, 3vw, 1.35rem);
-        border: 2px solid color-mix(in srgb, var(--outline) 58%, transparent);
-        border-radius: var(--radius-2xl);
-        background: color-mix(in srgb, #ffffff 90%, var(--lavender) 10%);
-        box-shadow: 0 10px 0 color-mix(in srgb, var(--outline) 14%, transparent);
-        gap: 0.8rem;
+        padding: 0.2rem 0.08rem 0.35rem;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        gap: 0;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-title-row {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
-        gap: 0.85rem;
+        display: flex;
         align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        min-width: 0;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-header .page-title {
@@ -3520,181 +2845,490 @@ function renderInventoryJournalPage(needsList = []) {
         overflow: visible;
         clip: auto;
         white-space: normal;
-        font-size: clamp(1.45rem, 4.8vw, 2.2rem);
-        line-height: 1.08;
-        text-transform: uppercase;
-        letter-spacing: 0.055em;
+        font-size: clamp(1.45rem, 5.6vw, 2rem);
+        line-height: 1.05;
+        text-transform: none;
+        letter-spacing: -0.015em;
       }
 
       main[data-page-id='inventory-journal'] .journal-page-title-row__actions {
-        width: 100%;
-        justify-content: stretch;
+        width: auto;
+        display: flex;
+        flex: 0 0 auto;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight {
-        width: 100%;
-        min-height: 58px;
-        justify-content: center;
-        padding: 0.72rem 0.9rem;
-        border: 3px solid var(--outline);
-        border-radius: var(--radius-lg);
-        background: color-mix(in srgb, var(--rose) 84%, #ffffff 16%);
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact {
+        min-width: 0;
+        min-height: 44px;
+        padding: 0.42rem 0.7rem;
+        gap: 0.42rem;
+        border: 1.5px solid color-mix(in srgb, var(--outline) 58%, transparent);
+        border-radius: var(--radius-pill);
+        background: color-mix(in srgb, var(--rose) 56%, #ffffff 44%);
         color: var(--ink);
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 34%, transparent);
-        font-weight: 700;
+        box-shadow: none;
+        font-weight: 750;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight:hover,
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight:focus-visible {
-        transform: translateY(-2px);
-        border-color: var(--outline);
-        background: color-mix(in srgb, var(--rose) 90%, #ffffff 10%);
-        box-shadow: 0 11px 0 color-mix(in srgb, var(--outline) 38%, transparent);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button__icon {
-        width: 2rem;
-        height: 2rem;
-        min-width: 2rem;
-        min-height: 2rem;
-        border-width: 2px;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact:hover,
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact:focus-visible {
+        transform: none;
+        background: color-mix(in srgb, var(--rose) 68%, #ffffff 32%);
         box-shadow: none;
       }
 
-      main[data-page-id='inventory-journal'] .journal-fullscreen-button__title {
-        font-size: 0.95rem;
-        letter-spacing: 0.035em;
-        text-transform: uppercase;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact .journal-fullscreen-button__icon {
+        width: 1.45rem;
+        height: 1.45rem;
+        min-width: 1.45rem;
+        min-height: 1.45rem;
+        border-width: 1.5px;
+        box-shadow: none;
       }
 
-      main[data-page-id='inventory-journal'] .journal-page-description {
-        max-width: 62ch;
-        font-size: 0.94rem;
-        line-height: 1.45;
+      main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact .journal-fullscreen-button__title {
+        font-size: 0.82rem;
+        letter-spacing: 0;
+        text-transform: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-page {
         display: grid;
-        gap: clamp(0.9rem, 2.5vw, 1.25rem);
+        gap: clamp(0.65rem, 1.8vw, 0.95rem);
+      }
+
+      /* Journal inline-size containment contract. Populated History adds a
+         bounded responsive filter grid, while Patterns and entry text add
+         intrinsic content. Every nested grid/flex item in that path must be
+         allowed to shrink to the viewport so intrinsic width stays inside the
+         component instead of widening the document on mobile Safari. */
+      .page-wrapper,
+      main[data-page-id='inventory-journal'],
+      main[data-page-id='inventory-journal'] .journal-page,
+      main[data-page-id='inventory-journal'] .journal-history-section,
+      main[data-page-id='inventory-journal'] .journal-history-controls,
+      main[data-page-id='inventory-journal'] .journal-overview-grid,
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure,
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__body,
+      main[data-page-id='inventory-journal'] .journal-summary,
+      main[data-page-id='inventory-journal'] .journal-summary__stat,
+      main[data-page-id='inventory-journal'] .journal-history,
+      main[data-page-id='inventory-journal'] .journal-entry,
+      main[data-page-id='inventory-journal'] .journal-entry__title-row {
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__title-row {
+        flex-wrap: wrap;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__emotion,
+      main[data-page-id='inventory-journal'] .journal-entry__notes,
+      main[data-page-id='inventory-journal'] .journal-summary__value,
+      main[data-page-id='inventory-journal'] .journal-summary__list,
+      main[data-page-id='inventory-journal'] .journal-value-token {
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section {
+        padding: clamp(0.7rem, 2vw, 0.9rem);
+        border: 1.5px solid color-mix(in srgb, var(--outline) 22%, transparent);
+        border-radius: var(--radius-2xl);
+        background: color-mix(in srgb, #ffffff 97%, var(--lavender) 3%);
+        box-shadow: none;
+        display: grid;
+        gap: 0.62rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section__header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 0.55rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-section__header .section-title {
+        font-size: 1.02rem;
+        line-height: 1.15;
+        letter-spacing: 0;
+        text-transform: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls {
+        display: grid;
+        gap: 0.48rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls[hidden],
+      main[data-page-id='inventory-journal'] .journal-history-control[hidden] {
+        display: none !important;
+      }
+
+      /* The Journal store is local browser state, but its empty/populated
+         classification is known synchronously. A tiny head bootstrap sets this
+         before first paint so the static shell never flashes the wrong state. */
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history-controls,
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history {
+        display: none !important;
+      }
+
+      html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-empty--history {
+        display: grid !important;
+      }
+
+      html[data-journal-state='populated'] main[data-page-id='inventory-journal'] .journal-empty--history {
+        display: none !important;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history {
+        gap: 0.28rem;
+        padding: 0.78rem 0.85rem;
+        border-style: solid;
+        border-color: color-mix(in srgb, var(--outline) 14%, transparent);
+        background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history .journal-empty__title {
+        font-size: 0.9rem;
+        font-weight: 760;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-empty--history .journal-empty__description {
+        font-size: 0.78rem;
+        line-height: 1.35;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__search input {
+        min-height: 44px;
+        border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+        border-radius: var(--radius-lg);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__filters {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        gap: 0.34rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control {
+        display: block;
+        min-width: 0;
+        max-width: 100%;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control > span {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-control select {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        min-height: 44px;
+        padding: 0.42rem 1.55rem 0.42rem 0.68rem;
+        border: 1px solid color-mix(in srgb, var(--outline) 18%, transparent);
+        border-radius: var(--radius-pill);
+        background-color: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+        box-shadow: none;
+        color: var(--ink);
+        font: inherit;
+        font-size: 0.78rem;
+        font-weight: 650;
+        white-space: nowrap;
+      }
+
+      main[data-page-id='inventory-journal'] #journal-filter-range {
+        min-width: 7.4rem;
+      }
+
+      main[data-page-id='inventory-journal'] #journal-filter-sort {
+        min-width: 8.5rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__clear {
+        justify-self: end;
+        min-width: 0;
+        min-height: 44px;
+        margin: -0.08rem 0 0;
+        padding: 0.22rem 0.18rem;
+        border: 0;
+        border-radius: var(--radius-sm);
+        background: transparent;
+        box-shadow: none;
+        color: var(--ink-soft);
+        font: inherit;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history-controls__clear[hidden] {
+        display: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-history--cards {
+        display: grid;
+        gap: 0;
+        overflow: hidden;
+        border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+        border-radius: var(--radius-xl);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry {
+        margin: 0;
+        padding: 0.72rem 0.78rem;
+        gap: 0.42rem;
+        border: 0;
+        border-bottom: 1px solid color-mix(in srgb, var(--outline) 10%, transparent);
+        border-radius: 0;
+        background: #ffffff;
+        box-shadow: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry:last-child {
+        border-bottom: 0;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__emotion {
+        margin: 0;
+        font-size: 0.96rem;
+        line-height: 1.25;
+        font-weight: 760;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__meta {
+        font-size: 0.72rem;
+        line-height: 1.25;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__notes {
+        margin: 0;
+        font-size: 0.86rem;
+        line-height: 1.38;
+        color: color-mix(in srgb, var(--ink) 84%, var(--ink-soft) 16%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__facets {
+        gap: 0.28rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-value-token {
+        min-height: 28px;
+        padding: 0.16rem 0.45rem;
+        border-width: 1px;
+        box-shadow: none;
+        font-size: 0.72rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__actions {
+        margin-top: 0.08rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.34rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__edit,
+      main[data-page-id='inventory-journal'] .journal-entry__delete {
+        min-width: 0;
+        min-height: 36px;
+        padding: 0.3rem 0.55rem;
+        border: 0;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        box-shadow: none;
+        color: var(--ink-soft);
+        font: inherit;
+        font-size: 0.74rem;
+        font-weight: 700;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-entry__edit:hover,
+      main[data-page-id='inventory-journal'] .journal-entry__edit:focus-visible,
+      main[data-page-id='inventory-journal'] .journal-entry__delete:hover,
+      main[data-page-id='inventory-journal'] .journal-entry__delete:focus-visible {
+        transform: none;
+        background: color-mix(in srgb, var(--lavender) 38%, #ffffff 62%);
+        box-shadow: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-overview-grid {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        grid-template-areas:
-          'summary'
-          'backup';
-        gap: clamp(0.75rem, 2vw, 1rem);
+        gap: 0.48rem;
       }
 
-      main[data-page-id='inventory-journal'] .journal-summary-section {
-        grid-area: summary;
-        border: 2px solid color-mix(in srgb, var(--outline) 45%, transparent);
-        background: color-mix(in srgb, #ffffff 86%, var(--sky) 14%);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-actions {
-        grid-area: backup;
-        border: 2px solid color-mix(in srgb, var(--outline) 34%, transparent);
-        background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-panel {
-        padding: clamp(0.9rem, 2.6vw, 1.15rem);
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure {
+        display: block;
+        min-height: 0;
+        border: 1px solid color-mix(in srgb, var(--outline) 16%, transparent);
         border-radius: var(--radius-xl);
-        box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 10%, transparent);
+        background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+        box-shadow: none;
+        overflow: hidden;
       }
 
-      main[data-page-id='inventory-journal'] .journal-actions__header,
-      main[data-page-id='inventory-journal'] .journal-history-section__header {
-        gap: 0.25rem;
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__summary {
+        min-height: 48px;
+        padding: 0.62rem 0.72rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.65rem;
+        cursor: pointer;
+        list-style: none;
+        font-size: 0.84rem;
+        font-weight: 760;
       }
 
-      main[data-page-id='inventory-journal'] .journal-actions__hint,
-      main[data-page-id='inventory-journal'] .journal-form-section__hint,
-      main[data-page-id='inventory-journal'] .journal-list__hint {
-        line-height: 1.4;
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__summary::-webkit-details-marker {
+        display: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__chevron {
+        color: var(--ink-soft);
+        transition: transform 0.16s ease;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure[open] .journal-utility-disclosure__chevron {
+        transform: rotate(90deg);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__body {
+        display: grid;
+        gap: 0.55rem;
+        padding: 0 0.72rem 0.72rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__label {
+        min-width: 0;
+        display: grid;
+        gap: 0.04rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure__hint {
+        font-size: 0.68rem;
+        font-weight: 560;
+        line-height: 1.2;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-summary-section.journal-utility-disclosure {
+        border-color: color-mix(in srgb, var(--outline) 24%, transparent);
+        background: #ffffff;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-summary-section .journal-utility-disclosure__summary {
+        min-height: 54px;
+        font-size: 0.9rem;
+        font-weight: 780;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions.journal-utility-disclosure {
+        border-color: color-mix(in srgb, var(--outline) 12%, transparent);
+        background: color-mix(in srgb, #ffffff 78%, var(--lavender) 22%);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions .journal-utility-disclosure__summary {
+        font-size: 0.78rem;
+        font-weight: 680;
+        color: var(--ink-soft);
+      }
+
+      main[data-page-id='inventory-journal'] .journal-patterns-empty {
+        display: grid;
+        gap: 0.18rem;
+        padding: 0.62rem 0.68rem;
+        border-radius: var(--radius-lg);
+        background: color-mix(in srgb, var(--lavender) 24%, #ffffff 76%);
+        color: var(--ink-soft);
+        font-size: 0.76rem;
+        line-height: 1.38;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-patterns-empty strong {
+        color: var(--ink);
+        font-size: 0.8rem;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-utility-disclosure:not([open]) > .journal-utility-disclosure__body {
+        display: none;
+      }
+
+      main[data-page-id='inventory-journal'] .journal-actions__hint {
+        margin: 0;
+        font-size: 0.76rem;
+        line-height: 1.35;
+        color: var(--ink-soft);
       }
 
       main[data-page-id='inventory-journal'] .journal-actions__buttons {
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 0.55rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.42rem;
       }
 
       main[data-page-id='inventory-journal'] .journal-actions__buttons .inventory-button {
         width: 100%;
-        min-height: 46px;
-        padding: 0.55rem 0.7rem;
-        border-width: 2px;
-        box-shadow: 0 4px 0 color-mix(in srgb, var(--outline) 15%, transparent);
-        font-size: 0.82rem;
+        min-height: 42px;
+        padding: 0.4rem 0.58rem;
+        border-width: 1.5px;
+        border-radius: var(--radius-lg);
+        box-shadow: none;
+        font-size: 0.74rem;
       }
 
-      main[data-page-id='inventory-journal'] .journal-summary__header {
-        align-items: center;
-        gap: 0.65rem;
-      }
-
-      main[data-page-id='inventory-journal'] .journal-summary__header .inventory-button {
-        min-height: 44px;
-        padding: 0.45rem 0.7rem;
-        border-width: 2px;
-        font-size: 0.78rem;
-      }
-
-      main[data-page-id='inventory-journal'] .journal-history-section {
-        border: 2px solid color-mix(in srgb, var(--outline) 52%, transparent);
-        background: #ffffff;
-        box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 12%, transparent);
-      }
-
-      main[data-page-id='inventory-journal'] .journal-filters {
-        gap: 0.65rem;
+      main[data-page-id='inventory-journal'] .journal-summary {
+        padding-top: 0.05rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
       }
 
       main[data-page-id='inventory-journal'] .journal-inline-fallback {
-        margin-top: 0.1rem;
-        border-width: 2px;
-        border-color: color-mix(in srgb, var(--outline) 30%, transparent);
-        background: color-mix(in srgb, #ffffff 92%, var(--lavender) 8%);
+        margin-top: 0;
+        border: 0;
+        background: transparent;
         box-shadow: none;
       }
 
       main[data-page-id='inventory-journal'] .journal-inline-fallback__summary {
-        padding: 0.72rem 0.85rem;
-        font-size: 0.82rem;
+        min-height: 40px;
+        padding: 0.35rem 0.15rem;
+        font-size: 0.72rem;
+        color: var(--ink-soft);
       }
 
       @media (min-width: 760px) {
-        main[data-page-id='inventory-journal'] .journal-overview-grid {
-          grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr);
-          grid-template-areas: 'summary backup';
-          align-items: start;
+        main[data-page-id='inventory-journal'] .journal-history-controls__filters {
+          grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
         }
       }
 
-      @media (max-width: 640px) {
-        main[data-page-id='inventory-journal'] .journal-page-header {
-          padding: 0.95rem;
-          gap: 0.7rem;
+      @media (max-width: 420px) {
+        main[data-page-id='inventory-journal'] .journal-page-header .page-title {
+          font-size: 1.35rem;
         }
 
-        main[data-page-id='inventory-journal'] .journal-page-title-row {
-          grid-template-columns: minmax(0, 1fr);
-          gap: 0.65rem;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-fullscreen-button--spotlight {
-          min-height: 62px;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-page-description {
-          font-size: 0.9rem;
-        }
-
-        main[data-page-id='inventory-journal'] .journal-panel {
-          padding: 0.85rem;
+        main[data-page-id='inventory-journal'] .journal-fullscreen-button--compact {
+          padding-inline: 0.58rem;
         }
 
         main[data-page-id='inventory-journal'] .journal-actions__buttons {
@@ -3710,106 +3344,89 @@ function renderInventoryJournalPage(needsList = []) {
           <div class="journal-page-title-row__actions">
             <button
               type="button"
-              class="journal-fullscreen-button journal-fullscreen-button--spotlight"
+              class="journal-fullscreen-button journal-fullscreen-button--compact"
               data-support-journal-open
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
             >
               <span class="journal-fullscreen-button__icon" aria-hidden="true"></span>
-              <span class="journal-fullscreen-button__text">
-                <span class="journal-fullscreen-button__title">Open journal</span>
-              </span>
+              <span class="journal-fullscreen-button__title">New entry</span>
             </button>
           </div>
         </div>
-        <p class="page-description journal-page-description">
-          Log feelings, needs, and notes from any check-in. Review patterns over time, or export a backup when you want one.
-        </p>
       </header>
       <section class="journal-page" data-inventory-section="journal">
-        <div class="journal-overview-grid">
-          <section class="journal-actions journal-panel" aria-labelledby="journal-actions-heading">
-            <div class="journal-actions__header">
-              <h2 id="journal-actions-heading" class="section-title">Backup &amp; restore</h2>
-              <p class="journal-actions__hint">
-                Export or import a backup of your journal, inventory, and customizer settings.
-              </p>
-            </div>
-            <div class="journal-actions__buttons">
-              <button type="button" id="journal-export" class="inventory-button">Export backup</button>
-              <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import backup</button>
-              <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
-            </div>
-            <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
-          </section>
-
-          <section class="journal-summary-section journal-panel" aria-labelledby="journal-summary-heading">
-            <div class="journal-summary__header">
-              <h2 id="journal-summary-heading" class="section-title">Patterns at a glance</h2>
-              <button
-                type="button"
-                class="inventory-button inventory-button--ghost"
-                data-journal-summary-toggle
-                aria-expanded="true"
-              >
-                Hide summary
-              </button>
-            </div>
-            <div class="journal-summary" data-journal-summary></div>
-          </section>
-        </div>
-
         <section class="journal-history-section journal-panel journal-panel--history" aria-labelledby="journal-history-heading">
           <div class="journal-history-section__header">
-            <h2 id="journal-history-heading" class="section-title">Journal history</h2>
-            <p class="journal-actions__hint">Search entries, focus on a tag, or sort by intensity to notice patterns.</p>
+            <h2 id="journal-history-heading" class="section-title">History</h2>
           </div>
-          <form class="journal-filters" data-journal-filters>
-            <div class="journal-filters__field">
-              <label for="journal-filter-search">Search notes</label>
-              <input id="journal-filter-search" name="search" type="search" placeholder="Search text" />
+          <form class="journal-history-controls" data-journal-filters>
+            <div class="journal-history-controls__search">
+              <label class="visually-hidden" for="journal-filter-search">Search journal</label>
+              <input id="journal-filter-search" name="search" type="search" placeholder="Search journal" autocomplete="off" />
             </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-tag">Filter tags</label>
-              <input id="journal-filter-tag" name="tag" type="text" placeholder="e.g. work" />
+            <div class="journal-history-controls__filters" aria-label="Filter journal history">
+              <label class="journal-history-control" for="journal-filter-emotion"><span>Feeling</span><select id="journal-filter-emotion" name="emotion" aria-label="Feeling"><option value="">Any feeling</option></select></label>
+              <label class="journal-history-control" for="journal-filter-need"><span>Need</span><select id="journal-filter-need" name="need" aria-label="Need"><option value="">Any need</option></select></label>
+              <label class="journal-history-control" for="journal-filter-tag"><span>Tag</span><select id="journal-filter-tag" name="tag" aria-label="Tag"><option value="">Any tag</option></select></label>
+              <label class="journal-history-control" for="journal-filter-range"><span>Date</span><select id="journal-filter-range" name="range" aria-label="Date"><option value="all">Any time</option><option value="7">7 days</option><option value="30">30 days</option><option value="90">90 days</option></select></label>
+              <label class="journal-history-control" for="journal-filter-sort"><span>Sort</span><select id="journal-filter-sort" name="sort" aria-label="Sort"><option value="newest">Newest</option><option value="oldest">Oldest</option><option value="intensity-high">Highest intensity</option><option value="intensity-low">Lowest intensity</option></select></label>
             </div>
-            <div class="journal-filters__field">
-              <label for="journal-filter-sort">Sort order</label>
-              <select id="journal-filter-sort" name="sort">
-                <option value="newest">Newest first</option>
-                <option value="oldest">Oldest first</option>
-                <option value="intensity-high">Highest intensity</option>
-                <option value="intensity-low">Lowest intensity</option>
-              </select>
-            </div>
-            <div class="journal-filters__actions">
-              <button type="button" class="inventory-button inventory-button--ghost" data-journal-filters-reset>Reset filters</button>
-            </div>
+            <button type="button" class="journal-history-controls__clear" data-journal-filters-reset hidden>Clear filters</button>
           </form>
-          <p class="journal-empty" data-journal-empty hidden>Save entries to see them listed here.</p>
+          <div class="journal-empty journal-empty--history" data-journal-empty hidden><strong class="journal-empty__title">No entries yet</strong><span class="journal-empty__description">Save your first entry to start building history and patterns. Filters will appear once there is something to explore.</span></div>
           <div class="journal-history journal-history--cards" data-journal-history></div>
         </section>
 
+        <div class="journal-overview-grid" aria-label="Journal tools">
+          <details class="journal-summary-section journal-utility-disclosure">
+            <summary class="journal-utility-disclosure__summary">
+              <span class="journal-utility-disclosure__label">
+                <span>Patterns</span>
+                <span class="journal-utility-disclosure__hint">Trends across entries</span>
+              </span>
+              <span class="journal-utility-disclosure__chevron" aria-hidden="true">›</span>
+            </summary>
+            <div class="journal-utility-disclosure__body">
+              <div class="journal-summary" data-journal-summary>
+                <div class="journal-patterns-empty" data-journal-patterns-placeholder>
+                  <strong>Patterns grow with your journal.</strong>
+                  <span>Recurring feelings, needs, tags, and intensity trends will appear here as you save entries.</span>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="journal-actions journal-utility-disclosure">
+            <summary class="journal-utility-disclosure__summary">
+              <span>Backup &amp; restore</span>
+              <span class="journal-utility-disclosure__chevron" aria-hidden="true">›</span>
+            </summary>
+            <div class="journal-utility-disclosure__body">
+              <p class="journal-actions__hint">Export or import your journal, inventory, and customizer settings.</p>
+              <div class="journal-actions__buttons">
+                <button type="button" id="journal-export" class="inventory-button">Export</button>
+                <button type="button" id="journal-import-trigger" class="inventory-button inventory-button--ghost">Import</button>
+                <input type="file" id="journal-import" accept="application/json,.json,text/csv,.csv" hidden />
+              </div>
+              <p class="journal-message" data-journal-message hidden aria-live="polite"></p>
+            </div>
+          </details>
+        </div>
+
         <details class="journal-inline-fallback" data-journal-inline-fallback>
           <summary class="journal-inline-fallback__summary">
-            <span class="journal-inline-fallback__summary-text">Need the legacy inline journal form?</span>
+            <span class="journal-inline-fallback__summary-text">Fallback editor</span>
           </summary>
           <div class="journal-inline-fallback__body">
-            <p class="journal-inline-fallback__note">
-              The full screen journal above is the best experience&mdash;it's roomier, faster, and stays current with
-              new features. This legacy form is more constrained and less polished, so only use it if the primary
-              journal will not load.
-            </p>
-            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container>
+            <p class="journal-inline-fallback__note">Use only if New entry does not open.</p>
+            <div class="journal-inline-container journal-panel journal-panel--form-shell" data-journal-inline-container data-journal-notes-rows="5">
               <section class="journal-form-section" aria-labelledby="journal-form-heading">
                 <div class="journal-form-section__header">
-                  <h2 id="journal-form-heading" class="section-title">Log a new entry</h2>
-                  <p class="journal-form-section__hint">Tag what's present right now. Unsure of the feeling? Leave it blank and lean on the notes.</p>
+                  <h2 id="journal-form-heading" class="section-title">New entry</h2>
                 </div>
-                <div class="journal-module" data-journal-module data-journal-variant="inventory" data-journal-id-prefix="journal">
-                  <noscript>
-                    <p class="journal-status">Enable JavaScript to use the journal form.</p>
-                  </noscript>
+                <div class="journal-module" data-journal-module data-journal-id-prefix="journal">
+                  <noscript><p class="journal-status">Enable JavaScript to use the journal form.</p></noscript>
                 </div>
               </section>
             </div>
@@ -3833,9 +3450,10 @@ function renderInventoryJournalPage(needsList = []) {
     ],
     main,
     mainAttributes: 'data-page-id="inventory-journal"',
+    prepaintExtras: journalHistoryPrepaintScript(),
     headExtras: journalPageStyles,
     scripts: [
-      { src: 'assets/js/journal/store.js', type: 'module' },
+      { src: 'assets/js/journal/store.js', type: 'module', beforeBase: true },
       { src: 'assets/js/journal/module.js', type: 'module' },
       { src: 'scripts/inventory.js', defer: true },
     ],

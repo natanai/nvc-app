@@ -1,6 +1,8 @@
 import fs from "fs/promises";
 import path from "path";
 
+import { flattenReverseInferenceOverrides } from "./reverse-inference-overrides-csv.mjs";
+
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const EVIDENCE_DIR = path.join(ROOT, "_evidence");
@@ -181,13 +183,18 @@ function flattenObservationLexicon(lexicon) {
 function flattenObservationTemplates(templates) {
   const rows = [];
   for (const [need, entry] of Object.entries(templates)) {
-    for (const cue of entry.cues ?? []) {
+    const { slotIds = [], cues = [], ...entryRest } = entry;
+    for (const cue of cues) {
+      const { suffix = "", example = "", patterns = [], ...cueRest } = cue;
       rows.push({
         need,
-        slots: (entry.slotIds ?? []).join("|"),
-        suffix: cue.suffix ?? "",
-        example: cue.example ?? "",
-        patterns: (cue.patterns ?? []).join("|")
+        slots: slotIds.join("|"),
+        suffix,
+        example,
+        patterns: patterns.join("|"),
+        patternsJson: JSON.stringify(patterns),
+        entryExtraJson: Object.keys(entryRest).length ? JSON.stringify(entryRest) : "",
+        cueExtraJson: Object.keys(cueRest).length ? JSON.stringify(cueRest) : ""
       });
     }
   }
@@ -197,16 +204,29 @@ function flattenObservationTemplates(templates) {
 function flattenObservationModules(blueprints) {
   const rows = [];
   for (const module of blueprints.modules ?? []) {
+    const {
+      id = "",
+      label = "",
+      summary = "",
+      slotIds = [],
+      lexiconKeys = [],
+      feelings = [],
+      needs = [],
+      examples = [],
+      detectors = [],
+      ...rest
+    } = module;
     rows.push({
-      id: module.id ?? "",
-      label: module.label ?? "",
-      summary: module.summary ?? "",
-      slotIds: (module.slotIds ?? []).join("|"),
-      lexiconKeys: (module.lexiconKeys ?? []).join("|"),
-      feelings: (module.feelings ?? []).join("|"),
-      needs: (module.needs ?? []).join("|"),
-      examples: (module.examples ?? []).join("|"),
-      detectorsJson: JSON.stringify(module.detectors ?? [])
+      id,
+      label,
+      summary,
+      slotIds: slotIds.join("|"),
+      lexiconKeys: lexiconKeys.join("|"),
+      feelings: feelings.join("|"),
+      needs: needs.join("|"),
+      examples: examples.join("|"),
+      detectorsJson: JSON.stringify(detectors),
+      extraJson: Object.keys(rest).length ? JSON.stringify(rest) : ""
     });
   }
   return rows;
@@ -230,6 +250,17 @@ async function run() {
   await copyCsv(path.join(EVIDENCE_DIR, "citations.csv"), "citations.csv");
   console.log("• copied core CSV sources and citations");
 
+  const reverseInferenceOverrides = JSON.parse(
+    await fs.readFile(path.join(DATA_DIR, "reverse-inference-overrides.json"), "utf8"),
+  );
+  await exportJsonCsv(
+    "reverse-inference-overrides.json",
+    flattenReverseInferenceOverrides(reverseInferenceOverrides),
+    "reverse-inference-overrides.csv",
+  );
+
+  // These two generated tables remain useful review snapshots. Their editable
+  // canonical inputs are Feelings.csv and reverse-inference-overrides.csv.
   const reverseInference = JSON.parse(await fs.readFile(path.join(DATA_DIR, "reverse-inference.json"), "utf8"));
   await exportJsonCsv("reverse-inference.json", flattenReverseInference(reverseInference), "reverse-inference.csv");
 

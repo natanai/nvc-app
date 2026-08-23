@@ -1,169 +1,194 @@
-import {
-  initBlueskyOAuth,
-  getCurrentBlueskySession,
-  signInWithBluesky,
-  signOutFromBluesky,
-  ensureBackendSession,
-} from './bluesky-oauth.js?v=2024-07-11';
-import './profile-restore-rehydration.js';
-
 const LOGIN_INTENT_STORAGE_KEY = 'allneeds:bsky-login-intent';
-let initialized = false;
+const SESSION_HINT_STORAGE_KEY = 'allneeds:bsky-session-hint';
+const RESTORE_PENDING_STORAGE_KEY = 'allneeds:restore-palette-rehydrate';
+const SESSION_HINT_ACTIVE = 'active';
+const SESSION_HINT_NONE = 'none';
+const ACCOUNT_TRIGGER_SELECTOR = [
+  '[data-menu-drill="account-data"]',
+  '#bluesky-auth-button',
+  '[data-backend-save-button]',
+  '[data-backend-load-button]',
+  '[data-save-to-profile-button]',
+  '.strategy-card__save--profile',
+].join(',');
+const RESTORE_TRIGGER_SELECTOR = [
+  '[data-backend-load-button]',
+  '#inventory-import-trigger',
+].join(',');
 
-function consumeLoginIntent() {
+let runtimePromise = null;
+let runtimeReady = false;
+let restorePromise = null;
+let restoreReady = false;
+
+function loadBlueskyRuntime() {
+  if (!runtimePromise) {
+    runtimePromise = import('./inventory-bluesky-runtime.js?v=2026-08-21-session-hint')
+      .then((module) => {
+        runtimeReady = true;
+        return module;
+      })
+      .catch((error) => {
+        runtimePromise = null;
+        console.error('Unable to load Bluesky account runtime', error);
+        throw error;
+      });
+  }
+  return runtimePromise;
+}
+
+function loadRestoreRuntime() {
+  if (!restorePromise) {
+    restorePromise = import('./profile-restore-rehydration.js?v=2026-08-21-lazy')
+      .then((module) => {
+        restoreReady = true;
+        return module;
+      })
+      .catch((error) => {
+        restorePromise = null;
+        console.error('Unable to load profile restore protection', error);
+        throw error;
+      });
+  }
+  return restorePromise;
+}
+
+function hasLoginIntent() {
   try {
-    if (!window.sessionStorage) return false;
-    const hasIntent = window.sessionStorage.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
-    if (hasIntent) window.sessionStorage.removeItem(LOGIN_INTENT_STORAGE_KEY);
-    return hasIntent;
+    return window.sessionStorage?.getItem(LOGIN_INTENT_STORAGE_KEY) === '1';
   } catch (error) {
     return false;
   }
 }
 
-function setLoginIntent() {
+function hasPendingRestoreRehydrate() {
   try {
-    if (window.sessionStorage) window.sessionStorage.setItem(LOGIN_INTENT_STORAGE_KEY, '1');
+    return window.sessionStorage?.getItem(RESTORE_PENDING_STORAGE_KEY) === '1';
   } catch (error) {
-    // Ignore storage errors. Sign-in can still proceed.
+    return false;
   }
 }
 
-function setGlobalBlueskySession(session, { reason = '' } = {}) {
-  const normalizedDid = session?.did || session?.sub || null;
-  const normalizedHandle = session?.preferred_username || session?.handle || session?.username || null;
-
-  window.allneedsSession = normalizedDid
-    ? { did: normalizedDid, handle: normalizedHandle }
-    : null;
-
-  window.dispatchEvent(new CustomEvent('allneeds:bsky-login-changed', {
-    detail: {
-      ...(window.allneedsSession || {}),
-      reason,
-    },
-  }));
-}
-
-function describeSession(session) {
-  const handle = session?.preferred_username || session?.handle || session?.username || '';
-  return handle ? `Signed in as @${String(handle).replace(/^@/, '')}` : 'Signed in with Bluesky';
-}
-
-function updateBlueskyAuthUi(session) {
-  const handleField = document.querySelector('[data-bluesky-handle-field]');
-  const statusText = document.querySelector('#bluesky-auth-status-text');
-  const authButton = document.querySelector('#bluesky-auth-button');
-  const authButtonText = authButton?.querySelector('.inventory-button__text');
-
-  if (session) {
-    if (handleField) handleField.hidden = true;
-    if (statusText) {
-      statusText.textContent = describeSession(session);
-      statusText.classList.remove('inventory-auth-panel__status-text--error');
-    }
-    if (authButton) {
-      authButton.classList.add('inventory-button--ghost');
-      if (authButtonText) authButtonText.textContent = 'Sign out';
-      authButton.setAttribute('aria-label', 'Sign out of Bluesky');
-    }
-  } else {
-    if (handleField) handleField.hidden = false;
-    if (statusText) {
-      statusText.textContent = '';
-      statusText.classList.remove('inventory-auth-panel__status-text--error');
-    }
-    if (authButton) {
-      authButton.classList.remove('inventory-button--ghost');
-      if (authButtonText) authButtonText.textContent = 'Sign in';
-      authButton.setAttribute('aria-label', 'Sign in with Bluesky');
-    }
+function readSessionHint() {
+  try {
+    const hint = window.localStorage?.getItem(SESSION_HINT_STORAGE_KEY);
+    return hint === SESSION_HINT_ACTIVE || hint === SESSION_HINT_NONE ? hint : '';
+  } catch (error) {
+    return '';
   }
 }
 
-function setStatusText(message, { isError = false } = {}) {
-  const statusText = document.querySelector('#bluesky-auth-status-text');
-  if (!statusText) return;
-  statusText.textContent = message || '';
-  statusText.classList.toggle('inventory-auth-panel__status-text--error', Boolean(isError));
+function isOAuthReturn() {
+  try {
+    const params = new URL(window.location.href).searchParams;
+    return params.has('state') && (params.has('code') || params.has('error') || params.has('iss'));
+  } catch (error) {
+    return false;
+  }
 }
 
-async function onBlueskySignInClick() {
-  const input = document.querySelector('#bluesky-handle-input');
-  const handle = input?.value?.trim();
-  if (!handle) {
-    setStatusText('Enter your Bluesky handle first.', { isError: true });
+function isStrategyFeedRoute() {
+  return Boolean(document.querySelector('[data-feed-list]'));
+}
+
+function closestTrigger(target, selector) {
+  return target instanceof Element ? target.closest(selector) : null;
+}
+
+function warmOptionalRuntimes(event) {
+  if (closestTrigger(event.target, ACCOUNT_TRIGGER_SELECTOR)) {
+    loadBlueskyRuntime().catch(() => {});
+  }
+  if (closestTrigger(event.target, RESTORE_TRIGGER_SELECTOR)) {
+    loadRestoreRuntime().catch(() => {});
+  }
+}
+
+// Pointer/focus intent begins fetching before the eventual click without
+// changing the interaction itself. Account & data can open normally while its
+// optional network runtime becomes ready; restore protection is warmed only
+// when the person approaches an action that can replace local data.
+document.addEventListener('pointerover', warmOptionalRuntimes, { capture: true, passive: true });
+document.addEventListener('focusin', warmOptionalRuntimes, { capture: true });
+
+// Direct activation can happen without pointer/focus warming (automation,
+// assistive tooling, synthetic clicks). Hold only the affected action until the
+// runtime that owns it is installed, then replay the same click once.
+document.addEventListener('click', async (event) => {
+  const target = event.target instanceof Element ? event.target : null;
+  if (!target) return;
+
+  const authButton = target.closest('#bluesky-auth-button');
+  if (authButton instanceof HTMLElement && !runtimeReady) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    try {
+      await loadBlueskyRuntime();
+      window.requestAnimationFrame(() => authButton.click());
+    } catch (error) {
+      const status = document.querySelector('#bluesky-auth-status-text');
+      if (status) status.textContent = 'Unable to load Bluesky sign-in right now.';
+    }
     return;
   }
 
-  try {
-    setStatusText('Opening Bluesky sign-in…');
-    setLoginIntent();
-    await signInWithBluesky(handle);
-  } catch (err) {
-    console.error('Error during Bluesky OAuth sign-in', err);
-    setStatusText(err?.message || 'Unable to start Bluesky sign-in. Please check your handle.', { isError: true });
-  }
-}
-
-async function onBlueskySignOutClick() {
-  try {
-    await signOutFromBluesky();
-  } catch (err) {
-    console.error('Error during Bluesky OAuth sign-out', err);
-  }
-  setGlobalBlueskySession(null, { reason: 'signout' });
-  updateBlueskyAuthUi(null);
-}
-
-async function initBlueskyUi() {
-  if (initialized) return;
-  initialized = true;
-
-  const authButton = document.querySelector('#bluesky-auth-button');
-  if (authButton) {
-    authButton.addEventListener('click', () => {
-      if (window.allneedsSession) onBlueskySignOutClick();
-      else onBlueskySignInClick();
-    });
-  }
-
-  const handleInput = document.querySelector('#bluesky-handle-input');
-  if (handleInput) {
-    handleInput.addEventListener('input', () => setStatusText(''));
-    handleInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' && !window.allneedsSession) {
-        event.preventDefault();
-        onBlueskySignInClick();
-      }
-    });
-  }
-
-  let session = null;
-  const loginIntent = consumeLoginIntent();
-  try {
-    session = await initBlueskyOAuth();
-  } catch (err) {
-    console.error('Error initializing Bluesky OAuth', err);
-  }
-
-  if (!session) session = getCurrentBlueskySession();
-
-  if (session) {
+  const restoreTrigger = target.closest('#inventory-import-trigger, [data-backend-load-button]');
+  const needsBluesky = restoreTrigger?.matches('[data-backend-load-button]') === true;
+  if (
+    restoreTrigger instanceof HTMLElement &&
+    (!restoreReady || (needsBluesky && !runtimeReady))
+  ) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
     try {
-      await ensureBackendSession(session);
-    } catch (err) {
-      console.error('Could not start backend session', err);
+      const loads = [loadRestoreRuntime()];
+      if (needsBluesky) loads.push(loadBlueskyRuntime());
+      await Promise.all(loads);
+      window.requestAnimationFrame(() => restoreTrigger.click());
+    } catch (error) {
+      const status = document.querySelector('[data-backend-sync-status]');
+      if (status) status.textContent = 'Unable to prepare restore right now.';
     }
   }
+}, true);
 
-  const reason = session ? (loginIntent ? 'signin' : 'restore') : 'signout';
-  setGlobalBlueskySession(session || null, { reason });
-  updateBlueskyAuthUi(session);
+function schedulePostLoadRestore({ knownActive = false } = {}) {
+  const start = () => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(
+        () => loadBlueskyRuntime().catch(() => {}),
+        { timeout: knownActive ? 600 : 1800 },
+      );
+    } else {
+      window.setTimeout(() => loadBlueskyRuntime().catch(() => {}), knownActive ? 0 : 900);
+    }
+  };
+
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start, { once: true });
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initBlueskyUi, { once: true });
-} else {
-  initBlueskyUi();
+// Restore reconciliation is local-state protection rather than account UI, so
+// it remains global even on routes that own their own account/session restore.
+if (hasPendingRestoreRehydrate()) {
+  loadRestoreRuntime().catch(() => {});
+}
+
+// Shared Strategies owns its route-level session restoration because it needs
+// that session to choose between the public and followed feeds. Do not schedule
+// a second account-runtime restore there; Account & data still prewarms/loads
+// this runtime on intent through the listeners above.
+if (!isStrategyFeedRoute()) {
+  // OAuth returns must be consumed immediately. A browser with a previously
+  // confirmed session restores it after first paint. Once a browser has confirmed
+  // there is no Bluesky session, ordinary page navigation does no OAuth work at
+  // all until the user approaches Account & data. Unknown/legacy browsers perform
+  // one idle discovery, and the runtime records the result for later navigations.
+  if (isOAuthReturn() || hasLoginIntent()) {
+    loadBlueskyRuntime().catch(() => {});
+  } else {
+    const hint = readSessionHint();
+    if (hint === SESSION_HINT_ACTIVE) schedulePostLoadRestore({ knownActive: true });
+    else if (hint !== SESSION_HINT_NONE) schedulePostLoadRestore();
+  }
 }

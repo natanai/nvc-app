@@ -1,43 +1,46 @@
 # Fact-Checking Playbook
 
-This guide is for the alexithymia fact-checker. It shows exactly where every fact, citation, and number lives and how to change them so the site reflects updates as soon as pages are refreshed (or rebuilt).
+This guide is for the alexithymia fact-checker. It shows where each fact, citation, and reviewed number lives and how to change it so the site reflects updates after regeneration.
 
 ## One-button spreadsheets
 
-You can now complete the entire fact-checking loop from GitHub Actions—no local runtime required:
+You can complete the fact-checking loop from GitHub Actions—no local runtime required:
 
 1. From the Actions tab, run **“Fact-Checking Spreadsheets”** to download the latest `fact-checking/` bundle as an artifact.
-2. Edit the spreadsheets.
+2. Edit the source spreadsheets.
 3. Run **“Apply Fact-Checking Spreadsheets”** to import the edited folder, rebuild data + pages, and open a pull request with the generated changes.
 
-Prefer local commands instead? Run the export command to generate a single `fact-checking/` folder that holds **every value and citation the site consumes** as spreadsheets. Edit those CSVs directly, then import to push the changes back into the canonical data files used at build time.
+Prefer local commands instead? Run the export command to generate the `fact-checking/` folder, edit the source CSVs, then import them back into canonical source before rebuilding.
 
 ```bash
-npm run export:fact-checking   # writes fact-checking/*.csv for all datasets
-# ...open and edit the CSVs...
-npm run import:fact-checking   # rewrites data/ and _evidence/ from the edited sheets
-npm run build:data             # rebuilds the dataset
-npm run build:pages            # regenerates static pages with the new values
+npm run export:fact-checking   # writes fact-checking/*.csv
+# ...open and edit the source CSVs...
+npm run import:fact-checking   # rewrites canonical data/_evidence sources
+npm run build:data             # rebuilds generated JSON directly from canonical source
+npm run build:pages            # regenerates static pages
 ```
 
 Generated CSVs include:
 
 - Core content: `Needs.csv`, `Feelings.csv`, `Faux Feelings.csv`, `Strategies.csv`, `color-palettes.csv`
 - Evidence: `_evidence/citations.csv`
-- Body cues + weights: `reverse-inference.csv`, `body-regions.csv`
+- Reviewed reverse-inference exceptions: `reverse-inference-overrides.csv` — **editable and round-trippable**
+- Generated Body Cue/reverse-inference review snapshots: `body-regions.csv`, `reverse-inference.csv` — **reference-only**
 - Observation system: `observation-taxonomy.csv`, `observation-lexicon.csv`, `observation-templates.csv`, `observation-modules.csv`, `observation-detector-stats.csv`, and `observation-guide.csv` (raw JSON in a spreadsheet column)
 
 ## Quick rebuild loop
 
 ```bash
 npm install                # first-time setup
-npm run build:data         # rebuild the dataset after CSV/JSON edits
-npm run build:pages        # regenerate the static pages
+npm run build:data         # rebuild generated JSON after CSV/JSON source edits
+npm run build:pages        # regenerate static pages
 # If you edited observation lexicon or templates:
 npm run build:observation-cues
 python -m http.server      # serve the refreshed pages locally
 # visit http://localhost:8000/
 ```
+
+A correct no-op build is deterministic: after canonical generated files are committed, rerunning `npm run build` should leave no Git diff.
 
 ## Where each piece of data lives
 
@@ -45,14 +48,26 @@ python -m http.server      # serve the refreshed pages locally
 | --- | --- | --- | --- |
 | Core needs | `data/Needs.csv` | Need titles, summaries, claim narrative, and **Source Links** used for citations. | `npm run build:data && npm run build:pages` |
 | Citations | `_evidence/citations.csv` | Citation text/URLs that feed the need page "Supporting Sources" list via `Source Links`. | After editing run `npm run replace:needs-sources`, then `npm run build:pages` |
-| Feelings + body cues | `data/Feelings.csv` | Feeling names, summaries, related needs/faux feelings, and reverse-inference body cues. | `npm run build:data && npm run build:pages` |
+| Feelings + Body Cue source | `data/Feelings.csv` | Feeling names, summaries, related needs/faux feelings, and canonical Body Cue rows/weights. Cue keys must be unique by region/option/feeling. | `npm run build:data && npm run build:pages` |
 | Faux feelings | `data/Faux Feelings.csv` | Faux feeling names plus related feelings/needs. | `npm run build:data && npm run build:pages` |
 | Strategies | `data/Strategies.csv` | Strategy text and contributor info shown on need pages and the inventory. | `npm run build:data && npm run build:pages` |
-| Reverse inference map | `data/reverse-inference.json` | Region-to-feeling weightings used by the feeling reverse-inference toggles. | `npm run build:data && npm run build:pages` |
-| Visual metadata | `data/color-palettes.csv`, `data/body-regions.json` | Palette values for magnets and body region labels. | `npm run build:data && npm run build:pages` |
+| Reviewed reverse-inference exceptions | `data/reverse-inference-overrides.json` or the round-trippable `fact-checking/reverse-inference-overrides.csv` | The small reviewed set of zone, need-hypothesis, Body Cue order/weight, and evidence exceptions that intentionally differ from formula-derived defaults. | `npm run build:data && npm run build:pages` |
+| Visual metadata | `data/color-palettes.csv` | Palette values for magnets and shared UI. | `npm run build:pages` |
 | Observation system | `data/observation_need_templates.json`, `data/observation_lexicon.json`, `data/observation_taxonomy.json`, `data/observation_module_blueprints.json`, `data/observation_detector_stats.json`, `data/observation-guide.json` | Vocabulary, templates, taxonomy labels, and detector stats for the observation editor. | `npm run build:observation-cues` (also rerun `build:data` if you want `index.json` refreshed) |
-| Generated outputs (read-only) | `data/index.json`, `data/observation_cue_modules.json`, `data/observation_cues.csv` | Built artifacts consumed by the site. Edit the source files above instead. | Regenerated by the commands in this table |
+| Generated outputs (read-only) | `data/index.json`, `data/body-regions.json`, `data/reverse-inference.json`, `data/observation_cue_modules.json`, `data/observation_cues.csv` | Built artifacts consumed by the site. Edit the source files above instead. | Regenerated by the commands in this table |
 | Temporary link suppressions | `scripts/link-suppressions.json` | URLs that are valid but temporarily flaky; keeps `lint:links` green with a justification. | No rebuild; only affects link linting |
+
+### Reverse-inference ownership
+
+`data/reverse-inference.json` is generated, not hand-edited. The compiler first derives the normal reverse-inference model from the canonical needs, feelings, and Body Cue source rows. It then translates internal emotion-model keys back to public page keys and applies only the reviewed exceptions in `data/reverse-inference-overrides.json`.
+
+For spreadsheet review:
+
+- edit `reverse-inference-overrides.csv` when a reviewed exception itself should change;
+- edit `Feelings.csv` when a canonical Body Cue association or weight should change;
+- use `reverse-inference.csv` and `body-regions.csv` to inspect the generated result, but do not edit them expecting the change to survive a build.
+
+The import step deliberately ignores edits to those two generated review snapshots.
 
 ## Fast path for citation edits
 
@@ -63,14 +78,15 @@ python -m http.server      # serve the refreshed pages locally
 
 ## Fast path for number or text edits
 
-1. Open the relevant file from the table above (for example, change a claim summary inside `data/Needs.csv` or adjust detector weights in `data/observation_detector_stats.json`).
-2. Save the change and run the rebuild command listed for that file set.
-3. Refresh the served site (or rebuild then re-open `index.html`) to confirm the update on the page.
+1. Open the relevant canonical source from the table above. For example, change a claim summary in `data/Needs.csv`, a Body Cue weight in `data/Feelings.csv`, or a reviewed exception in `reverse-inference-overrides.csv`.
+2. Save the change and run the rebuild command listed for that source.
+3. Refresh the served site and confirm the resulting generated output.
 
-## Validation checklist (optional but helpful)
+## Validation checklist
 
+- `npm run test:data-integrity` — validates data relationships plus the permanent data-authoring contract, including duplicate-free canonical Body Cue keys and reviewed override references.
 - `npm run lint:links` — confirms every citation URL responds (unless suppressed).
 - `npm run lint:evidence` — checks that need claim sources stay aligned with `_evidence/citations.csv`.
-- `npm test` — runs Playwright smoke tests if you want full coverage.
+- `npm run build` — runs the canonical data/page build and should leave zero diff when sources and committed outputs are already synchronized.
 
-Stick to editing the source CSV/JSON files; all generated files rebuild from them so the fact-checked changes stay canonical.
+Stick to editing canonical source. Generated files should always be reproducible from it rather than becoming a second authoring layer.

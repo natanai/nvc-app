@@ -282,10 +282,6 @@
 
 html {
   scrollbar-gutter: auto;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--plum) 65%, #000 5%) 0%,
-      color-mix(in srgb, var(--plum) 55%, #fff 20%) 60%,
-      color-mix(in srgb, var(--plum) 45%, #fff 35%) 100%);
-  background-attachment: fixed;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -638,6 +634,31 @@ button.site-nav__magnet {
   flex-shrink: 0;
 }
 
+.site-nav__magnet--menu {
+  padding: 0.45rem;
+  gap: 0;
+  justify-content: center;
+  min-width: 0;
+  background: color-mix(in srgb, var(--gold) 72%, #ffffff 28%);
+}
+
+.site-nav__menu-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  display: block;
+  flex-shrink: 0;
+  fill: none;
+  stroke: var(--outline);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.site-nav__magnet--menu[aria-expanded='true'] {
+  background: color-mix(in srgb, var(--gold) 88%, #ffffff 12%);
+  box-shadow: inset 0 -8px 0 color-mix(in srgb, var(--outline) 18%, transparent);
+}
+
 .site-nav__magnet--home,
 .site-nav__magnet--customizer {
   padding: 0.45rem;
@@ -740,6 +761,13 @@ button.site-nav__magnet {
   }
 }</style>
     <link rel="preload" href="../../styles.css" as="style" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" />
+    <link rel="stylesheet" href="../../styles/feelings-magnet-icons.css" />
+    <link rel="stylesheet" href="../../styles/needs-magnet-icons.css" />
+    <link rel="stylesheet" href="../../styles/shared-density.css" />
+    <link rel="stylesheet" href="../../styles/inventory-core-shell.css" />
     <link rel="stylesheet" href="../../styles.css" fetchpriority="high" />
   </head>
   <body data-base-path="../../">
@@ -748,7 +776,7 @@ button.site-nav__magnet {
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-                        <button
+            <button
               class="pill magnet site-nav__magnet site-nav__magnet--menu"
               type="button"
               data-magnet-id="nav-menu"
@@ -762,7 +790,7 @@ button.site-nav__magnet {
               </svg>
               <span class="site-nav__magnet-label visually-hidden">More</span>
             </button>
-<a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../../">
 
   <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <use href="../../icons/nav-sprite.svg#icon-home" />
@@ -783,12 +811,15 @@ button.site-nav__magnet {
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
+              data-nav-hidden="true"
+              aria-hidden="true"
+              tabindex="-1"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
-             data-nav-hidden="true" aria-hidden="true" tabindex="-1">
+            >
               <span class="site-nav__magnet-label">Journal</span>
             </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../../inventory/">
@@ -1102,13 +1133,24 @@ button.site-nav__magnet {
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:site-nav';
+          var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';
+          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
+          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
           var raw;
           try {
             if (!('localStorage' in window)) {
               return;
             }
             raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
+              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+              if (legacyRaw) {
+                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
+                raw = legacyRaw;
+              }
+              window.localStorage.setItem(MIGRATION_KEY, bucket);
+            }
           } catch (error) {
             return;
           }
@@ -1254,16 +1296,12 @@ button.site-nav__magnet {
         </a>
       </div>
       <section class="strategy-section" aria-labelledby="strategy-heading">
-          <h2 id="strategy-heading" class="section-title">Strategies</h2>
-          <p class="local-storage-note">Reminder: This static site saves data in your browser; clearing local storage removes it, so export backups.</p>
-          <div class="strategy-deck-header">
-            <button
-              type="button"
-              class="strategy-deck__shuffle"
-              data-strategy-shuffle
-            >
-              Shuffle cards
-            </button>
+          <div class="strategy-section__header">
+            <h2 id="strategy-heading" class="section-title">Strategies</h2>
+            <div class="strategy-deck-header" aria-label="Strategy browsing controls">
+              <button type="button" class="strategy-deck__shuffle" data-strategy-shuffle aria-label="Shuffle strategy cards">Shuffle</button>
+              <button type="button" class="strategy-deck__toggle" data-strategy-toggle aria-pressed="false">View all</button>
+            </div>
           </div>
 
           <div class="strategy-deck" data-strategy-deck>
@@ -1275,8 +1313,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Consider using pictures if lists are unhelpful. Could draw them or print them. It&#39;s not perfect but having some kind of a plan can help me</p>
                         <p class="strategy-card__meta">Nat • Missouri</p>
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1286,8 +1325,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Reflect on moments you’ve reliably done what you intended to. From things like getting out of bed (eventually) to doing chores or keeping a promise to a friend. Every moment you make it through, each next breath you take, you prove to your friends and family that you can be trusted to keep living. If someone is not able to extend trust to you it doesn’t have to mean you are untrustworthy. It just means they have a need too which is not being met for some reason. I find when I engage my thoughts this way it’s easier to have compassion on myself and others.</p>
                         <p class="strategy-card__meta">Nat • Missouri</p>
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1335,15 +1375,23 @@ button.site-nav__magnet {
               </div>
             </div>
             
-        <div class="strategy-form__field">
-          <label for="suggestion-need">Primary need</label>
-          <p id="suggestion-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="suggestion-need" name="need" multiple aria-describedby="suggestion-need-hint" required>
-              <option value="" disabled>Select a need</option>
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability" selected>Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely">Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
-          </div>
+        <div class="strategy-form__field strategy-form__field--needs">
+          <label for="suggestion-need-trigger">Needs</label>
+          <div class="journal-catalog-select strategy-card strategy-card--input strategy-need-catalog" data-catalog-multiselect="needs" data-catalog-delimiter="|" data-journal-catalog-select="needs" data-strategy-need-catalog>
+  <select id="suggestion-need" name="need" multiple hidden data-catalog-multiselect-transport><option value="acceptance">Acceptance</option><option value="accomplishment">Accomplishment</option><option value="accountability">Accountability</option><option value="acknowledgement">Acknowledgement</option><option value="act-freely">Act Freely</option><option value="appreciation">Appreciation</option><option value="authenticity">Authenticity</option><option value="autonomy">Autonomy</option><option value="beauty">Beauty</option><option value="belonging">Belonging</option><option value="calm">Calm</option><option value="causality">Causality</option><option value="choice">Choice</option><option value="choose-freely">Choose Freely</option><option value="clarity">Clarity</option><option value="closeness">Closeness</option><option value="commitment">Commitment</option><option value="community">Community</option><option value="connection">Connection</option><option value="consideration">Consideration</option><option value="consistency">Consistency</option><option value="contribution">Contribution</option><option value="control">Control</option><option value="dependability" selected>Dependability</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="empathy">Empathy</option><option value="empowerment">Empowerment</option><option value="equality">Equality</option><option value="fairness">Fairness</option><option value="freedom">Freedom</option><option value="friendship">Friendship</option><option value="genuineness">Genuineness</option><option value="growth">Growth</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="inclusion">Inclusion</option><option value="integrity">Integrity</option><option value="justice">Justice</option><option value="love-caring">Love/Caring</option><option value="mattering">Mattering</option><option value="mutuality">Mutuality</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="need-to-matter">Need to matter</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="nurturing">Nurturing</option><option value="order">Order</option><option value="participation">Participation</option><option value="peace">Peace</option><option value="peer-respect">Peer Respect</option><option value="physical-fitness">Physical Fitness</option><option value="predictability">Predictability</option><option value="privacy">Privacy</option><option value="recognition">Recognition</option><option value="relaxation">Relaxation</option><option value="reliability">Reliability</option><option value="respect">Respect</option><option value="rest">Rest</option><option value="safety">Safety</option><option value="security">Security</option><option value="self-expression">Self expression</option><option value="serenity">Serenity</option><option value="space">Space</option><option value="support">Support</option><option value="to-be-heard">To be heard</option><option value="to-be-seen">To be seen</option><option value="trust">Trust</option><option value="understanding">Understanding</option></select>
+  <button class="journal-catalog-select__trigger" id="suggestion-need-trigger" type="button" aria-expanded="false" aria-controls="suggestion-need-popover" aria-haspopup="dialog" data-journal-catalog-trigger data-catalog-kind="needs">
+    <span class="journal-catalog-select__value" data-journal-catalog-value>Dependability</span>
+    <span class="journal-catalog-select__chevron" aria-hidden="true"></span>
+  </button>
+  <div class="journal-catalog-popover" id="suggestion-need-popover" hidden role="dialog" aria-label="Choose one or more needs" data-journal-catalog-popover data-catalog-kind="needs">
+    <div class="journal-catalog-popover__toolbar"><input class="journal-catalog-popover__search" type="search" autocomplete="off" placeholder="Search needs" data-journal-catalog-search></div>
+    <div class="journal-catalog-popover__options" role="listbox" aria-multiselectable="true" data-journal-catalog-options></div>
+    <div class="journal-catalog-popover__footer">
+      <button class="journal-catalog-popover__action" type="button" data-journal-catalog-clear>Clear</button>
+      <button class="journal-catalog-popover__action journal-catalog-popover__action--done" type="button" data-journal-catalog-done>Done</button>
+    </div>
+  </div>
+</div>
         </div>
             
         <div class="strategy-form__row">
@@ -1372,8 +1420,11 @@ button.site-nav__magnet {
             </select>
           </div>
         </div>
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Save to device</button>
+            
+            <input type="hidden" name="save-target" value="device" />
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+              <button type="submit" class="strategy-form__submit strategy-form__submit--secondary strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
             </div>
             
           </form>
@@ -1386,10 +1437,10 @@ button.site-nav__magnet {
     
       </main>
     </div>
-    <script src="../../assets/js/journal/store.js" type="module"></script>
     <script src="../../scripts/inventory.js" defer></script>
-    <script defer src="../../scripts/inventory-core-shell.js"></script>
+    <script src="../../scripts/inventory-core-shell.js" defer></script>
     <script src="../../scripts/magnets.js" type="module"></script>
+    <script src="../../scripts/strategy-deck.js" defer></script>
     <script src="../../scripts/inventory-bluesky.js?v=2026-02-12" type="module"></script>
   </body>
 </html>

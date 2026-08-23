@@ -3,6 +3,31 @@ import { startPhysics, loadPositions, savePositions } from './magnets/magnetPhys
 
 const NAV_STORAGE_KEY = 'site-nav';
 const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';
+const RESPONSIVE_LAYOUT_MIGRATION_SUFFIX = '@responsive-v1';
+
+const getResponsiveLayoutBucket = () =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(NAV_MOBILE_ORDER_QUERY).matches
+    ? 'mobile'
+    : 'desktop';
+
+const resolveResponsiveStorageKey = (storageKey) => {
+  const bucket = getResponsiveLayoutBucket();
+  const scopedKey = `${storageKey}@${bucket}`;
+  if (typeof window === 'undefined' || !window.localStorage) return scopedKey;
+  const legacyKey = `magnetPositions:${storageKey}`;
+  const scopedRawKey = `magnetPositions:${scopedKey}`;
+  const migrationKey = `${legacyKey}${RESPONSIVE_LAYOUT_MIGRATION_SUFFIX}`;
+  try {
+    if (!window.localStorage.getItem(scopedRawKey) && !window.localStorage.getItem(migrationKey)) {
+      const legacy = window.localStorage.getItem(legacyKey);
+      if (legacy) window.localStorage.setItem(scopedRawKey, legacy);
+      window.localStorage.setItem(migrationKey, bucket);
+    }
+  } catch {
+    // Storage availability is handled again by magnetPhysics.
+  }
+  return scopedKey;
+};
 const NAV_MOBILE_ORDER_IDS = [
   'nav-menu',
   'nav-home',
@@ -757,7 +782,7 @@ const candidateOverlapsFixedObstacle = (state, magnet, x, y, obstacles) => {
   return obstacles.find((obstacle) => rectsOverlap(bounds, obstacle)) || null;
 };
 
-const resolveFixedObstacleOverlaps = (state) => {
+const resolveFixedObstacleOverlaps = (state, { allowReseed = true } = {}) => {
   if (!state?.magnets?.length) return false;
   const obstacles = getFixedObstacleRects(state);
   if (!obstacles.length) return false;
@@ -798,7 +823,7 @@ const resolveFixedObstacleOverlaps = (state) => {
   state.magnets.forEach((magnet) => setMagnetTransform(magnet));
   updateBoardHeight(state);
 
-  if (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state)) {
+  if (allowReseed && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {
     applyRowPackedLayout(state, state.magnets, { persist: false });
   } else {
     updateLayout(state);
@@ -972,7 +997,7 @@ const persistLayout = (state, immediate = false) => {
         y: typeof magnet.yPct === 'number' ? magnet.yPct : (height ? magnet.y / height : 0),
       }));
       savePositions(
-        state.storageKey,
+        state.persistenceKey,
         { width: 1, height: 1 },
         magnetsForSave,
         null,
@@ -981,13 +1006,17 @@ const persistLayout = (state, immediate = false) => {
       return;
     }
     savePositions(
-      state.storageKey,
+      state.persistenceKey,
       { width: Math.max(state.boardWidth || 0, 1), height: Math.max(state.boardHeight || 0, 1) },
       state.magnets,
     );
   };
 
   if (immediate) {
+    if (state.saveTimer != null) {
+      window.clearTimeout(state.saveTimer);
+      state.saveTimer = null;
+    }
     flush();
     return;
   }
@@ -1347,6 +1376,10 @@ const setPlayState = (state, active) => {
       getBoardSize: () => ({ width: state.boardWidth, height: state.boardHeight }),
       getObstacles: () => getFixedObstacleRects(state, FIXED_OBSTACLE_PHYSICS_CLEARANCE),
       onDragRelease: () => state.setClickSuppress(),
+      onDragEnd: () => {
+        updateLayout(state);
+        persistLayout(state, true);
+      },
       onTiltPermissionDenied: (reason) => handleTiltPermissionDenied(state, reason),
     });
     if (state.tiltPermissionState === 'granted') {
@@ -1661,6 +1694,8 @@ const initializeBoard = async (root, index) => {
     searchCount,
     searchList,
     storageKey: resolvedStorageKey,
+    persistenceKey: resolveResponsiveStorageKey(resolvedStorageKey),
+    layoutBucket: getResponsiveLayoutBucket(),
     magnets: measured,
     magnetMap: new Map(),
     layout: new Map(),
@@ -1733,7 +1768,7 @@ const initializeBoard = async (root, index) => {
     : { width: state.boardWidth, height: state.boardHeight };
   const loadOptions = isNavBoardState(state) ? { normalized: true } : undefined;
   const storedResult = loadPositions(
-    state.storageKey,
+    state.persistenceKey,
     loadSize,
     sizeMap,
     loadOptions,
@@ -1828,8 +1863,9 @@ const initializeBoard = async (root, index) => {
     updateBoardHeight(state);
     updateLayout(state);
     state.lastLayoutType = 'restored';
-    if (!isNavBoardState(state) && (layoutHasOverlap(state) || layoutHasFixedObstacleOverlap(state))) {
-      shouldSeed = true;
+    if (!isNavBoardState(state) && layoutHasFixedObstacleOverlap(state)) {
+      resolveFixedObstacleOverlaps(state, { allowReseed: false });
+      updateLayout(state);
     }
   }
 

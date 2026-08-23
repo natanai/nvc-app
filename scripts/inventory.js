@@ -2,7 +2,6 @@ const STORAGE_KEY = 'nvcApp.inventory';
 const THEME_STORAGE_KEY = 'nvcApp.theme';
 const JOURNAL_EDIT_QUERY_KEY = 'e';
 const JOURNAL_EDIT_HASH = '#edit';
-const LEGACY_JOURNAL_HASHES = new Set(['#journal-dashboard']);
 const PERSONAL_STRATEGIES_EMAIL_ADDRESS = 'ahiccup@gmail.com';
 const PERSONAL_STRATEGIES_EMAIL_SUBJECT = 'Strategies for allneeds.app!';
 const PERSONAL_STRATEGIES_EMAIL_BODY =
@@ -27,48 +26,6 @@ function normalizeVisibilityValue(value) {
   }
   return 'private';
 }
-
-function redirectLegacyJournalHash() {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  const { hash = '', pathname = '', href = '' } = window.location || {};
-  if (!hash) {
-    return;
-  }
-
-  const normalizedHash = hash.trim().toLowerCase();
-  if (!LEGACY_JOURNAL_HASHES.has(normalizedHash)) {
-    return;
-  }
-
-  const normalizedPath = (pathname || '').toLowerCase();
-  if (!normalizedPath.includes('/inventory') || normalizedPath.includes('/inventory/journal')) {
-    return;
-  }
-
-  if (typeof document === 'undefined') {
-    return;
-  }
-
-  const basePath = document.body?.dataset?.basePath || '';
-  let target = `${basePath}inventory/journal/`;
-
-  try {
-    target = new URL(target, href || window.location.href).href;
-  } catch (error) {
-    // Ignore resolution errors and rely on the relative URL fallback.
-  }
-
-  try {
-    window.location.replace(target);
-  } catch (error) {
-    window.location.href = target;
-  }
-}
-
-redirectLegacyJournalHash();
 
 const DEFAULT_PALETTE = {
   plum: '#74569B',
@@ -341,19 +298,6 @@ const NAV_ITEM_DEFINITIONS = [
     label: 'Faux feelings magnet',
     defaultEnabled: false,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-faux-feelings"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--faux-feelings';
-      link.href = `${basePath}faux-feelings/`;
-      link.dataset.magnetId = 'nav-faux-feelings';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Faux feelings';
-      link.appendChild(label);
-      return link;
-    },
   },
   {
     id: 'feelings',
@@ -376,19 +320,6 @@ const NAV_ITEM_DEFINITIONS = [
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-body-cues"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--body-cues';
-      link.href = `${basePath}feelings/body-cues/`;
-      link.dataset.magnetId = 'nav-body-cues';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Body cues';
-      link.appendChild(label);
-      return link;
-    },
   },
   {
     id: 'journalDashboard',
@@ -397,19 +328,6 @@ const NAV_ITEM_DEFINITIONS = [
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--journal-dashboard';
-      link.href = `${basePath}inventory/journal/`;
-      link.dataset.magnetId = 'nav-journal-dashboard';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Journal History';
-      link.appendChild(label);
-      return link;
-    },
   },
 ];
 
@@ -468,7 +386,6 @@ const state = {
   journalHistoryEl: null,
   journalEmptyEl: null,
   journalSummaryEl: null,
-  journalSummaryToggle: null,
   journalFiltersForm: null,
   journalIntensityDisplay: null,
   journalIntensityInput: null,
@@ -499,8 +416,7 @@ const state = {
   journalDraftTimer: null,
   journalEditingId: '',
   journalEditingEntry: null,
-  journalFilters: { search: '', tag: '', sort: 'newest', range: 'all' },
-  journalSummaryCollapsed: false,
+  journalFilters: { search: '', emotion: '', need: '', tag: '', sort: 'newest', range: 'all' },
   journalSavedTimer: null,
   journalSaveLabel: '',
   viewportHeightListenersAttached: false,
@@ -604,10 +520,9 @@ function ensureJournalStore() {
 
 function updateJournalEntriesFromStore() {
   const store = ensureJournalStore();
-  state.journalEntries = store ? store.list() : [];
+  state.journalEntries = store && typeof store.list === 'function' ? store.list() : [];
   updateJournalTagSource();
-  renderJournalOverlayHistory();
-  renderJournalHistory();
+  renderJournalViews();
 }
 
 function updateJournalTagSource() {
@@ -1534,9 +1449,35 @@ function setupScrollTopButton() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+let catalogMultiselectModulePromise = null;
+
+function ensureCatalogMultiselectModule() {
+  if (!catalogMultiselectModulePromise) {
+    catalogMultiselectModulePromise = import(resolveAssetPath('assets/js/catalog-multiselect.js'));
+  }
+  return catalogMultiselectModulePromise;
+}
+
+async function hydrateStrategyNeedSelectors() {
+  const roots = Array.from(document.querySelectorAll('[data-strategy-need-catalog]'));
+  if (!roots.length) return;
+  const module = await ensureCatalogMultiselectModule();
+  roots.forEach((root) => module.hydrateCatalogMultiselect(root, { placeholder: 'Choose needs', delimiter: '|' }));
+}
+
+let inventoryRuntimeInitialized = false;
+
+function initializeInventoryRuntime() {
+  if (inventoryRuntimeInitialized) {
+    return;
+  }
+  inventoryRuntimeInitialized = true;
+
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  hydrateStrategyNeedSelectors().catch((error) => {
+    console.warn('Unable to initialize shared Needs selector', error);
+  });
   setupViewportHeightProperty();
   state.inventory = loadInventory();
   refreshSavedStrategyIndex();
@@ -1552,12 +1493,20 @@ document.addEventListener('DOMContentLoaded', () => {
   attachDelegatedJournalOverlayTriggerListener();
   setupJournalSection();
   renderJournalViews();
-  loadJournalReferenceData();
+  if (document.querySelector('[data-inventory-section="journal"]')) {
+    loadJournalReferenceData();
+  }
   setupScrollTopButton();
   updateBackendSyncButtons();
   updateVisibilityControls();
   updateProfileSaveButtonStates();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeInventoryRuntime, { once: true });
+} else {
+  initializeInventoryRuntime();
+}
 
 if (typeof window !== 'undefined') {
   window.addEventListener('allneeds:bsky-login-changed', (event) => {
@@ -1572,7 +1521,25 @@ if (typeof window !== 'undefined') {
       return;
     }
 
-    loadSnapshotFromBackend().catch((error) => {
+    (async () => {
+      // Automatic post-sign-in restore must use the same full-storage guard as
+      // an explicit profile load. This prevents running magnet persistence from
+      // racing the newly restored snapshot.
+      const restoreModule = await import('./profile-restore-rehydration.js?v=2026-08-21-lazy');
+      if (typeof restoreModule.installProfileRestoreRehydration === 'function') {
+        restoreModule.installProfileRestoreRehydration();
+      }
+
+      const guardedLoad = window.loadSnapshotFromBackend;
+      if (
+        typeof guardedLoad !== 'function' ||
+        guardedLoad.__allneedsRestoreRehydrationWrapped !== true
+      ) {
+        throw new Error('Profile restore guard did not attach before automatic sign-in restore');
+      }
+
+      await guardedLoad();
+    })().catch((error) => {
       console.error('Failed to auto-load backend snapshot after sign-in', error);
     });
   });
@@ -1674,16 +1641,17 @@ function updateStrategySaveButton(button, isSaved) {
     return;
   }
   if (!button.dataset.defaultLabel) {
-    button.dataset.defaultLabel = button.textContent?.trim() || '💾 Save to device';
+    button.dataset.defaultLabel = button.textContent?.trim() || 'Device';
   }
   if (!button.dataset.savedLabel) {
-    button.dataset.savedLabel = '✓ Saved on this device';
+    button.dataset.savedLabel = 'Saved';
   }
   const defaultLabel = button.dataset.defaultLabel;
   const savedLabel = button.dataset.savedLabel;
   button.textContent = isSaved ? savedLabel : defaultLabel;
   button.dataset.saved = isSaved ? 'true' : 'false';
   button.setAttribute('aria-pressed', isSaved ? 'true' : 'false');
+  button.setAttribute('aria-label', isSaved ? 'Saved to device' : 'Save to device');
   button.classList.toggle('strategy-card__save--saved', Boolean(isSaved));
 }
 
@@ -1728,19 +1696,10 @@ function setupNeedPage() {
       return;
     }
 
-    saveToDeviceButton.textContent = '💾 Save to device';
-    saveToDeviceButton.classList.add('strategy-card__save--device');
-
-    let saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
-    if (!saveToProfileButton) {
-      saveToProfileButton = document.createElement('button');
-      saveToProfileButton.type = 'button';
-      saveToProfileButton.className = saveToDeviceButton.className;
-      saveToProfileButton.dataset.saveToProfileButton = 'true';
-      saveToProfileButton.textContent = 'Save to profile';
-      saveToDeviceButton.insertAdjacentElement('afterend', saveToProfileButton);
+    const saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
+    if (!(saveToProfileButton instanceof HTMLButtonElement)) {
+      return;
     }
-    saveToProfileButton.classList.add('strategy-card__save--profile');
     registerProfileSaveButton(saveToProfileButton);
 
     const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
@@ -1835,43 +1794,21 @@ function setupNeedPage() {
       .closest('[data-strategy-form-container]')
       ?.querySelector('[data-form-message]');
 
-    const saveTargetField = document.createElement('input');
-    saveTargetField.type = 'hidden';
-    saveTargetField.name = 'save-target';
-    saveTargetField.value = SAVE_TARGET_DEVICE;
-    suggestionForm.appendChild(saveTargetField);
+    const saveTargetField = suggestionForm.querySelector('input[name="save-target"]');
+    if (!(saveTargetField instanceof HTMLInputElement)) {
+      throw new Error('Canonical suggestion form is missing its save-target field');
+    }
 
-    const formSaveToDevice = suggestionForm.querySelector('.strategy-form__submit');
-    if (formSaveToDevice) {
-      formSaveToDevice.textContent = '💾 Save to device';
-      formSaveToDevice.classList.add('strategy-card__save--device');
+    const formSaveToDevice = suggestionForm.querySelector('[data-save-to-device-button="true"]');
+    const formSaveToProfile = suggestionForm.querySelector('[data-save-to-profile-button="true"]');
+    if (formSaveToDevice instanceof HTMLButtonElement && formSaveToProfile instanceof HTMLButtonElement) {
       formSaveToDevice.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
-
-      let formSaveToProfile = suggestionForm.querySelector('[data-save-to-profile-button="true"]');
-      if (!formSaveToProfile) {
-        formSaveToProfile = document.createElement('button');
-        formSaveToProfile.type = 'submit';
-        formSaveToProfile.className = formSaveToDevice.className;
-        formSaveToProfile.dataset.saveToProfileButton = 'true';
-        formSaveToProfile.textContent = 'Save to profile';
-        formSaveToProfile.addEventListener('click', () => {
-          saveTargetField.value = SAVE_TARGET_PROFILE;
-        });
-        formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
-      }
-      formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
+      formSaveToProfile.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_PROFILE;
+      });
       registerProfileSaveButton(formSaveToProfile);
-
-      let saveTargetHint = suggestionForm.querySelector('[data-save-target-hint="true"]');
-      if (!saveTargetHint) {
-        saveTargetHint = document.createElement('p');
-        saveTargetHint.className = 'strategy-save-target-hint';
-        saveTargetHint.dataset.saveTargetHint = 'true';
-        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
-        formSaveToProfile.insertAdjacentElement('afterend', saveTargetHint);
-      }
     }
 
     suggestionForm.addEventListener('submit', async (event) => {
@@ -2067,41 +2004,21 @@ function setupInventoryPage() {
   if (form) {
     state.inventoryForm = form;
     state.inventorySubmitButton = form.querySelector('.strategy-form__submit');
-    const saveTargetField = document.createElement('input');
-    saveTargetField.type = 'hidden';
-    saveTargetField.name = 'save-target';
-    saveTargetField.value = SAVE_TARGET_DEVICE;
-    form.appendChild(saveTargetField);
+    const saveTargetField = form.querySelector('input[name="save-target"]');
+    if (!(saveTargetField instanceof HTMLInputElement)) {
+      throw new Error('Canonical Inventory form is missing its save-target field');
+    }
 
     if (state.inventorySubmitButton) {
-      state.inventorySubmitButton.textContent = '💾 Save to device';
-      state.inventorySubmitButton.classList.add('strategy-card__save--device');
       state.inventorySubmitButton.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
-
-      let saveToProfileButton = form.querySelector('[data-save-to-profile-button="true"]');
-      if (!saveToProfileButton) {
-        saveToProfileButton = document.createElement('button');
-        saveToProfileButton.type = 'submit';
-        saveToProfileButton.className = state.inventorySubmitButton.className;
-        saveToProfileButton.dataset.saveToProfileButton = 'true';
-        saveToProfileButton.textContent = 'Save to profile';
+      const saveToProfileButton = form.querySelector('[data-save-to-profile-button="true"]');
+      if (saveToProfileButton instanceof HTMLButtonElement) {
         saveToProfileButton.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });
-        state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
-      }
-      saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
-      registerProfileSaveButton(saveToProfileButton);
-
-      let saveTargetHint = form.querySelector('[data-save-target-hint="true"]');
-      if (!saveTargetHint) {
-        saveTargetHint = document.createElement('p');
-        saveTargetHint.className = 'strategy-save-target-hint';
-        saveTargetHint.dataset.saveTargetHint = 'true';
-        saveTargetHint.textContent = 'Device keeps it local. Profile also syncs to backend.';
-        saveToProfileButton.insertAdjacentElement('afterend', saveTargetHint);
+        registerProfileSaveButton(saveToProfileButton);
       }
     }
 
@@ -2537,23 +2454,30 @@ function resolveNavCustomizerToggle(nav) {
 }
 
 function buildPaletteUi() {
-  const container = document.createElement('div');
+  const staticContainer = document.querySelector('[data-shell-customizer-placeholder]');
+  const staticToggle = staticContainer?.querySelector('.palette-corner__toggle');
+  const container =
+    staticContainer instanceof HTMLElement ? staticContainer : document.createElement('div');
   container.className = 'palette-corner';
+  container.removeAttribute('data-shell-customizer-placeholder');
 
-  const toggle = document.createElement('button');
+  const toggle =
+    staticToggle instanceof HTMLButtonElement ? staticToggle : document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'palette-corner__toggle';
   toggle.setAttribute('aria-haspopup', 'dialog');
 
-  const glyph = document.createElement('span');
-  glyph.className = 'palette-corner__glyph';
-  glyph.textContent = '+';
-  toggle.appendChild(glyph);
+  if (!(staticToggle instanceof HTMLButtonElement)) {
+    const glyph = document.createElement('span');
+    glyph.className = 'palette-corner__glyph';
+    glyph.textContent = '+';
+    toggle.appendChild(glyph);
 
-  const srLabel = document.createElement('span');
-  srLabel.className = 'visually-hidden';
-  srLabel.textContent = 'Open customizer';
-  toggle.appendChild(srLabel);
+    const srLabel = document.createElement('span');
+    srLabel.className = 'visually-hidden';
+    srLabel.textContent = 'Open customizer';
+    toggle.appendChild(srLabel);
+  }
 
   const nav = document.querySelector('.site-nav');
   const mobileToggle = resolveNavCustomizerToggle(nav);
@@ -2879,7 +2803,9 @@ function buildPaletteUi() {
 
   panel.appendChild(panelScroll);
   container.append(toggle, panel);
-  document.body.appendChild(container);
+  if (!container.isConnected) {
+    document.body.appendChild(container);
+  }
 
   const handleToggle = (element) => {
     if (!element) {
@@ -3841,7 +3767,7 @@ function renderInventoryViews() {
 function setupJournalSection() {
   const panel = document.querySelector('[data-inventory-section="journal"]');
   if (!panel) {
-    setupStandaloneJournalOverlay();
+    setupJournalOverlay();
     registerJournalStoreListeners();
     return;
   }
@@ -3855,7 +3781,6 @@ function setupJournalSection() {
     if (typeof renderJournalForm === 'function' && mount) {
       try {
         renderJournalForm(mount, {
-          variant: mount.dataset.journalVariant || 'inventory',
           idPrefix: mount.dataset.journalIdPrefix || 'journal',
         });
       } catch (error) {
@@ -3888,7 +3813,6 @@ function setupJournalSection() {
     state.journalHistoryEl = panel.querySelector('[data-journal-history]');
     state.journalEmptyEl = panel.querySelector('[data-journal-empty]');
     state.journalSummaryEl = panel.querySelector('[data-journal-summary]');
-    state.journalSummaryToggle = panel.querySelector('[data-journal-summary-toggle]');
     state.journalFiltersForm = panel.querySelector('[data-journal-filters]');
     state.journalIntensityDisplay =
       state.journalController?.intensityDisplay || panel.querySelector('[data-journal-intensity-display]');
@@ -3901,7 +3825,7 @@ function setupJournalSection() {
       state.journalController?.tagSuggestionsEl || panel.querySelector('[data-journal-tag-suggestions]');
     state.journalSaveButton = state.journalController?.saveButton || panel.querySelector('[data-journal-submit]');
     if (state.journalSaveButton) {
-      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save entry';
+      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save';
       state.journalSaveButton.dataset.defaultLabel = state.journalSaveLabel;
     }
 
@@ -3923,13 +3847,6 @@ function setupJournalSection() {
     }
     const filtersReset = panel.querySelector('[data-journal-filters-reset]');
     filtersReset?.addEventListener('click', handleJournalFiltersReset);
-
-    if (state.journalSummaryToggle) {
-      state.journalSummaryToggle.addEventListener('click', () => {
-        state.journalSummaryCollapsed = !state.journalSummaryCollapsed;
-        updateJournalSummaryVisibility();
-      });
-    }
 
     if (state.journalNeedsSelect) {
       const needsEvent = state.journalNeedsSelect instanceof HTMLSelectElement ? 'change' : 'input';
@@ -3960,13 +3877,14 @@ function setupJournalSection() {
       const initialIntensity = Number(state.journalIntensityInput?.value);
       updateJournalIntensityDisplay(Number.isFinite(initialIntensity) ? initialIntensity : 5);
     }
-    updateJournalSummaryVisibility();
     applyJournalDraft();
   };
 
   const finalizeJournalSetup = () => {
     setupJournalOverlay();
+    state.journalStore = resolveJournalStore() || state.journalStore;
     registerJournalStoreListeners();
+    updateJournalEntriesFromStore();
   };
 
   if (isJournalModuleReady()) {
@@ -4121,6 +4039,10 @@ function handleJournalOverlayTriggerClick(event) {
   if (state.journalOverlayOpenTriggers.indexOf(button) === -1) {
     state.journalOverlayOpenTriggers.push(button);
   }
+  if (!state.journalFormSectionEl) {
+    setupStandaloneJournalOverlay();
+    loadJournalReferenceData();
+  }
   state.journalOverlayActiveTrigger = button;
   openJournalOverlay();
 }
@@ -4144,6 +4066,10 @@ function handleDelegatedJournalOverlayTrigger(event) {
   bindJournalOverlayTrigger(trigger, overlayId);
   trigger.setAttribute('aria-expanded', trigger.getAttribute('aria-expanded') || 'false');
   event.preventDefault();
+  if (!state.journalFormSectionEl) {
+    setupStandaloneJournalOverlay();
+    loadJournalReferenceData();
+  }
   state.journalOverlayActiveTrigger = trigger;
   openJournalOverlay();
 }
@@ -4190,7 +4116,6 @@ function setupStandaloneJournalOverlay() {
     const module = document.createElement('div');
     module.className = 'journal-module';
     module.dataset.journalModule = '';
-    module.dataset.journalVariant = 'inventory';
     module.dataset.journalIdPrefix = 'journal';
 
     formSection.append(module);
@@ -4202,7 +4127,6 @@ function setupStandaloneJournalOverlay() {
     mount = document.createElement('div');
     mount.className = 'journal-module';
     mount.dataset.journalModule = '';
-    mount.dataset.journalVariant = 'inventory';
     mount.dataset.journalIdPrefix = 'journal';
     formSection.append(mount);
   }
@@ -4214,7 +4138,6 @@ function setupStandaloneJournalOverlay() {
     if (typeof renderJournalForm === 'function') {
       try {
         renderJournalForm(mount, {
-          variant: mount.dataset.journalVariant || 'inventory',
           idPrefix: mount.dataset.journalIdPrefix || 'journal',
         });
       } catch (error) {
@@ -4256,7 +4179,7 @@ function setupStandaloneJournalOverlay() {
       state.journalController?.tagSuggestionsEl || formSection.querySelector('[data-journal-tag-suggestions]');
     state.journalSaveButton = state.journalController?.saveButton || formSection.querySelector('[data-journal-submit]');
     if (state.journalSaveButton) {
-      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save entry';
+      state.journalSaveLabel = state.journalSaveButton.textContent || 'Save';
       state.journalSaveButton.dataset.defaultLabel = state.journalSaveLabel;
     }
 
@@ -4313,7 +4236,6 @@ function registerJournalStoreListeners() {
     window.addEventListener('nvc-journal-store-ready', () => {
       state.journalStore = resolveJournalStore();
       updateJournalEntriesFromStore();
-      renderJournalViews();
       if (!state.journalEditingId) {
         const editId = getJournalEditIdFromLocation();
         if (editId) {
@@ -4485,7 +4407,6 @@ function renderJournalViews() {
   renderJournalSummary();
   renderJournalHistory();
   renderJournalOverlayHistory();
-  updateJournalSummaryVisibility();
 }
 
 function normalizeJournalTags(value) {
@@ -4636,7 +4557,10 @@ function fillJournalForm(values = {}) {
 
 function resetJournalForm(options = {}) {
   if (state.journalController && typeof state.journalController.resetForm === 'function') {
-    state.journalController.resetForm();
+    state.journalController.resetForm({
+      keepStatus: Boolean(options.keepStatus),
+      focusNotes: options.focusNotes !== false,
+    });
   } else if (state.journalForm) {
     state.journalForm.reset();
     fillJournalForm({});
@@ -4667,11 +4591,17 @@ function escapeSelector(value) {
 }
 
 function focusJournalHistoryCard(id) {
-  if (!state.journalHistoryEl || !id) {
+  if (!id) {
     return;
   }
   const selector = `[data-journal-id="${escapeSelector(id)}"]`;
-  const card = state.journalHistoryEl.querySelector(selector);
+  const historyTargets = state.journalOverlayOpen
+    ? [state.journalOverlayHistoryEl, state.journalHistoryEl]
+    : [state.journalHistoryEl, state.journalOverlayHistoryEl];
+  const card = historyTargets
+    .filter((history) => history instanceof HTMLElement)
+    .map((history) => history.querySelector(selector))
+    .find((candidate) => candidate instanceof HTMLElement);
   if (!card) {
     return;
   }
@@ -4979,16 +4909,6 @@ function handleJournalFormInput() {
   scheduleJournalDraftSave();
 }
 
-function updateJournalSummaryVisibility() {
-  if (!state.journalSummaryEl || !state.journalSummaryToggle) {
-    return;
-  }
-  const collapsed = !!state.journalSummaryCollapsed;
-  state.journalSummaryEl.hidden = collapsed;
-  state.journalSummaryToggle.textContent = collapsed ? 'Show summary' : 'Hide summary';
-  state.journalSummaryToggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
-}
-
 function updateJournalIntensityDisplay(value) {
   if (state.journalController && typeof state.journalController.updateIntensityDisplay === 'function') {
     state.journalController.updateIntensityDisplay(value);
@@ -5018,9 +4938,13 @@ function renderJournalSummary() {
   container.innerHTML = '';
   const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
   if (!entries.length) {
-    const empty = document.createElement('p');
-    empty.className = 'journal-empty';
-    empty.textContent = 'Save entries to see a snapshot of your progress.';
+    const empty = document.createElement('div');
+    empty.className = 'journal-patterns-empty';
+    const title = document.createElement('strong');
+    title.textContent = 'Patterns grow with your journal.';
+    const description = document.createElement('span');
+    description.textContent = 'Recurring feelings, needs, tags, and intensity trends will appear here as you save entries.';
+    empty.append(title, description);
     container.appendChild(empty);
     return;
   }
@@ -5028,23 +4952,19 @@ function renderJournalSummary() {
   const totalStat = createJournalSummaryStat('Entries logged', String(entries.length));
   container.appendChild(totalStat);
 
-  const intensityEntries = entries.filter((entry) => Number.isFinite(entry.intensity));
-  const averageIntensity = intensityEntries.length
-    ? (intensityEntries.reduce((sum, entry) => sum + entry.intensity, 0) / intensityEntries.length).toFixed(1)
+  const feelingRatings = entries.flatMap((entry) => parseJournalFeelingRatings(entry));
+  const averageIntensity = feelingRatings.length
+    ? (feelingRatings.reduce((sum, item) => sum + item.intensity, 0) / feelingRatings.length).toFixed(1)
     : '—';
   const intensityStat = createJournalSummaryStat('Average intensity', `${averageIntensity}`);
   container.appendChild(intensityStat);
 
   const emotionCounts = new Map();
   entries.forEach((entry) => {
-    if (!entry.emotion) {
-      return;
-    }
-    const key = entry.emotion.trim().toLowerCase();
-    if (!key) {
-      return;
-    }
-    emotionCounts.set(key, (emotionCounts.get(key) || 0) + 1);
+    parseJournalFeelingRatings(entry).forEach(({ feeling }) => {
+      const key = feeling.trim().toLowerCase();
+      if (key) emotionCounts.set(key, (emotionCounts.get(key) || 0) + 1);
+    });
   });
   const topEmotions = Array.from(emotionCounts.entries())
     .sort((a, b) => b[1] - a[1])
@@ -5168,19 +5088,134 @@ function formatJournalDate(timestamp) {
   }
 }
 
-function renderJournalHistory() {
-  if (!state.journalHistoryEl) {
-    return;
+function parseJournalFeelings(value) {
+  const values = Array.isArray(value) ? value : (value || '').toString().split(/[,|]/);
+  const seen = new Set();
+  return values
+    .map((item) => item.toString().trim())
+    .filter((item) => {
+      if (!item) return false;
+      const key = item.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+}
+
+function parseJournalFeelingRatings(entry) {
+  if (Array.isArray(entry?.feelings) && entry.feelings.length) {
+    return entry.feelings
+      .map((item) => ({
+        feeling: (item?.feeling || item?.emotion || '').toString().trim(),
+        intensity: Number(item?.intensity),
+      }))
+      .filter((item) => item.feeling && Number.isFinite(item.intensity) && item.intensity > 0);
   }
+  const fallback = Number.isFinite(Number(entry?.intensity)) ? Math.min(10, Math.max(1, Math.round(Number(entry.intensity)))) : 5;
+  return parseJournalFeelings(entry?.emotion).map((feeling) => ({ feeling, intensity: fallback }));
+}
+
+function updateJournalFiltersResetVisibility() {
+  const button = state.journalFiltersForm?.querySelector('[data-journal-filters-reset]');
+  if (!button) return;
+  const filters = state.journalFilters || {};
+  const active = Boolean(
+    filters.search ||
+      filters.emotion ||
+      filters.need ||
+      filters.tag ||
+      (filters.sort && filters.sort !== 'newest') ||
+      (filters.range && filters.range !== 'all')
+  );
+  button.hidden = !active;
+}
+
+const JOURNAL_HISTORY_COLLAPSE_AFTER_WORDS = 80;
+const JOURNAL_HISTORY_PREVIEW_WORDS = 55;
+
+function getJournalHistoryNotePresentation(value) {
+  const full = String(value ?? '').trim();
+  if (!full) {
+    return null;
+  }
+  const words = full.split(/\s+/).filter(Boolean);
+  if (words.length <= JOURNAL_HISTORY_COLLAPSE_AFTER_WORDS) {
+    return { full, preview: full, collapsible: false };
+  }
+  return {
+    full,
+    preview: `${words.slice(0, JOURNAL_HISTORY_PREVIEW_WORDS).join(' ')}…`,
+    collapsible: true,
+  };
+}
+
+function buildJournalHistoryNote(value) {
+  const note = getJournalHistoryNotePresentation(value);
+  if (!note) {
+    return null;
+  }
+
+  if (!note.collapsible) {
+    const paragraph = document.createElement('p');
+    paragraph.className = 'journal-entry__notes';
+    paragraph.textContent = note.full;
+    return paragraph;
+  }
+
+  const details = document.createElement('details');
+  details.className = 'journal-entry__notes-disclosure';
+
+  const summary = document.createElement('summary');
+  summary.className = 'journal-entry__notes-summary';
+
+  const preview = document.createElement('span');
+  preview.className = 'journal-entry__notes journal-entry__notes--preview';
+  preview.textContent = note.preview;
+
+  const closedLabel = document.createElement('span');
+  closedLabel.className = 'journal-entry__notes-toggle journal-entry__notes-toggle--closed';
+  closedLabel.textContent = 'Read full entry';
+
+  const openLabel = document.createElement('span');
+  openLabel.className = 'journal-entry__notes-toggle journal-entry__notes-toggle--open';
+  openLabel.textContent = 'Show less';
+
+  summary.append(preview, closedLabel, openLabel);
+
+  const full = document.createElement('p');
+  full.className = 'journal-entry__notes journal-entry__notes--full';
+  full.textContent = note.full;
+
+  details.append(summary, full);
+  return details;
+}
+
+function renderJournalHistory() {
+  if (!state.journalHistoryEl) return;
+  const allEntries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+  const hasJournalEntries = allEntries.length > 0;
+  if (document.documentElement) {
+    document.documentElement.setAttribute('data-journal-state', hasJournalEntries ? 'populated' : 'empty');
+  }
+  if (state.journalFiltersForm) state.journalFiltersForm.hidden = !hasJournalEntries;
+  syncJournalHistoryFilterOptions();
+  updateJournalFiltersResetVisibility();
   const container = state.journalHistoryEl;
   container.innerHTML = '';
   const entries = getFilteredJournalEntries();
   if (state.journalEmptyEl) {
+    const title = state.journalEmptyEl.querySelector('.journal-empty__title');
+    const description = state.journalEmptyEl.querySelector('.journal-empty__description');
     state.journalEmptyEl.hidden = entries.length > 0;
+    if (title) title.textContent = hasJournalEntries ? 'No matches' : 'No entries yet';
+    if (description) {
+      description.textContent = hasJournalEntries
+        ? 'Try another filter or clear filters.'
+        : 'Save your first entry to start building history and patterns. Filters will appear once there is something to explore.';
+    }
   }
-  if (!entries.length) {
-    return;
-  }
+  if (!entries.length) return;
+
   entries.forEach((entry) => {
     const card = document.createElement('article');
     card.className = 'journal-entry';
@@ -5188,76 +5223,59 @@ function renderJournalHistory() {
 
     const header = document.createElement('div');
     header.className = 'journal-entry__header';
+    const titleRow = document.createElement('div');
+    titleRow.className = 'journal-entry__title-row';
     const emotion = document.createElement('h4');
     emotion.className = 'journal-entry__emotion';
-    emotion.textContent = entry.emotion ? capitalizeWord(entry.emotion) : 'Reflection';
-    header.appendChild(emotion);
-
+    const feelings = parseJournalFeelingRatings(entry);
+    emotion.textContent = feelings.length
+      ? feelings.map(({ feeling, intensity }) => `${feeling} ${intensity}/10`).join(' · ')
+      : 'Reflection';
+    titleRow.appendChild(emotion);
+    header.appendChild(titleRow);
     const meta = document.createElement('div');
     meta.className = 'journal-entry__meta';
-    const date = document.createElement('span');
-    date.textContent = formatJournalDate(entry.dateISO);
-    meta.appendChild(date);
-    if (Number.isFinite(entry.intensity)) {
-      const intensity = document.createElement('span');
-      intensity.textContent = `Intensity ${entry.intensity}/10`;
-      meta.appendChild(intensity);
-    }
+    meta.textContent = formatJournalDate(entry.dateISO);
     header.appendChild(meta);
     card.appendChild(header);
 
-    if (Array.isArray(entry.tags) && entry.tags.length) {
-      const tagsList = document.createElement('div');
-      tagsList.className = 'journal-entry__tags';
-      entry.tags.forEach((tag) => {
-        const chip = document.createElement('span');
-        chip.className = 'journal-tag';
-        chip.textContent = `#${tag}`;
-        tagsList.appendChild(chip);
-      });
-      card.appendChild(tagsList);
+    const noteElement = buildJournalHistoryNote(entry.notes);
+    if (noteElement) {
+      card.appendChild(noteElement);
     }
 
-    if (Array.isArray(entry.needs) && entry.needs.length) {
-      const needsList = document.createElement('div');
-      needsList.className = 'journal-entry__needs';
-      entry.needs.forEach((needValue) => {
+    if ((entry.needs || []).length || (entry.tags || []).length) {
+      const facets = document.createElement('div');
+      facets.className = 'journal-entry__facets';
+      (entry.needs || []).forEach((needValue) => {
         const { href, label } = buildNeedLink(needValue);
         const link = document.createElement('a');
-        link.className = 'journal-need-link';
+        link.className = 'journal-value-token journal-value-token--need';
         link.href = href;
         link.textContent = label;
-        needsList.appendChild(link);
+        facets.appendChild(link);
       });
-      card.appendChild(needsList);
-    }
-
-    if (entry.notes) {
-      const notes = document.createElement('p');
-      notes.className = 'journal-entry__notes';
-      notes.textContent = entry.notes;
-      card.appendChild(notes);
+      (entry.tags || []).forEach((tag) => {
+        const chip = document.createElement('span');
+        chip.className = 'journal-value-token journal-value-token--tag';
+        chip.textContent = `#${tag}`;
+        facets.appendChild(chip);
+      });
+      card.appendChild(facets);
     }
 
     const actions = document.createElement('div');
     actions.className = 'journal-entry__actions';
-    const editButton = document.createElement('button');
-    editButton.type = 'button';
-    editButton.className = 'journal-entry__edit';
-    editButton.dataset.journalAction = 'edit';
-    editButton.dataset.journalId = entry.id;
-    editButton.textContent = 'Edit';
-    actions.appendChild(editButton);
-
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.className = 'journal-entry__delete';
-    deleteButton.dataset.journalAction = 'delete';
-    deleteButton.dataset.journalId = entry.id;
-    deleteButton.textContent = 'Delete';
-    actions.appendChild(deleteButton);
+    for (const [action, label] of [['edit', 'Edit'], ['delete', 'Delete']]) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `journal-entry__${action}`;
+      button.dataset.journalAction = action;
+      button.dataset.journalId = entry.id;
+      button.textContent = label;
+      actions.appendChild(button);
+    }
     card.appendChild(actions);
-
     container.appendChild(card);
   });
 }
@@ -5294,7 +5312,10 @@ function renderJournalOverlayHistory() {
       if (dateLabel) {
         segments.push(dateLabel);
       }
-      const emotionLabel = entry.emotion ? `${capitalizeWord(entry.emotion)} — ` : '';
+      const feelings = parseJournalFeelingRatings(entry);
+      const emotionLabel = feelings.length
+        ? `${feelings.map(({ feeling, intensity }) => `${feeling} ${intensity}/10`).join(', ')} — `
+        : '';
       const detail = `${emotionLabel}${entry.notes || ''}`.trim();
       if (detail) {
         segments.push(detail);
@@ -5311,68 +5332,71 @@ function renderJournalOverlayHistory() {
   container.appendChild(link);
 }
 
+function populateJournalHistorySelect(select, entries) {
+  if (!select) return;
+  const current = select.value || '';
+  const neutralLabels = {
+    emotion: 'Any feeling',
+    need: 'Any need',
+    tag: 'Any tag',
+  };
+  const neutralLabel = neutralLabels[select.name] || 'Any';
+  select.replaceChildren(new Option(neutralLabel, ''), ...entries.map(({ value, label }) => new Option(label, value)));
+  if ([...select.options].some((option) => option.value === current)) select.value = current;
+  const control = select.closest('.journal-history-control');
+  if (control && Object.prototype.hasOwnProperty.call(neutralLabels, select.name)) {
+    control.hidden = entries.length === 0;
+  }
+}
+
+function syncJournalHistoryFilterOptions() {
+  if (!state.journalFiltersForm) return;
+  const entries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
+  const unique = (values, labeler = (value) => value) => {
+    const map = new Map();
+    values.filter(Boolean).forEach((value) => {
+      const raw = value.toString().trim();
+      if (raw && !map.has(raw.toLowerCase())) map.set(raw.toLowerCase(), { value: raw, label: labeler(raw) });
+    });
+    return [...map.values()].sort((a, b) => a.label.localeCompare(b.label));
+  };
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="emotion"]'), unique(entries.flatMap((entry) => parseJournalFeelingRatings(entry).map((item) => item.feeling))));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="need"]'), unique(entries.flatMap((entry) => entry.needs || []), (value) => buildNeedLink(value).label));
+  populateJournalHistorySelect(state.journalFiltersForm.querySelector('[name="tag"]'), unique(entries.flatMap((entry) => entry.tags || []), (value) => `#${value}`));
+}
+
 function getFilteredJournalEntries() {
   const entries = Array.isArray(state.journalEntries) ? [...state.journalEntries] : [];
-  const searchTerm = state.journalFilters.search?.trim().toLowerCase();
-  const tagFilter = state.journalFilters.tag?.trim().toLowerCase();
+  const normalize = (value) => (value || '').toString().trim().toLowerCase();
+  const searchTerm = normalize(state.journalFilters.search);
+  const emotionFilter = normalize(state.journalFilters.emotion);
+  const needFilter = normalize(state.journalFilters.need);
+  const tagFilter = normalize(state.journalFilters.tag);
   const sort = state.journalFilters.sort || 'newest';
   const range = state.journalFilters.range || 'all';
-
   let filtered = entries;
-  if (searchTerm) {
-    filtered = filtered.filter((entry) => {
-      const haystack = [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])]
-        .join(' ')
-        .toLowerCase();
-      return haystack.includes(searchTerm);
-    });
-  }
 
-  if (tagFilter) {
-    filtered = filtered.filter((entry) =>
-      Array.isArray(entry.tags) && entry.tags.some((tag) => tag.toLowerCase().includes(tagFilter))
-    );
-  }
+  if (searchTerm) filtered = filtered.filter((entry) => [entry.notes || '', entry.emotion || '', ...(entry.tags || []), ...(entry.needs || [])].join(' ').toLowerCase().includes(searchTerm));
+  if (emotionFilter) filtered = filtered.filter((entry) => parseJournalFeelingRatings(entry).some(({ feeling }) => normalize(feeling) === emotionFilter));
+  if (needFilter) filtered = filtered.filter((entry) => (entry.needs || []).some((need) => normalize(need) === needFilter));
+  if (tagFilter) filtered = filtered.filter((entry) => (entry.tags || []).some((tag) => normalize(tag) === tagFilter));
 
   if (range !== 'all') {
     const days = Number(range);
     if (Number.isFinite(days) && days > 0) {
-      const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+      const cutoff = Date.now() - days * 86400000;
       filtered = filtered.filter((entry) => {
         const time = new Date(entry.dateISO || 0).getTime();
-        if (!Number.isFinite(time)) {
-          return false;
-        }
-        return time >= cutoff;
+        return Number.isFinite(time) && time >= cutoff;
       });
     }
   }
 
-  const sortByTimestamp = (a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0);
-  if (sort === 'oldest') {
-    filtered.sort((a, b) => new Date(a.dateISO || 0) - new Date(b.dateISO || 0));
-  } else if (sort === 'intensity-high') {
-    filtered.sort((a, b) => {
-      const aVal = Number.isFinite(a.intensity) ? a.intensity : -Infinity;
-      const bVal = Number.isFinite(b.intensity) ? b.intensity : -Infinity;
-      if (bVal === aVal) {
-        return sortByTimestamp(a, b);
-      }
-      return bVal - aVal;
-    });
-  } else if (sort === 'intensity-low') {
-    filtered.sort((a, b) => {
-      const aVal = Number.isFinite(a.intensity) ? a.intensity : Infinity;
-      const bVal = Number.isFinite(b.intensity) ? b.intensity : Infinity;
-      if (aVal === bVal) {
-        return sortByTimestamp(a, b);
-      }
-      return aVal - bVal;
-    });
-  } else {
-    filtered.sort(sortByTimestamp);
-  }
-
+  const newest = (a, b) => new Date(b.dateISO || 0) - new Date(a.dateISO || 0);
+  if (sort === 'oldest') filtered.sort((a, b) => new Date(a.dateISO || 0) - new Date(b.dateISO || 0));
+  else if (sort === 'intensity-high') filtered.sort((a, b) => (Number.isFinite(b.intensity) ? b.intensity : -Infinity) - (Number.isFinite(a.intensity) ? a.intensity : -Infinity) || newest(a, b));
+  else if (sort === 'intensity-low') filtered.sort((a, b) => (Number.isFinite(a.intensity) ? a.intensity : Infinity) - (Number.isFinite(b.intensity) ? b.intensity : Infinity) || newest(a, b));
+  else filtered.sort(newest);
   return filtered;
 }
 
@@ -5440,7 +5464,7 @@ function resetJournalSaveButton() {
     clearTimeout(state.journalSavedTimer);
     state.journalSavedTimer = null;
   }
-  const label = state.journalSaveLabel || state.journalSaveButton.dataset.defaultLabel || state.journalSaveButton.textContent || 'Save entry';
+  const label = state.journalSaveLabel || state.journalSaveButton.dataset.defaultLabel || state.journalSaveButton.textContent || 'Save';
   state.journalSaveButton.textContent = label;
   state.journalSaveButton.disabled = false;
   state.journalSaveButton.removeAttribute('aria-disabled');
@@ -5448,7 +5472,7 @@ function resetJournalSaveButton() {
 
 function showJournalSavedFeedback() {
   if (state.journalController && typeof state.journalController.markSaved === 'function') {
-    state.journalController.markSaved('Saved ✓', 1500);
+    state.journalController.markSaved('Saved', 1500);
     state.journalSaveButton = state.journalController.saveButton;
     return;
   }
@@ -5456,7 +5480,7 @@ function showJournalSavedFeedback() {
     return;
   }
   resetJournalSaveButton();
-  state.journalSaveButton.textContent = 'Saved ✓';
+  state.journalSaveButton.textContent = 'Saved';
   state.journalSaveButton.disabled = true;
   state.journalSaveButton.setAttribute('aria-disabled', 'true');
   state.journalSavedTimer = setTimeout(() => {
@@ -5517,14 +5541,13 @@ function handleJournalFormSubmit(event) {
       notes: formData.notes,
     });
     savedEntry = store.create(entry);
-    showJournalStatus('Saved entry. It stays on this device until you export it.');
-    resetJournalForm({ keepStatus: true });
+    showJournalStatus('Saved. Your entry is in Journal History below. The form is ready for a new entry.');
+    resetJournalForm({ keepStatus: true, focusNotes: false });
     setJournalEditState('');
   }
 
   state.journalStore = store;
   updateJournalEntriesFromStore();
-  renderJournalViews();
   state.journalStore.clearDraft(state.journalDraftPath);
   showJournalMessage('');
   showJournalSavedFeedback();
@@ -5566,7 +5589,6 @@ function handleJournalHistoryClick(event) {
   }
   store.remove(journalId);
   updateJournalEntriesFromStore();
-  renderJournalViews();
   showJournalStatus('Entry deleted.');
   if (state.journalStore && state.journalDraftPath) {
     state.journalStore.clearDraft(state.journalDraftPath);
@@ -5574,12 +5596,12 @@ function handleJournalHistoryClick(event) {
 }
 
 function handleJournalFiltersChange() {
-  if (!state.journalFiltersForm) {
-    return;
-  }
+  if (!state.journalFiltersForm) return;
   const formData = new FormData(state.journalFiltersForm);
   state.journalFilters = {
     search: (formData.get('search') || '').toString().trim(),
+    emotion: (formData.get('emotion') || '').toString().trim(),
+    need: (formData.get('need') || '').toString().trim(),
     tag: (formData.get('tag') || '').toString().trim(),
     sort: (formData.get('sort') || 'newest').toString(),
     range: (formData.get('range') || 'all').toString(),
@@ -5588,11 +5610,9 @@ function handleJournalFiltersChange() {
 }
 
 function handleJournalFiltersReset() {
-  if (!state.journalFiltersForm) {
-    return;
-  }
+  if (!state.journalFiltersForm) return;
   state.journalFiltersForm.reset();
-  state.journalFilters = { search: '', tag: '', sort: 'newest', range: 'all' };
+  state.journalFilters = { search: '', emotion: '', need: '', tag: '', sort: 'newest', range: 'all' };
   renderJournalHistory();
 }
 
@@ -6007,14 +6027,18 @@ function setInventoryFormMode({ entry }) {
 
   if (!entry) {
     state.inventoryEditingId = null;
-    state.inventorySubmitButton.textContent = '💾 Save to device';
+    state.inventorySubmitButton.textContent = 'Device';
+    state.inventorySubmitButton.setAttribute('aria-label', 'Save to device');
+    state.inventorySubmitButton.setAttribute('title', 'Save to device');
     state.inventoryForm.removeAttribute('data-editing');
     return;
   }
 
   state.inventoryEditingId = entry.id;
   state.inventoryForm.setAttribute('data-editing', 'true');
-  state.inventorySubmitButton.textContent = '💾 Save changes to device';
+  state.inventorySubmitButton.textContent = 'Save changes';
+  state.inventorySubmitButton.setAttribute('aria-label', 'Save changes to device');
+  state.inventorySubmitButton.setAttribute('title', 'Save changes to device');
 
   const titleInput = state.inventoryForm.querySelector('#inventory-title');
   const descriptionInput = state.inventoryForm.querySelector('#inventory-description');
@@ -6879,6 +6903,23 @@ function replaceLocalStorageWithSnapshot(nextSnapshot, previousSnapshot) {
   return { success: true };
 }
 
+function syncRestoredCustomizerMirrors(snapshot) {
+  if (typeof window === 'undefined' || !window.sessionStorage) return;
+
+  [THEME_STORAGE_KEY, NAV_SETTINGS_STORAGE_KEY].forEach((key) => {
+    try {
+      const value = snapshot?.[key];
+      if (typeof value === 'string' && value.trim()) {
+        window.sessionStorage.setItem(key, value);
+      } else {
+        window.sessionStorage.removeItem(key);
+      }
+    } catch (error) {
+      console.warn(`Unable to synchronize restored customizer key ${key}`, error);
+    }
+  });
+}
+
 async function importLocalStorageSnapshot(payload) {
   const normalized = normalizeBackupPayload(payload);
   if (!normalized.localStorage || !Object.keys(normalized.localStorage).length) {
@@ -6901,6 +6942,11 @@ async function importLocalStorageSnapshot(payload) {
     broadcastDataMessage('Import failed. Unable to write to localStorage.', 'error');
     return;
   }
+
+  // A full snapshot is authoritative. Theme and nav settings are mirrored
+  // into sessionStorage during normal Customizer use, so update those mirrors
+  // before the running page re-reads presentation state.
+  syncRestoredCustomizerMirrors(normalized.localStorage);
 
   const counts = await refreshStateFromLocalStorageSnapshot(normalized.localStorage);
   const inventoryCount = counts?.inventoryCount ?? 0;
@@ -7102,7 +7148,6 @@ async function importLegacyJournalEntries(entries) {
       return false;
     }
     updateJournalEntriesFromStore();
-    renderJournalViews();
     const total = result.added + result.updated;
     showJournalStatus(`Imported ${total} ${total === 1 ? 'entry' : 'entries'}.`);
     showJournalMessage('Import complete. Entries stay on this device unless you export them.', 'success');
@@ -7283,325 +7328,3 @@ function focusNeedSection(slug) {
     target.classList.remove('inventory-need--highlight');
   }, 1200);
 }
-
-(function () {
-  const stack = document.querySelector('[data-strategy-stack]');
-  const deck = document.querySelector('[data-strategy-deck]');
-  const nextBtn = document.querySelector('[data-strategy-next]');
-  const prevBtn = document.querySelector('[data-strategy-prev]');
-  const shuffleBtn = document.querySelector('[data-strategy-shuffle]');
-  const deckHeader = document.querySelector('.strategy-deck-header');
-  const counter = document.querySelector('[data-strategy-count]');
-  let toggleBtn = document.querySelector('[data-strategy-toggle]');
-
-  if (!stack) {
-    return;
-  }
-
-  let cards = Array.from(stack.querySelectorAll('.strategy-card'));
-  if (!cards.length) {
-    return;
-  }
-
-  if (!toggleBtn && deckHeader) {
-    toggleBtn = document.createElement('button');
-    toggleBtn.type = 'button';
-    toggleBtn.className = 'strategy-deck__toggle';
-    toggleBtn.setAttribute('data-strategy-toggle', '');
-    toggleBtn.textContent = 'View all';
-    deckHeader.appendChild(toggleBtn);
-  }
-
-  function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i -= 1) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const tmp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = tmp;
-    }
-    return arr;
-  }
-
-  let viewAll = false;
-
-  function updateToggleButton() {
-    if (!toggleBtn) return;
-    toggleBtn.textContent = viewAll ? 'View one at a time' : 'View all';
-    toggleBtn.setAttribute('aria-pressed', viewAll ? 'true' : 'false');
-  }
-
-  function applyPositions(currentIndex) {
-    if (viewAll) {
-      cards.forEach((card) => {
-        card.removeAttribute('data-active');
-        card.removeAttribute('data-position');
-      });
-      return;
-    }
-
-    const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-    const nextIndex = (currentIndex + 1) % cards.length;
-
-    cards.forEach((card, index) => {
-      card.removeAttribute('data-active');
-      card.removeAttribute('data-position');
-
-      if (index === currentIndex) {
-        card.setAttribute('data-active', 'true');
-      } else if (index === prevIndex) {
-        card.setAttribute('data-position', 'prev');
-      } else if (index === nextIndex) {
-        card.setAttribute('data-position', 'next');
-      }
-    });
-  }
-
-  if (counter) {
-    counter.setAttribute('aria-live', 'polite');
-  }
-
-  function updateCounter(currentIndex) {
-    if (!counter) return;
-    if (viewAll) {
-      counter.textContent = `${cards.length} ${cards.length === 1 ? 'card' : 'cards'}`;
-    } else {
-      counter.textContent = `${currentIndex + 1} of ${cards.length}`;
-    }
-  }
-
-  function enableListView() {
-    viewAll = true;
-    if (deck) {
-      deck.classList.add('strategy-deck--list');
-    }
-    applyPositions(currentIndex);
-    updateCounter(currentIndex);
-    updateToggleButton();
-    window.requestAnimationFrame(refreshBodyShadows);
-  }
-
-  function disableListView() {
-    viewAll = false;
-    if (deck) {
-      deck.classList.remove('strategy-deck--list');
-    }
-    applyPositions(currentIndex);
-    updateCounter(currentIndex);
-    updateToggleButton();
-    window.requestAnimationFrame(refreshBodyShadows);
-  }
-
-  function toggleViewMode() {
-    if (viewAll) {
-      disableListView();
-    } else {
-      enableListView();
-    }
-  }
-
-  function toggleBodyShadow(body) {
-    if (!body) return;
-
-    const hasOverflow = body.scrollHeight > body.clientHeight + 1;
-    const dismissed = body.dataset.scrollHintDismissed === 'true';
-
-    body.classList.toggle('strategy-card__body--shadow', hasOverflow && !dismissed);
-  }
-
-  function refreshBodyShadows() {
-    cards.forEach((card) => {
-      const body = card.querySelector('.strategy-card__body');
-      toggleBodyShadow(body);
-    });
-  }
-
-  cards.forEach((card) => {
-    const body = card.querySelector('.strategy-card__body');
-    if (body) {
-      body.addEventListener('scroll', function () {
-        if (body.scrollTop > 0) {
-          body.dataset.scrollHintDismissed = 'true';
-        }
-        toggleBodyShadow(body);
-      });
-    }
-  });
-
-  let currentIndex = 0;
-
-  function go(offset) {
-    if (!cards.length || viewAll) return;
-    currentIndex = (currentIndex + offset + cards.length) % cards.length;
-    applyPositions(currentIndex);
-    updateCounter(currentIndex);
-    window.requestAnimationFrame(refreshBodyShadows);
-  }
-
-  function performShuffle() {
-    const children = Array.from(stack.children).filter(function (node) {
-      return node.classList && node.classList.contains('strategy-card');
-    });
-
-    const shuffled = shuffleArray(children);
-    shuffled.forEach(function (card) {
-      stack.appendChild(card);
-    });
-
-    cards = Array.from(stack.querySelectorAll('.strategy-card'));
-    currentIndex = 0;
-    applyPositions(currentIndex);
-    updateCounter(currentIndex);
-    window.requestAnimationFrame(refreshBodyShadows);
-  }
-
-  performShuffle();
-  updateCounter(currentIndex);
-  updateToggleButton();
-  window.requestAnimationFrame(refreshBodyShadows);
-
-  window.addEventListener('resize', function () {
-    window.requestAnimationFrame(refreshBodyShadows);
-  });
-
-  if (nextBtn) {
-    nextBtn.addEventListener('click', function () {
-      go(1);
-    });
-  }
-
-  if (prevBtn) {
-    prevBtn.addEventListener('click', function () {
-      go(-1);
-    });
-  }
-
-  if (shuffleBtn) {
-    shuffleBtn.addEventListener('click', function () {
-      performShuffle();
-    });
-  }
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', function () {
-      toggleViewMode();
-    });
-  }
-
-  if (deck && deck.addEventListener) {
-    let startX = null;
-    let startY = null;
-    let isDragging = false;
-    let swipeLocked = false;
-    let startedOnActiveCard = false;
-
-    deck.addEventListener('pointerdown', function (event) {
-      const target = event.target;
-      const targetIsElement = target instanceof Element;
-      const targetInsideStack = targetIsElement && (target === stack || stack.contains(target));
-      const interactiveTarget = targetIsElement
-        ? target.closest('button, a, input, textarea, select, label')
-        : null;
-
-      if (!targetInsideStack || (interactiveTarget && deck.contains(interactiveTarget))) {
-        isDragging = false;
-        swipeLocked = false;
-        startedOnActiveCard = false;
-        startX = null;
-        startY = null;
-        deck.style.touchAction = '';
-        return;
-      }
-
-      isDragging = true;
-      swipeLocked = false;
-      startedOnActiveCard = false;
-      startX = event.clientX;
-      startY = event.clientY;
-
-      const activeCard = stack.querySelector('.strategy-card[data-active="true"]');
-      if (activeCard && activeCard.contains(event.target)) {
-        startedOnActiveCard = true;
-        swipeLocked = true;
-        deck.style.touchAction = 'pan-x';
-      } else {
-        deck.style.touchAction = '';
-      }
-
-      if (deck.setPointerCapture) {
-        try {
-          deck.setPointerCapture(event.pointerId);
-        } catch (err) {
-          /* noop */
-        }
-      }
-    });
-
-    deck.addEventListener('pointermove', function (event) {
-      if (!isDragging || startX == null || startY == null) {
-        return;
-      }
-
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-
-      if (startedOnActiveCard) {
-        event.preventDefault();
-        return;
-      }
-
-      if (!swipeLocked) {
-        const horizontalDominant = Math.abs(dx) > Math.abs(dy) + 6;
-        if (horizontalDominant && Math.abs(dx) > 12) {
-          swipeLocked = true;
-          event.preventDefault();
-        } else if (Math.abs(dy) > Math.abs(dx)) {
-          return;
-        }
-      } else {
-        event.preventDefault();
-      }
-    });
-
-    deck.addEventListener('pointerup', function (event) {
-      if (!isDragging || startX == null) {
-        return;
-      }
-
-      const dx = event.clientX - startX;
-      const threshold = 40;
-
-      if (swipeLocked && Math.abs(dx) > threshold) {
-        if (dx > 0) {
-          go(-1);
-        } else {
-          go(1);
-        }
-      }
-
-      isDragging = false;
-      swipeLocked = false;
-      startedOnActiveCard = false;
-      startX = null;
-      startY = null;
-      deck.style.touchAction = '';
-    });
-
-    deck.addEventListener('pointerleave', function () {
-      isDragging = false;
-      swipeLocked = false;
-      startedOnActiveCard = false;
-      startX = null;
-      startY = null;
-      deck.style.touchAction = '';
-    });
-
-    deck.addEventListener('pointercancel', function () {
-      isDragging = false;
-      swipeLocked = false;
-      startedOnActiveCard = false;
-      startX = null;
-      startY = null;
-      deck.style.touchAction = '';
-    });
-  }
-})();

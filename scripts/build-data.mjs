@@ -6,6 +6,16 @@ import { buildReverseInferenceIndex } from './reverse-inference-index.js';
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA_DIR = join(ROOT, 'data');
 
+const PAGE_TO_MODEL_KEY = new Map([
+  ['excited', 'excitement'],
+  ['joyful', 'joy'],
+  ['hopeful', 'hope'],
+  ['contented', 'contentment'],
+]);
+const MODEL_TO_PAGE_KEY = new Map(
+  Array.from(PAGE_TO_MODEL_KEY.entries(), ([pageKey, modelKey]) => [modelKey, pageKey]),
+);
+
 function readCsv(path) {
   const text = readFileSync(join(ROOT, path), 'utf8').replace(/\ufeff/g, '');
   return parseCsv(text);
@@ -404,6 +414,172 @@ function buildBodyRegions(rows) {
 
 const bodyRegions = buildBodyRegions(rawCueRows);
 
+function bodyRegionsForInference(regions) {
+  return regions.map((region) => ({
+    ...region,
+    options: (region.options || []).map((option) => {
+      const emotions = {};
+      for (const [pageKey, weight] of Object.entries(option.emotions || {})) {
+        const modelKey = PAGE_TO_MODEL_KEY.get(pageKey) || pageKey;
+        const previous = emotions[modelKey];
+        emotions[modelKey] = Number.isFinite(previous) ? Math.max(previous, weight) : weight;
+      }
+      return { ...option, emotions };
+    }),
+  }));
+}
+
+function restorePageFacingInferenceKeys(index) {
+  const output = {};
+
+  for (const [modelKey, value] of Object.entries(index)) {
+    if (modelKey === '_meta') continue;
+    const pageKey = MODEL_TO_PAGE_KEY.get(modelKey) || modelKey;
+    const entry = value && typeof value === 'object' ? { ...value } : value;
+
+    if (entry && Array.isArray(entry.evidenceKeys)) {
+      entry.evidenceKeys = entry.evidenceKeys.map((key) =>
+        key === `emotion-${modelKey}` ? `emotion-${pageKey}` : key,
+      );
+    }
+    output[pageKey] = entry;
+  }
+
+  if (index._meta) output._meta = index._meta;
+  return output;
+}
+
+function cloneJson(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function applyReverseInferenceOverrides(index, source) {
+  if (!source || source.schemaVersion !== 1 || !source.entries || typeof source.entries !== 'object') {
+    throw new Error('data/reverse-inference-overrides.json must use schemaVersion 1 with an entries object.');
+  }
+
+  const output = cloneJson(index);
+  const allowedFields = new Set([
+    'zones',
+    'needsHypotheses',
+    'bodyCueOrder',
+    'bodyCueOverrides',
+    'evidenceKeysAppend',
+  ]);
+
+  for (const [pageKey, override] of Object.entries(source.entries)) {
+    const entry = output[pageKey];
+    if (!entry || pageKey === '_meta') {
+      throw new Error(`Reverse-inference override references unknown generated feeling "${pageKey}".`);
+    }
+    if (!override || typeof override !== 'object' || Array.isArray(override)) {
+      throw new Error(`Reverse-inference override for "${pageKey}" must be an object.`);
+    }
+
+    const unknownFields = Object.keys(override).filter((field) => !allowedFields.has(field));
+    if (unknownFields.length) {
+      throw new Error(
+        `Reverse-inference override for "${pageKey}" has unknown field(s): ${unknownFields.join(', ')}.`,
+      );
+    }
+
+    if (Object.hasOwn(override, 'zones')) {
+      if (!Array.isArray(override.zones)) {
+        throw new Error(`Override zones for "${pageKey}" must be an array.`);
+      }
+      entry.zones = cloneJson(override.zones);
+    }
+
+    if (Object.hasOwn(override, 'needsHypotheses')) {
+      if (
+        !override.needsHypotheses ||
+        typeof override.needsHypotheses !== 'object' ||
+        Array.isArray(override.needsHypotheses)
+      ) {
+        throw new Error(`Override needsHypotheses for "${pageKey}" must be an object.`);
+      }
+      entry.needsHypotheses = cloneJson(override.needsHypotheses);
+    }
+
+    const originalBodyCues = Array.isArray(entry.bodyCues)
+      ? entry.bodyCues.map((cue) => cloneJson(cue))
+      : [];
+    const originalBodyEvidence = new Set(
+      originalBodyCues.map((cue) => cue.evidenceKey).filter(Boolean),
+    );
+    let bodyCues = originalBodyCues;
+    let bodyCueChanged = false;
+
+    if (Object.hasOwn(override, 'bodyCueOrder')) {
+      if (!Array.isArray(override.bodyCueOrder)) {
+        throw new Error(`Override bodyCueOrder for "${pageKey}" must be an array.`);
+      }
+      if (new Set(override.bodyCueOrder).size !== override.bodyCueOrder.length) {
+        throw new Error(`Override bodyCueOrder for "${pageKey}" contains duplicate option IDs.`);
+      }
+
+      const byId = new Map(originalBodyCues.map((cue) => [cue.optionId, cue]));
+      bodyCues = override.bodyCueOrder.map((optionId) => {
+        const cue = byId.get(optionId);
+        if (!cue) {
+          throw new Error(
+            `Override bodyCueOrder for "${pageKey}" references unknown cue "${optionId}".`,
+          );
+        }
+        return cloneJson(cue);
+      });
+      bodyCueChanged = true;
+    }
+
+    if (Object.hasOwn(override, 'bodyCueOverrides')) {
+      if (
+        !override.bodyCueOverrides ||
+        typeof override.bodyCueOverrides !== 'object' ||
+        Array.isArray(override.bodyCueOverrides)
+      ) {
+        throw new Error(`Override bodyCueOverrides for "${pageKey}" must be an object.`);
+      }
+
+      const available = new Set(bodyCues.map((cue) => cue.optionId));
+      for (const optionId of Object.keys(override.bodyCueOverrides)) {
+        if (!available.has(optionId)) {
+          throw new Error(
+            `Override bodyCueOverrides for "${pageKey}" references unavailable cue "${optionId}".`,
+          );
+        }
+      }
+
+      bodyCues = bodyCues.map((cue) => {
+        const patch = override.bodyCueOverrides[cue.optionId];
+        return patch ? { ...cue, ...cloneJson(patch) } : cue;
+      });
+      bodyCueChanged = true;
+    }
+
+    if (bodyCueChanged) {
+      entry.bodyCues = bodyCues;
+      const nonBodyEvidence = (entry.evidenceKeys || []).filter(
+        (key) => !originalBodyEvidence.has(key),
+      );
+      entry.evidenceKeys = [
+        ...nonBodyEvidence,
+        ...bodyCues.map((cue) => cue.evidenceKey).filter(Boolean),
+      ];
+    }
+
+    if (Object.hasOwn(override, 'evidenceKeysAppend')) {
+      if (!Array.isArray(override.evidenceKeysAppend)) {
+        throw new Error(`Override evidenceKeysAppend for "${pageKey}" must be an array.`);
+      }
+      entry.evidenceKeys = Array.from(
+        new Set([...(entry.evidenceKeys || []), ...override.evidenceKeysAppend]),
+      );
+    }
+  }
+
+  return output;
+}
+
 const feelings = rawFeelings.map((row) => {
   const title = row['Feeling Title'];
   const baseSlug = slugify(title);
@@ -498,7 +674,17 @@ const dataset = { feelings, needs, fauxFeelings, strategies };
 writeFileSync(join(DATA_DIR, 'index.json'), JSON.stringify(dataset, null, 2));
 writeFileSync(join(DATA_DIR, 'body-regions.json'), `${JSON.stringify(bodyRegions, null, 2)}\n`);
 
-const reverseIndex = buildReverseInferenceIndex({ needs, feelings, bodyRegions });
+const modelBodyRegions = bodyRegionsForInference(bodyRegions);
+const modelReverseIndex = buildReverseInferenceIndex({
+  needs,
+  feelings,
+  bodyRegions: modelBodyRegions,
+});
+const pageReverseIndex = restorePageFacingInferenceKeys(modelReverseIndex);
+const reverseInferenceOverrides = JSON.parse(
+  readFileSync(join(DATA_DIR, 'reverse-inference-overrides.json'), 'utf8'),
+);
+const reverseIndex = applyReverseInferenceOverrides(pageReverseIndex, reverseInferenceOverrides);
 writeFileSync(join(DATA_DIR, 'reverse-inference.json'), `${JSON.stringify(reverseIndex, null, 2)}\n`);
 
 console.log('Wrote data/index.json, data/body-regions.json, and data/reverse-inference.json');

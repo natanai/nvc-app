@@ -182,6 +182,34 @@ const normalizeEmotionCandidates = (value) => {
   return Array.from(seen.values());
 };
 
+const normalizeFeelingRatings = (value, fallbackEmotion = '', fallbackIntensity) => {
+  const fallbackScale = sanitizeScale(fallbackIntensity);
+  const defaultScale = typeof fallbackScale === 'number' && fallbackScale > 0 ? fallbackScale : 5;
+  const rawItems = Array.isArray(value) && value.length
+    ? value
+    : normalizeStringList(fallbackEmotion).map((feeling) => ({ feeling, intensity: defaultScale }));
+  const seen = new Map();
+  rawItems.forEach((item) => {
+    let feeling = '';
+    let intensityCandidate;
+    if (typeof item === 'string') {
+      feeling = item.trim();
+      intensityCandidate = defaultScale;
+    } else if (item && typeof item === 'object') {
+      const rawFeeling = item.feeling ?? item.emotion ?? item.label ?? item.name ?? item.key ?? '';
+      feeling = typeof rawFeeling === 'string' ? rawFeeling.trim() : '';
+      intensityCandidate = item.intensity ?? item.level ?? item.scale ?? item.rating;
+      if (intensityCandidate === undefined) intensityCandidate = defaultScale;
+    }
+    const intensity = sanitizeScale(intensityCandidate);
+    if (!feeling || !Number.isFinite(intensity) || intensity <= 0) return;
+    const key = feeling.toLowerCase();
+    const existing = seen.get(key);
+    if (!existing || intensity > existing.intensity) seen.set(key, { feeling, intensity });
+  });
+  return Array.from(seen.values());
+};
+
 const normalizeRegulationUsed = (value) => normalizeStringList(value);
 
 const normalizeNeeds = (value, fallback) => {
@@ -253,10 +281,18 @@ const normalizeEntry = (raw = {}) => {
     raw.dateISO ?? raw.timestamp ?? raw.createdAt ?? raw.date ?? raw.savedAt ?? extras.dateISO
   );
 
-  overrides.emotion = coerceEmotion(raw.emotion ?? extras.emotion);
-
   const intensityCandidate = raw.intensity ?? raw.intensityValue ?? extras.intensity;
-  overrides.intensity = sanitizeScale(intensityCandidate);
+  overrides.feelings = normalizeFeelingRatings(
+    raw.feelings ?? extras.feelings,
+    raw.emotion ?? extras.emotion,
+    intensityCandidate,
+  );
+  overrides.emotion = overrides.feelings.length
+    ? overrides.feelings.map((item) => item.feeling).join(', ')
+    : coerceEmotion(raw.emotion ?? extras.emotion);
+  overrides.intensity = overrides.feelings.length
+    ? Math.max(...overrides.feelings.map((item) => item.intensity))
+    : sanitizeScale(intensityCandidate);
 
   const confidenceCandidate = raw.confidence ?? raw.confidenceValue ?? extras.confidence;
   overrides.confidence = sanitizeScale(confidenceCandidate);
@@ -299,6 +335,9 @@ const normalizeEntry = (raw = {}) => {
     ...base,
     ...extras,
     ...overrides,
+    feelings: Array.isArray(overrides.feelings)
+      ? overrides.feelings.map(({ feeling, intensity }) => ({ feeling, intensity }))
+      : [],
     sensations: Array.isArray(overrides.sensations) ? overrides.sensations : [],
     needs: Array.isArray(overrides.needs) ? overrides.needs : [],
     strategies: Array.isArray(overrides.strategies) ? overrides.strategies : [],
@@ -315,6 +354,9 @@ const normalizeEntry = (raw = {}) => {
 
 const cloneEntry = (entry) => ({
   ...entry,
+  feelings: Array.isArray(entry.feelings)
+    ? entry.feelings.map(({ feeling, intensity }) => ({ feeling, intensity }))
+    : [],
   sensations: Array.isArray(entry.sensations) ? [...entry.sensations] : [],
   needs: Array.isArray(entry.needs) ? [...entry.needs] : [],
   strategies: Array.isArray(entry.strategies) ? [...entry.strategies] : [],
@@ -364,6 +406,7 @@ const rebuildCache = (entries) => {
     const haystack = [
       entry.notes || '',
       entry.emotion || '',
+      ...(Array.isArray(entry.feelings) ? entry.feelings.map((item) => item?.feeling || '') : []),
       ...(Array.isArray(entry.tags) ? entry.tags : []),
       ...(Array.isArray(entry.needs) ? entry.needs : []),
     ]

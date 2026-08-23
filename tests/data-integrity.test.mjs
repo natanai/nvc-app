@@ -232,7 +232,8 @@ function checkReferenceList({
 }
 
 const EXTRA_DIRECTORY_ALLOWLIST = {
-  feelings: new Set(['body-cues']),
+  // These are tools nested under /feelings/, not Feeling vocabulary entries.
+  feelings: new Set(['body-cues', 'emotions-wheel']),
   needs: new Set(),
   'faux-feelings': new Set(),
 };
@@ -282,7 +283,10 @@ function checkBodySignals(feeling) {
 // Some reverse inference entries are intentionally absent while data is collected.
 // Track those keys explicitly so the integrity check still passes but we can
 // continue catching unexpected omissions if new feelings point to missing data.
-const KNOWN_INFERENCE_GAPS = new Set(['uncertain']);
+// `love-caring` is an existing cross-taxonomy/legacy alias target; there is no
+// corresponding Feeling inference record yet, so keep the gap explicit rather
+// than fabricating one or allowing arbitrary missing targets.
+const KNOWN_INFERENCE_GAPS = new Set(['uncertain', 'love-caring']);
 
 clearMissingVocabularySpreadsheet();
 

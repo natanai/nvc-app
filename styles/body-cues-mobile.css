@@ -2,10 +2,6 @@
    Scoring, slider state, result ordering, and update timing remain owned by
    scripts/body-cues-tool.js; this file only composes those states for phones. */
 
-/* The pin control is created by the Body Cues runtime but is a mobile-only affordance. */
-.body-cues-page .body-cues-tool__pin-toggle {
-  display: none;
-}
 
 @media (max-width: 640px) {
   /* Treat Body Cues as a dedicated mobile surface rather than a card inside a card. */

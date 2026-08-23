@@ -6,7 +6,7 @@
     <title>Alexithymia Support • allneeds.app</title>
     <meta
       name="description"
-      content="Follow a guided check-in that links body sensations with emotions while keeping your care strategies in your browser&#39;s localStorage inventory."
+      content="Use a structured check-in with body sensations and affect dimensions to consider possible emotion labels and regulation options."
     />
     <link rel="icon" type="image/svg+xml" href="../icons/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="../icons/favicon-32x32.png" />
@@ -27,7 +27,7 @@
     <meta property="og:title" content="Alexithymia Support • allneeds.app" />
     <meta
       property="og:description"
-      content="Follow a guided check-in that links body sensations with emotions while keeping your care strategies in your browser&#39;s localStorage inventory."
+      content="Use a structured check-in with body sensations and affect dimensions to consider possible emotion labels and regulation options."
     />
     <meta property="og:image" content="https://allneeds.app/social/og-image-1200x630.png" />
     <meta property="og:image:secure_url" content="https://allneeds.app/social/og-image-1200x630.png" />
@@ -40,7 +40,7 @@
     <meta name="twitter:title" content="Alexithymia Support • allneeds.app" />
     <meta
       name="twitter:description"
-      content="Follow a guided check-in that links body sensations with emotions while keeping your care strategies in your browser&#39;s localStorage inventory."
+      content="Use a structured check-in with body sensations and affect dimensions to consider possible emotion labels and regulation options."
     />
     <meta name="twitter:image" content="https://allneeds.app/social/twitter-card-1200x630.png" />
     <meta name="twitter:image:alt" content="Three colorful doorways symbolizing allneeds.app" />
@@ -663,6 +663,137 @@ button.site-nav__magnet {
 }
 
 @media (max-width: 640px) {
+  body.alexithymia-support-page {
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+
+  .alexithymia-support-page .page-wrapper {
+    width: 100%;
+    gap: 0.85rem;
+  }
+
+  .alexithymia-support-page .breadcrumbs {
+    padding: 0.45rem 0.65rem;
+    border-width: 2px;
+    box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  }
+
+  .alexithymia-support-page .page {
+    padding: 1rem 0.72rem 1.15rem;
+    gap: 0.9rem;
+    border-width: 3px;
+    box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 32%, transparent);
+  }
+
+  .alexithymia-support-page .page-header {
+    gap: 0.55rem;
+  }
+
+  .alexithymia-support-page .page-title {
+    font-size: clamp(1.15rem, 7.4vw, 1.55rem);
+    letter-spacing: 0.045em;
+  }
+
+  .alexithymia-support-page .page-subtitle {
+    font-size: 0.96rem;
+    line-height: 1.45;
+  }
+
+  .alexithymia-support-page .support-flow {
+    gap: 0.9rem;
+  }
+
+  .alexithymia-support-page .support-step {
+    min-width: 0;
+    gap: 0.78rem;
+    padding: 0.82rem 0.78rem;
+    border-width: 2px;
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 0 color-mix(in srgb, var(--outline) 24%, transparent);
+  }
+
+  .alexithymia-support-page .support-step--has-next {
+    padding-bottom: 1rem;
+  }
+
+  .alexithymia-support-page .support-step > p {
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .alexithymia-support-page .support-step__title {
+    font-size: 0.96rem;
+    line-height: 1.28;
+    letter-spacing: 0.045em;
+  }
+
+  .alexithymia-support-page .emotion-suggestions {
+    min-width: 0;
+    max-width: 100%;
+    gap: 0.55rem;
+    padding: 0.62rem;
+    border-width: 1.5px;
+    border-radius: var(--radius-md);
+  }
+
+  .alexithymia-support-page .emotion-library {
+    min-width: 0;
+    max-width: 100%;
+    gap: 0.72rem;
+    padding: 0.7rem 0 0;
+    border: 0;
+    border-top: 1px solid color-mix(in srgb, var(--outline) 20%, transparent);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .alexithymia-support-page .emotion-detail {
+    display: grid;
+    min-width: 0;
+    gap: 0.68rem;
+  }
+
+  .alexithymia-support-page .emotion-detail > div {
+    display: grid;
+    min-width: 0;
+    gap: 0.25rem;
+  }
+
+  .alexithymia-support-page .emotion-detail__name {
+    font-size: 1.18rem;
+    letter-spacing: 0.025em;
+  }
+
+  .alexithymia-support-page .emotion-detail__definition {
+    font-size: 0.96rem;
+    line-height: 1.43;
+  }
+
+  .alexithymia-support-page .emotion-suggestions__title {
+    margin: 0;
+    font-size: 0.88rem;
+    line-height: 1.3;
+  }
+
+  .alexithymia-support-page .emotion-detail__list {
+    min-width: 0;
+    margin: 0;
+    padding-left: 1.05rem;
+    font-size: 0.94rem;
+    line-height: 1.4;
+  }
+
+  .alexithymia-support-page .emotion-detail__list li {
+    margin-bottom: 0.18rem;
+    overflow-wrap: anywhere;
+  }
+
+  .alexithymia-support-page .emotion-detail__list--links {
+    padding-left: 0;
+    gap: 0.35rem;
+  }
+
   .alexithymia-support-page .sensation-region__title {
     font-size: 1rem;
   }
@@ -670,7 +801,6 @@ button.site-nav__magnet {
   .alexithymia-support-page .support-step__nav {
     gap: 0.45rem;
   }
-
 
   .alexithymia-support-page .support-step__nav .support-button {
     padding-inline: 0.65rem;
@@ -683,8 +813,22 @@ button.site-nav__magnet {
 }
     </style>
     <link rel="preload" href="../styles.css" as="style" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="../styles/feelings-magnet-icons.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="../styles/needs-magnet-icons.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="../styles/shared-density.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="../styles/inventory-core-shell.css" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="../styles.css" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="../styles.css" /></noscript>
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;600&amp;family=Manrope:wght@500;600;700&amp;display=swap" />
+      <link rel="stylesheet" href="../styles/feelings-magnet-icons.css" />
+      <link rel="stylesheet" href="../styles/needs-magnet-icons.css" />
+      <link rel="stylesheet" href="../styles/shared-density.css" />
+      <link rel="stylesheet" href="../styles/inventory-core-shell.css" />
+      <link rel="stylesheet" href="../styles.css" />
+    </noscript>
 
     <style>
       /* Support Lane compass footer v3 */
@@ -740,7 +884,7 @@ button.site-nav__magnet {
       <nav class="site-nav magnet-section" aria-label="Primary" data-magnet-root data-magnet-key="site-nav">
         <div class="magnet-board-wrapper site-nav__board-wrapper">
           <div class="pill-grid magnet-board site-nav__board" data-magnet-board>
-                        <button
+            <button
               class="pill magnet site-nav__magnet site-nav__magnet--menu"
               type="button"
               data-magnet-id="nav-menu"
@@ -754,7 +898,7 @@ button.site-nav__magnet {
               </svg>
               <span class="site-nav__magnet-label visually-hidden">More</span>
             </button>
-<a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
+            <a class="pill magnet site-nav__magnet site-nav__magnet--home" data-magnet-id="nav-home" href="../">
 
   <svg class="site-nav__magnet-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24">
     <use href="../icons/nav-sprite.svg#icon-home" />
@@ -775,12 +919,15 @@ button.site-nav__magnet {
             <button
               class="pill magnet site-nav__magnet site-nav__magnet--journal"
               data-magnet-id="nav-journal"
+              data-nav-hidden="true"
+              aria-hidden="true"
+              tabindex="-1"
               type="button"
               data-support-journal-open
               aria-haspopup="dialog"
               aria-expanded="false"
               aria-controls="global-support-journal-layer"
-             data-nav-hidden="true" aria-hidden="true" tabindex="-1">
+            >
               <span class="site-nav__magnet-label">Journal</span>
             </button>
             <a class="pill magnet site-nav__magnet site-nav__magnet--inventory" data-magnet-id="nav-inventory" href="../inventory/">
@@ -1094,13 +1241,24 @@ button.site-nav__magnet {
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:site-nav';
+          var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';
+          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
+          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
           var raw;
           try {
             if (!('localStorage' in window)) {
               return;
             }
             raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
+              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+              if (legacyRaw) {
+                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
+                raw = legacyRaw;
+              }
+              window.localStorage.setItem(MIGRATION_KEY, bucket);
+            }
           } catch (error) {
             return;
           }
@@ -1229,8 +1387,8 @@ button.site-nav__magnet {
         <header class="page-header support-header">
           <h1 class="page-title">Alexithymia Support</h1>
           <p class="page-subtitle">
-            About one in ten people live with alexithymia. If naming a feeling is hard, this step-by-step lane offers gentle
-            structure so you can notice your body, explore possible emotions, and choose caring next steps.
+            Alexithymia can make it difficult to identify, distinguish, or describe emotions. This step-by-step check-in uses
+            body sensations and affect dimensions to help you consider possible feeling labels and decide what may be useful next.
           </p>
           <p class="support-note support-note--mini">
             <a href="../docs/body-scan-sourcing-review.md">Methods &amp; References</a>
@@ -1240,19 +1398,19 @@ button.site-nav__magnet {
           <h2 id="supportFlowTitle" class="visually-hidden">Guided support flow</h2>
 
           <article class="support-step" data-step="intro">
-            <h3 class="support-step__title">Start with reassurance</h3>
+            <h3 class="support-step__title">Start with what you can observe</h3>
             <p>
-              There are no wrong answers here. Treat every sensation you notice as valuable information. Move at the pace that
-              feels kind to you.
+              There is no single correct response. Use any sensations you notice as observations, and skip or revise a step if it
+              does not fit your experience.
             </p>
             <button class="support-button support-button--continue" type="button" data-action="start">Begin <span class="support-button__symbol" aria-hidden="true">→</span></button>
           </article>
 
           <article class="support-step is-hidden" data-step="breathing" aria-live="polite">
-            <h3 class="support-step__title">Optional pause: settle your body</h3>
+            <h3 class="support-step__title">Optional pause: paced breathing</h3>
             <p>
-              If you feel revved up, try a short breathing cycle before checking in. Slow, counted breaths can help your nervous
-              system shift toward safety.
+              If activation feels high, you can try a brief paced-breathing exercise before continuing. Skip it if breathing
+              exercises are not useful for you.
             </p>
             <div class="breathing-card">
               <p class="breathing-card__prompt" data-breathing-display>Press start to try a 30-second guided breath.</p>
@@ -1276,8 +1434,8 @@ button.site-nav__magnet {
           <article class="support-step support-step--has-next is-hidden" data-step="body">
             <h3 class="support-step__title">Step 1: What does your body notice?</h3>
             <p>
-              Invite awareness to your body. Open the areas that speak up. We'll surface a few sensations at a time and ask how
-              strong they feel (0–10) after you choose.
+              Notice any body sensations that stand out. Open a region to see examples, choose any that fit, then rate their
+              intensity from 0–10.
             </p>
             <p class="support-note">Tap any region below in any order.</p>
             <form class="sensation-form" data-sensation-form>
@@ -1299,8 +1457,8 @@ button.site-nav__magnet {
           <article class="support-step support-step--has-next is-hidden" data-step="compass">
             <h3 class="support-step__title">Step 2: Emotion compass</h3>
             <p>
-              If the body suggestions feel uncertain, try plotting your state on the emotion compass. Estimate your energy and how
-              pleasant or unpleasant things feel right now. Your emotion matches will collect in the next step.
+              Use the compass to estimate current activation (energy) and pleasantness. These two dimensions provide another way
+              to generate possible emotion matches.
             </p>
             <div class="compass-panel">
               <div class="emotion-compass" data-compass aria-label="Emotion compass">
@@ -1335,8 +1493,8 @@ button.site-nav__magnet {
           <article class="support-step support-step--has-next is-hidden" data-step="library">
             <h3 class="support-step__title">Step 3: Explore an emotion</h3>
             <p>
-              Review the matches from your body check-in or compass plot, then choose an emotion to explore in depth. Ready to pick?
-              <a class="support-jump-link" href="#compass-suggestions">Jump to the list of emotions</a> and load one here.
+              Review the candidates from the body check-in and emotion compass. Select one to compare its definition, possible body
+              cues, common contexts, and related needs. <a class="support-jump-link" href="#compass-suggestions">Jump to emotion candidates</a>.
             </p>
             <div class="emotion-suggestions" data-body-suggestions>
               <p class="support-note">Body-based matches will appear here after you choose sensations.</p>
@@ -1356,8 +1514,8 @@ button.site-nav__magnet {
           <article class="support-step support-step--has-next is-hidden" data-step="journal">
             <h3 id="support-journal-title" class="support-step__title">Step 4: Reflect and journal</h3>
             <p>
-              Linking a feeling to context strengthens emotional awareness. Use the prompts below as writing cues or simply sit
-              with them.
+              Open the same Journal used throughout allneeds.app when you want to record what you noticed. Entries saved here
+              appear in the same Journal history as entries made elsewhere.
             </p>
             <button
               class="support-button support-button--icon-label"
@@ -1377,7 +1535,7 @@ button.site-nav__magnet {
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="regulation">
-            <h3 class="support-step__title">Step 5: Care for what you feel</h3>
+            <h3 class="support-step__title">Step 5: Consider regulation options</h3>
             <div class="regulation-card" data-regulation-card>
               <p class="support-note">Suggestions will appear after you choose an emotion.</p>
             </div>
@@ -1388,10 +1546,10 @@ button.site-nav__magnet {
           </article>
 
           <article class="support-step support-step--has-next is-hidden" data-step="communication">
-            <h3 class="support-step__title">Step 6: Share if you want to</h3>
+            <h3 class="support-step__title">Step 6: Put it into words</h3>
             <p>
-              Putting a feeling into words—just for yourself or with a trusted person—can build confidence. Use this starter
-              sentence or edit it to fit your voice.
+              If useful, use the suggested sentence as a starting point and edit it to match what you mean. You can also leave
+              the feeling uncertain and revise it later.
             </p>
             <div class="communication-card" data-communication-card>
               <p class="support-note">We will suggest a sentence once you pick an emotion.</p>
@@ -1403,10 +1561,10 @@ button.site-nav__magnet {
           </article>
 
           <article class="support-step is-hidden" data-step="closing">
-            <h3 class="support-step__title">Keep practicing gently</h3>
+            <h3 class="support-step__title">Review and repeat as useful</h3>
             <p>
-              You did courageous work by checking in. Emotional vocabulary grows with repetition. Return whenever you want a guide,
-              and celebrate every moment of connection you create with yourself.
+              Emotion identification can become easier with repeated observation and comparison. Return to the flow when it is
+              useful, and revise earlier labels as new information becomes available.
             </p>
             <div class="support-step__nav support-step__nav--back-only" data-step-cta>
               <button class="support-button support-button--ghost support-button--nav" type="button" data-step-back><span class="support-button__symbol" aria-hidden="true">←</span><span>Back</span></button>

@@ -7,14 +7,38 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
-test('shared density styles are part of the static CSS graph', async () => {
+test('shared density styles are parser-discovered without a nested CSS import', async () => {
+  const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
   const shell = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
   const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
 
-  assert.ok(shell.startsWith("@import url('shared-density.css');"));
+  assert.ok(!styles.includes('@import'), 'styles.css should not own nested stylesheet discovery');
+  assert.ok(!shell.includes("@import url('shared-density.css');"), 'inventory-core-shell.css must not create a serial CSS discovery chain');
   assert.ok(!contrast.includes('loadSharedPolishAssets'));
   assert.ok(!contrast.includes('shared-ui-polish.js'));
   assert.ok(!contrast.includes('styles/shared-density.css'));
+});
+
+test('deterministic Inventory and Body Cues styles are parser-discovered', async () => {
+  const buildPages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
+  const inventoryHtml = await fs.readFile(path.join(root, 'inventory/index.html'), 'utf8');
+  const bodyCuesHtml = await fs.readFile(path.join(root, 'feelings/body-cues/index.html'), 'utf8');
+  const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
+
+  const inventoryLink = '<link rel="stylesheet" href="../styles/inventory-mobile.css" media="(max-width: 640px)" />';
+  assert.ok(buildPages.includes(inventoryLink));
+  assert.ok(inventoryHtml.includes(inventoryLink));
+  assert.ok(inventoryHtml.indexOf(inventoryLink) > inventoryHtml.indexOf('<link rel="stylesheet" href="../styles.css" fetchpriority="high" />'));
+
+  assert.ok(buildPages.includes('<link rel="stylesheet" href="../../styles/body-cues.css" />'));
+  assert.ok(buildPages.includes('<link rel="stylesheet" href="../../styles/body-cues-mobile.css" media="(max-width: 640px)" />'));
+  assert.ok(bodyCuesHtml.includes('<link rel="stylesheet" href="../../styles/body-cues.css" />'));
+  assert.ok(bodyCuesHtml.includes('<link rel="stylesheet" href="../../styles/body-cues-mobile.css" media="(max-width: 640px)" />'));
+
+  assert.ok(!contrast.includes('loadInventoryMobileStylesBeforePaint'));
+  assert.ok(!contrast.includes('loadBodyCuesStylesBeforePaint'));
+  assert.ok(!contrast.includes('document.write'));
+  assert.ok(!contrast.includes("document.createElement('link')"));
 });
 
 test('there is no browser-side DOM normalizer for static UI copy', async () => {
@@ -28,19 +52,23 @@ test('there is no browser-side DOM normalizer for static UI copy', async () => {
   assert.ok(!feed.includes("document.querySelectorAll('#main .inventory-header .page-description')"));
 });
 
-test('build pipeline writes final user-facing static markup before deployment', async () => {
+test('page compiler is the canonical authoring path and emits final user-facing markup', async () => {
   const packageJson = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
-  const finalizer = await fs.readFile(path.join(root, 'scripts/finalize-static-assets.mjs'), 'utf8');
+  const buildPages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
 
-  assert.equal(
-    packageJson.scripts['build:pages'],
-    'node scripts/build-pages.mjs && node scripts/finalize-static-assets.mjs',
-  );
-  assert.ok(finalizer.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
-  assert.ok(finalizer.includes(".replaceAll('💾 Save to device', 'Save to device')"));
-  assert.ok(finalizer.includes(".replaceAll('☁️ Save to profile', 'Save to profile')"));
-  assert.ok(finalizer.includes('Tag what’s present now. Feeling optional—notes are enough.'));
-  assert.ok(finalizer.includes("relative(rootDir, file).replaceAll('\\\\', '/') === 'feed/index.html'"));
+  assert.equal(packageJson.scripts['build:pages'], 'node scripts/build-pages.mjs');
+  await assert.rejects(fs.access(path.join(root, 'scripts/build-pages-safe.mjs')), { code: 'ENOENT' });
+  await assert.rejects(fs.access(path.join(root, 'scripts/finalize-static-assets.mjs')), { code: 'ENOENT' });
+
+  assert.ok(buildPages.includes("submitLabel: 'Save to device'"));
+  assert.ok(!buildPages.includes('💾 Save to device'));
+  assert.ok(buildPages.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
+  assert.ok(!buildPages.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(buildPages.includes('class="journal-history-controls" data-journal-filters'));
+  assert.ok(buildPages.includes('class="journal-history-controls__filters"'));
+  assert.ok(buildPages.includes('journal-utility-disclosure'));
+  assert.ok(buildPages.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
+  assert.ok(!buildPages.includes('Personal strategies you add stay on this browser.'));
 });
 
 test('checked-in static artifacts already contain the final UI', async () => {
@@ -56,9 +84,17 @@ test('checked-in static artifacts already contain the final UI', async () => {
   assert.ok(!feedHtml.includes('Browse strategies that other allneeds users have chosen to share.'));
   assert.ok(inventoryHtml.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
   assert.ok(!needHtml.includes('💾 Save to device'));
-  assert.ok(needHtml.includes('>Save to device</button>'));
+  assert.ok(needHtml.includes('data-save-to-device-button="true"'));
+  assert.ok(needHtml.includes('data-app-icon="device"'));
+  assert.ok(needHtml.includes('>Device</button>'));
+  assert.ok(needHtml.includes('data-save-to-profile-button="true"'));
+  assert.ok(needHtml.includes('data-app-icon="profile"'));
+  assert.ok(needHtml.includes('>Profile</button>'));
   assert.ok(journalHtml.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
-  assert.ok(journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(!journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
+  assert.ok(journalHtml.includes('class="journal-history-controls" data-journal-filters'));
+  assert.ok(journalHtml.includes('class="journal-history-controls__filters"'));
+  assert.ok(journalHtml.includes('journal-utility-disclosure'));
   assert.ok(!css.includes('.feed-controls__icon-button'));
   assert.ok(!css.includes('.feed-controls__button'));
 });
@@ -72,9 +108,9 @@ test('mobile journal chrome remains compact without runtime mutation', async () 
   assert.ok(css.includes('min-height: clamp(15rem, 52dvh, 28rem)'));
 });
 
-test('shared strategies behavior is feed-first without repairing static chrome in JS', async () => {
+test('shared strategies static chrome is already final and runtime stays behavior-only', async () => {
   const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
-  const finalizer = await fs.readFile(path.join(root, 'scripts/finalize-static-assets.mjs'), 'utf8');
+  const feedHtml = await fs.readFile(path.join(root, 'feed/index.html'), 'utf8');
 
   assert.ok(feed.includes("addButton.textContent = 'Save to inventory'"));
   assert.ok(feed.includes('await fetchAndRenderFeed();'));
@@ -82,9 +118,9 @@ test('shared strategies behavior is feed-first without repairing static chrome i
   assert.ok(feed.includes("state.sortSelect?.addEventListener('change', fetchAndRenderFeed)"));
   assert.ok(!feed.includes('[data-feed-follows-check]'));
   assert.ok(!feed.includes('[data-feed-fetch]'));
-  assert.ok(finalizer.includes('<h1 class="page-title">Shared strategies</h1>'));
-  assert.ok(finalizer.includes('data-feed-follows-check'));
-  assert.ok(finalizer.includes('data-feed-fetch'));
+  assert.ok(feedHtml.includes('<h1 class="page-title">Shared strategies</h1>'));
+  assert.ok(!feedHtml.includes('data-feed-follows-check'));
+  assert.ok(!feedHtml.includes('data-feed-fetch'));
 });
 
 test('desktop Inventory keeps the Needs header left-aligned and uses one segmented filter control', async () => {
@@ -104,27 +140,40 @@ test('desktop Inventory keeps the Needs header left-aligned and uses one segment
   assert.ok(inventoryHtml.includes('data-summary-filter="ready"'));
 });
 
-test('mobile Inventory foregrounds the inventory instead of instructional chrome', async () => {
+test('mobile Inventory foregrounds the inventory with one phone-layout owner', async () => {
   const css = await fs.readFile(path.join(root, 'styles/inventory-mobile.css'), 'utf8');
+  const shell = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
+  const buildPages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
 
+  assert.ok(css.includes('authoritative presentation layer for /inventory/ at <= 640px'));
   assert.ok(css.includes('body:has(#main.inventory-page) .breadcrumbs'));
   assert.ok(css.includes('body:has(#main.inventory-page) .page-wrapper'));
   assert.ok(css.includes('gap: 0.45rem;'));
+  assert.ok(css.includes('width: calc(100% + 2rem);'));
+  assert.ok(css.includes('margin-inline: -1rem;'));
+  assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'));
+  assert.ok(css.includes('border-left: 0;'));
+  assert.ok(css.includes('border-right: 0;'));
   assert.ok(css.includes('grid-template-areas:'));
   assert.ok(css.includes("'title'"));
   assert.ok(css.includes("'action';"));
-  assert.ok(css.includes('display: none !important;'));
+  assert.ok(!css.includes('!important'));
+  assert.ok(!css.includes('body .inventory-page.inventory-page'));
 
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-view-switch'));
+  assert.ok(css.includes('.inventory-page .inventory-view-switch'));
   assert.ok(css.includes('border-bottom: 1px solid'));
-  assert.ok(css.includes("body .inventory-page.inventory-page .inventory-view-switch__button[aria-selected='true']::after"));
+  assert.ok(css.includes(".inventory-page .inventory-view-switch__button[aria-selected='true']::after"));
 
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-overview__hint'));
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-summary__filters'));
+  assert.ok(css.includes('.inventory-page .inventory-overview__hint'));
+  assert.ok(css.includes('.inventory-page .inventory-summary__filters'));
   assert.ok(css.includes('height: 36px;'));
 
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__status'));
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-summary__item--missing .inventory-summary__count'));
+  assert.ok(css.includes('.inventory-page .inventory-summary__item--missing .inventory-summary__status'));
+  assert.ok(css.includes('.inventory-page .inventory-summary__item--missing .inventory-summary__count'));
   assert.ok(css.includes('grid-template-columns: minmax(0, 1fr) auto;'));
-  assert.ok(css.includes('body .inventory-page.inventory-page .inventory-summary__item--ready .inventory-summary__count'));
+  assert.ok(css.includes('.inventory-page .inventory-summary__item--ready .inventory-summary__count'));
+
+  assert.ok(shell.includes("Inventory's <=640px page presentation is\n   owned by inventory-mobile.css"));
+  assert.ok(!shell.includes('body .inventory-page.inventory-page'));
+  assert.ok(!buildPages.includes('/* Inventory is the app surface on phones, not a card inside the page. */'));
 });

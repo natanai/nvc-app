@@ -50,11 +50,28 @@ jobs:
         if: steps.import.outputs.changes == 'true'
         run: npm ci
 
-      - name: Rebuild data and pages
+      - name: Rebuild only strategy-owned data and pages
         if: steps.import.outputs.changes == 'true'
         run: |
-          npm run build:data
-          npm run build:pages
+          npm run build:data -- --scope index
+          npm run build:pages -- --scope needs
+
+      - name: Reject collateral changes
+        if: steps.import.outputs.changes == 'true'
+        run: |
+          unexpected="$(git diff --name-only | grep -Ev '^(data/Strategies\.csv|data/index\.json|needs/index\.html|needs/[^/]+/index\.html)$' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "::error title=Strategy import changed files it does not own::The strategy importer may update Strategies.csv, data/index.json, and generated Need pages only."
+            echo "$unexpected"
+            exit 1
+          fi
+
+      - name: Validate imported site state
+        if: steps.import.outputs.changes == 'true'
+        run: |
+          npm run test:data-integrity
+          node --test tests/shared-density-polish.test.mjs
+          node tests/nav-magnet-coverage.test.mjs
 
       - name: Commit and push import artifacts
         if: steps.import.outputs.changes == 'true'
@@ -70,14 +87,16 @@ jobs:
             message="chore: import strategies"
           fi
 
-          git add -A
+          # Stage the workflow's declared ownership surface only. Never use
+          # `git add -A` in a content-import workflow.
+          git add -- data/Strategies.csv data/index.json needs
           git commit -m "$message"
           git push origin HEAD:${TARGET_BRANCH}
 
       - name: Summary
         run: |
           if [ "${{ steps.import.outputs.changes }}" = "true" ]; then
-            echo "Imported strategies and rebuilt site content on branch: ${{ env.TARGET_BRANCH }}." >> "$GITHUB_STEP_SUMMARY"
+            echo "Imported strategies, rebuilt only the affected data/Need pages, validated them, and pushed to: ${{ env.TARGET_BRANCH }}." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "No new strategies were imported from strategy-importer/." >> "$GITHUB_STEP_SUMMARY"
           fi

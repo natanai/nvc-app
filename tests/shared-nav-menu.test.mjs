@@ -49,7 +49,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
 
   const contrast = await fs.readFile(path.join(root, 'assets/js/ui/contrast.js'), 'utf8');
   assert.ok(!contrast.includes('loadSharedMoreNavigationBeforeMagnets'), 'Menu must not be parser-injected from contrast.js');
-  assert.ok(contrast.includes('loadBodyCuesStylesBeforePaint();'), 'Body Cues prepaint loader must remain intact');
+  assert.ok(!contrast.includes('loadBodyCuesStylesBeforePaint'), 'Body Cues CSS must remain parser-discovered instead of JS-injected');
 
   const magnets = await fs.readFile(path.join(root, 'scripts/magnets.js'), 'utf8');
   assert.ok(magnets.includes('hasMissingVisibleNavMagnet'), 'nav engine must reseed when a visible magnet is absent from saved state');
@@ -65,7 +65,7 @@ test('shared Menu magnet uses the established prepaint nav contract', async () =
 
   const critical = await fs.readFile(path.join(root, 'styles/nav-critical.css'), 'utf8');
   assert.ok(critical.includes('.site-nav__magnet--menu {'), 'Menu must have critical prepaint styling');
-  assert.ok(critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must hide unpositioned magnets');
+  assert.ok(!critical.includes(".magnet-board:not([data-ready='1']) .magnet"), 'critical nav CSS must not gate the whole magnet board on JavaScript readiness');
 
   const styles = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
   assert.ok(styles.includes('100svh - clamp(7rem, 22vw, 10rem)'), 'mobile Customizer must respect Safari safe viewport height');
@@ -103,7 +103,8 @@ test('Menu information architecture separates destinations, actions, personal co
 test('Account & data reuses existing allneeds capabilities instead of duplicating them', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
   const inventory = await fs.readFile(path.join(root, 'scripts/inventory.js'), 'utf8');
-  const bluesky = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
+  const blueskyLoader = await fs.readFile(path.join(root, 'scripts/inventory-bluesky.js'), 'utf8');
+  const blueskyRuntime = await fs.readFile(path.join(root, 'scripts/inventory-bluesky-runtime.js'), 'utf8');
 
   assert.ok(controller.includes('id="inventory-export"'), 'Menu should expose the existing backup trigger ID');
   assert.ok(controller.includes('id="inventory-import-trigger"'), 'Menu should expose the existing restore trigger ID');
@@ -116,8 +117,9 @@ test('Account & data reuses existing allneeds capabilities instead of duplicatin
   assert.ok(inventory.includes("document.getElementById('inventory-import-trigger')"), 'existing inventory controller should remain the restore implementation');
   assert.ok(inventory.includes("document.querySelectorAll('[data-support-journal-open]')"), 'existing journal trigger architecture should remain reusable');
 
-  assert.ok(bluesky.includes("document.readyState === 'loading'"), 'Bluesky module should initialize both before and after DOMContentLoaded');
-  assert.ok(bluesky.includes('let initialized = false'), 'Bluesky module should guard duplicate initialization');
+  assert.ok(blueskyLoader.includes("import('./inventory-bluesky-runtime.js?v=2026-08-21-session-hint')"), 'generic Menu loader should defer the full Bluesky implementation');
+  assert.ok(blueskyRuntime.includes("document.readyState === 'loading'"), 'Bluesky runtime should initialize both before and after DOMContentLoaded');
+  assert.ok(blueskyRuntime.includes('let initialized = false'), 'Bluesky runtime should guard duplicate initialization');
 });
 
 test('Account & data uses compact menu-native labels and explicit data direction', async () => {
@@ -147,10 +149,23 @@ test('Account & data actions are bound by the global Menu controller, not Invent
   assert.ok(controller.includes("invokeInventoryControl('loadSnapshotFromBackend')"), 'profile load should call the canonical backend snapshot implementation');
   assert.ok(controller.includes('event.stopImmediatePropagation();'), 'Menu-owned controls should prevent legacy Inventory-only listeners from double-firing');
 
-  const inventoryScript = home.indexOf('<script src="scripts/inventory.js" defer></script>');
-  const menuScript = home.indexOf('<script defer src="scripts/inventory-core-shell.js"></script>');
-  assert.ok(inventoryScript >= 0 && menuScript > inventoryScript,
-    'classic inventory implementation must load before the Menu controller that binds its global actions');
+  const inventoryScript = home.indexOf('scripts/inventory.js');
+  const loaderScript = home.indexOf('scripts/shell-runtime-loader.js');
+  const menuScript = home.indexOf('scripts/inventory-core-shell.js');
+  const eagerRuntimeIsReady = inventoryScript >= 0 && menuScript > inventoryScript;
+  const lazyRuntimeIsGuarded = loaderScript >= 0 && menuScript > loaderScript;
+  assert.ok(eagerRuntimeIsReady || lazyRuntimeIsGuarded,
+    'Menu actions require either the eager Inventory runtime or a pre-Menu intent loader');
+  if (lazyRuntimeIsGuarded) {
+    const loader = await fs.readFile(path.join(root, 'scripts/shell-runtime-loader.js'), 'utf8');
+    assert.ok(loader.includes("'[data-menu-drill=\"account-data\"]'"), 'Account drill should warm the canonical runtime');
+    assert.ok(loader.includes("'#inventory-export'"), 'backup action should be capture-guarded');
+    assert.ok(loader.includes("'#inventory-import-trigger'"), 'restore action should be capture-guarded');
+    assert.ok(loader.includes("'[data-backend-save-button]'"), 'profile save should be capture-guarded');
+    assert.ok(loader.includes("'[data-backend-load-button]'"), 'profile load should be capture-guarded');
+    assert.ok(loader.includes('event.stopImmediatePropagation();'), 'lazy actions must not reach Menu handlers before canonical runtime readiness');
+    assert.ok(loader.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'held actions must replay after canonical runtime readiness');
+  }
   assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should be a non-Inventory page');
 });
 
@@ -171,15 +186,22 @@ test('From Nat sharing is global and reuses the canonical Inventory sharing impl
   assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should prove personal sharing works without Inventory page DOM');
 });
 
-test('Inventory keeps system management out of its primary workspace', async () => {
+test('Inventory compiler omits system-management chrome instead of deleting it after paint', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const pages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
+  const inventoryHtml = await fs.readFile(path.join(root, 'inventory/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
-  assert.ok(controller.includes("document.querySelector('.inventory-bluesky-panel')?.remove()"), 'old Bluesky panel should leave the Inventory workspace');
-  assert.ok(controller.includes("document.querySelector('.inventory-main > .inventory-actions')?.remove()"), 'old backup/import section should leave the Inventory workspace');
-  assert.ok(controller.includes("document.querySelector('.inventory-header .inventory-shared-button')?.remove()"), 'Shared strategies should not compete with Inventory in its header');
-
-  assert.ok(css.includes('.inventory-page .inventory-main > .inventory-actions'), 'system controls should be hidden before JS to prevent flash');
+  assert.ok(!controller.includes('prepareInventoryExperience'), 'shared runtime must not normalize the deterministic Inventory shell');
+  assert.ok(!controller.includes("document.querySelector('.inventory-bluesky-panel')?.remove()"));
+  assert.ok(!controller.includes("document.querySelector('.inventory-main > .inventory-actions')?.remove()"));
+  assert.ok(!controller.includes("document.querySelector('.inventory-header .inventory-shared-button')?.remove()"));
+  assert.ok(!pages.includes('<details class=\"inventory-bluesky-panel\">'), 'compiler must not emit the retired Bluesky panel');
+  assert.ok(!pages.includes('<a class=\"inventory-shared-button\"'), 'compiler must not emit retired Shared chrome');
+  assert.ok(!inventoryHtml.includes('class=\"inventory-bluesky-panel\"'));
+  assert.ok(!inventoryHtml.includes('class=\"inventory-actions inventory-actions--collapsible\"'));
+  assert.ok(inventoryHtml.includes('class=\"inventory-message inventory-page__status\" data-inventory-message'), 'status belongs directly in the final Inventory shell');
+  assert.ok(!css.includes('.inventory-page .inventory-main > .inventory-actions'), 'CSS must not hide markup that should not exist');
   assert.ok(css.includes('inset: auto 0 0 0;'), 'mobile Menu should present as a lightweight bottom sheet');
 });
 
@@ -192,9 +214,14 @@ test('Menu activation remains reliable when magnet physics suppresses synthetic 
 
 test('strategy feed participates in the shared UI architecture and mobile app surface', async () => {
   const feed = await fs.readFile(path.join(root, 'scripts/strategy-feed.js'), 'utf8');
+  const feedHtml = await fs.readFile(path.join(root, 'feed/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
-  assert.ok(feed.startsWith("import './inventory.js"), 'Feed should initialize the existing shared Customizer, Journal, and data controller instead of duplicating handlers');
+  assert.ok(!feed.includes("import './inventory.js"), 'Feed must not execute the shared controller with ES-module semantics');
+  assert.ok(feed.includes('installInventoryRuntimeIntentLoader();\ninit();'), 'Feed should initialize its own feature without starting the shared controller');
+  assert.ok(feed.includes("document.addEventListener('pointerover', warmInventoryRuntime"), 'Feed should warm the shared controller only when an owned interaction is approached');
+  assert.ok(feed.includes('window.requestAnimationFrame(() => replayTrigger.click());'), 'direct taps should replay after the shared owner becomes ready');
+  assert.ok(!feedHtml.includes('<script src="../scripts/inventory.js" defer></script>'), 'Feed must keep the 238 KB shared controller out of its parser graph');
   assert.ok(feed.includes('Menu → Account & data'), 'Feed sign-in guidance should point to the current Account & data location');
   assert.ok(!feed.includes('sign in with Bluesky on the Inventory page'), 'Feed should not send account management back to Inventory');
   assert.ok(css.includes('body:has(#main [data-feed-list]) #main.page'), 'Feed should use the same full-bleed mobile app-surface direction as Inventory');

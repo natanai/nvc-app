@@ -1,29 +1,13 @@
 import fs from "fs/promises";
 import path from "path";
+import { isDeepStrictEqual } from "node:util";
+
+import { buildReverseInferenceOverridesFromRows } from "./reverse-inference-overrides-csv.mjs";
 
 const ROOT = process.cwd();
 const DATA_DIR = path.join(ROOT, "data");
 const EVIDENCE_DIR = path.join(ROOT, "_evidence");
 const INPUT_DIR = path.join(ROOT, "fact-checking");
-
-function csvEscape(value) {
-  if (value == null) return "";
-  const str = String(value);
-  if (/[,\n"\r]/.test(str)) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
-
-function serializeCsv(rows) {
-  if (!rows.length) return "";
-  const headers = Object.keys(rows[0]);
-  const lines = [headers.map(csvEscape).join(",")];
-  for (const row of rows) {
-    lines.push(headers.map((key) => csvEscape(row[key])).join(","));
-  }
-  return lines.join("\n") + "\n";
-}
 
 function parseCsv(text) {
   const rows = [];
@@ -87,69 +71,39 @@ function parseNumber(value) {
   return Number.isFinite(n) ? n : undefined;
 }
 
-function parseEmotions(value) {
-  const pairs = value ? value.split("|") : [];
-  const result = {};
-  for (const pair of pairs) {
-    const [emotion, weight] = pair.split(":");
-    if (emotion && weight !== undefined) {
-      const parsed = parseFloat(weight);
-      if (Number.isFinite(parsed)) {
-        result[emotion.trim()] = parsed;
-      }
-    }
+function parseJsonCell(value, fallback, label) {
+  const text = String(value || '').trim();
+  if (!text) return fallback;
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error(`${label} must contain valid JSON: ${error.message}`);
   }
-  return result;
 }
 
-async function restoreReverseInference() {
-  const rows = await readCsvFile("reverse-inference.csv");
-  const grouped = {};
-  for (const row of rows) {
-    const feeling = row.feeling;
-    if (!feeling) continue;
-    if (!grouped[feeling]) {
-      grouped[feeling] = { zones: row.zones ? row.zones.split("|") : [], bodyCues: [] };
+async function writeJsonIfChanged(targetPath, payload, label) {
+  try {
+    const currentText = await fs.readFile(targetPath, "utf8");
+    const current = JSON.parse(currentText);
+    if (isDeepStrictEqual(current, payload)) {
+      console.log(`• ${label} unchanged; preserved canonical JSON bytes`);
+      return false;
     }
-    grouped[feeling].bodyCues.push({
-      regionId: row.regionId,
-      regionLabel: row.regionLabel,
-      optionId: row.optionId,
-      title: row.title,
-      note: row.note,
-      intensityBand: [parseNumber(row.intensityMin), parseNumber(row.intensityMax)].filter((n) => n !== undefined),
-      arousal: row.arousal || undefined,
-      relativeWeight: parseNumber(row.relativeWeight),
-      evidenceKey: row.evidenceKey || undefined
-    });
+  } catch (error) {
+    if (error?.code !== 'ENOENT') throw error;
   }
-  await fs.writeFile(path.join(DATA_DIR, "reverse-inference.json"), JSON.stringify(grouped, null, 2) + "\n");
-  console.log("• restored data/reverse-inference.json from fact-checking/reverse-inference.csv");
+
+  await fs.writeFile(targetPath, JSON.stringify(payload, null, 2) + "\n");
+  console.log(`• restored ${label}`);
+  return true;
 }
 
-async function restoreBodyRegions() {
-  const rows = await readCsvFile("body-regions.csv");
-  const grouped = new Map();
-  for (const row of rows) {
-    if (!grouped.has(row.regionId)) {
-      grouped.set(row.regionId, {
-        id: row.regionId,
-        label: row.regionLabel,
-        prompt: row.prompt,
-        options: []
-      });
-    }
-    const region = grouped.get(row.regionId);
-    region.options.push({
-      id: row.optionId,
-      title: row.optionTitle,
-      note: row.optionNote,
-      insight: row.optionInsight,
-      emotions: parseEmotions(row.emotions)
-    });
-  }
-  await fs.writeFile(path.join(DATA_DIR, "body-regions.json"), JSON.stringify(Array.from(grouped.values()), null, 2) + "\n");
-  console.log("• restored data/body-regions.json from fact-checking/body-regions.csv");
+async function restoreReverseInferenceOverrides() {
+  const rows = await readCsvFile("reverse-inference-overrides.csv");
+  const sourcePath = path.join(DATA_DIR, "reverse-inference-overrides.json");
+  const existing = JSON.parse(await fs.readFile(sourcePath, "utf8"));
+  const payload = buildReverseInferenceOverridesFromRows(rows, existing);
+  await writeJsonIfChanged(sourcePath, payload, "data/reverse-inference-overrides.json from fact-checking/reverse-inference-overrides.csv");
 }
 
 async function restoreObservationTaxonomy() {
@@ -169,8 +123,12 @@ async function restoreObservationTaxonomy() {
       needs: row.needs ? row.needs.split("|") : []
     });
   }
-  await fs.writeFile(path.join(DATA_DIR, "observation_taxonomy.json"), JSON.stringify({ families: Array.from(families.values()) }, null, 2) + "\n");
-  console.log("• restored data/observation_taxonomy.json from fact-checking/observation-taxonomy.csv");
+  const payload = { families: Array.from(families.values()) };
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation_taxonomy.json"),
+    payload,
+    "data/observation_taxonomy.json from fact-checking/observation-taxonomy.csv",
+  );
 }
 
 async function restoreObservationLexicon() {
@@ -191,43 +149,98 @@ async function restoreObservationLexicon() {
       ...extra
     });
   }
-  await fs.writeFile(path.join(DATA_DIR, "observation_lexicon.json"), JSON.stringify(lexicon, null, 2) + "\n");
-  console.log("• restored data/observation_lexicon.json from fact-checking/observation-lexicon.csv");
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation_lexicon.json"),
+    lexicon,
+    "data/observation_lexicon.json from fact-checking/observation-lexicon.csv",
+  );
 }
 
 async function restoreObservationTemplates() {
   const rows = await readCsvFile("observation-templates.csv");
   const templates = {};
-  for (const row of rows) {
+  for (const [index, row] of rows.entries()) {
     if (!row.need) continue;
-    if (!templates[row.need]) {
-      templates[row.need] = { slotIds: row.slots ? row.slots.split("|") : [], cues: [] };
+    const entryExtra = parseJsonCell(
+      row.entryExtraJson,
+      {},
+      `observation-templates.csv row ${index + 2} entryExtraJson`,
+    );
+    if (!entryExtra || typeof entryExtra !== 'object' || Array.isArray(entryExtra)) {
+      throw new Error(`observation-templates.csv row ${index + 2} entryExtraJson must be a JSON object.`);
     }
+    if (!templates[row.need]) {
+      templates[row.need] = {
+        ...entryExtra,
+        slotIds: row.slots ? row.slots.split("|") : [],
+        cues: [],
+      };
+    }
+
+    const patterns = row.patternsJson
+      ? parseJsonCell(
+          row.patternsJson,
+          [],
+          `observation-templates.csv row ${index + 2} patternsJson`,
+        )
+      : row.patterns
+        ? row.patterns.split("|")
+        : [];
+    if (!Array.isArray(patterns)) {
+      throw new Error(`observation-templates.csv row ${index + 2} patternsJson must be a JSON array.`);
+    }
+    const cueExtra = parseJsonCell(
+      row.cueExtraJson,
+      {},
+      `observation-templates.csv row ${index + 2} cueExtraJson`,
+    );
+    if (!cueExtra || typeof cueExtra !== 'object' || Array.isArray(cueExtra)) {
+      throw new Error(`observation-templates.csv row ${index + 2} cueExtraJson must be a JSON object.`);
+    }
+
     templates[row.need].cues.push({
+      ...cueExtra,
       suffix: row.suffix,
       example: row.example,
-      patterns: row.patterns ? row.patterns.split("|") : []
+      patterns,
     });
   }
-  await fs.writeFile(path.join(DATA_DIR, "observation_need_templates.json"), JSON.stringify(templates, null, 2) + "\n");
-  console.log("• restored data/observation_need_templates.json from fact-checking/observation-templates.csv");
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation_need_templates.json"),
+    templates,
+    "data/observation_need_templates.json from fact-checking/observation-templates.csv",
+  );
 }
 
 async function restoreObservationModules() {
   const rows = await readCsvFile("observation-modules.csv");
-  const modules = rows.map((row) => ({
-    id: row.id,
-    label: row.label,
-    summary: row.summary,
-    slotIds: row.slotIds ? row.slotIds.split("|") : [],
-    lexiconKeys: row.lexiconKeys ? row.lexiconKeys.split("|") : [],
-    feelings: row.feelings ? row.feelings.split("|") : [],
-    needs: row.needs ? row.needs.split("|") : [],
-    examples: row.examples ? row.examples.split("|") : [],
-    detectors: row.detectorsJson ? JSON.parse(row.detectorsJson) : []
-  }));
-  await fs.writeFile(path.join(DATA_DIR, "observation_module_blueprints.json"), JSON.stringify({ modules }, null, 2) + "\n");
-  console.log("• restored data/observation_module_blueprints.json from fact-checking/observation-modules.csv");
+  const modules = rows.map((row, index) => {
+    const extra = parseJsonCell(
+      row.extraJson,
+      {},
+      `observation-modules.csv row ${index + 2} extraJson`,
+    );
+    if (!extra || typeof extra !== 'object' || Array.isArray(extra)) {
+      throw new Error(`observation-modules.csv row ${index + 2} extraJson must be a JSON object.`);
+    }
+    return {
+      ...extra,
+      id: row.id,
+      label: row.label,
+      summary: row.summary,
+      slotIds: row.slotIds ? row.slotIds.split("|") : [],
+      lexiconKeys: row.lexiconKeys ? row.lexiconKeys.split("|") : [],
+      feelings: row.feelings ? row.feelings.split("|") : [],
+      needs: row.needs ? row.needs.split("|") : [],
+      examples: row.examples ? row.examples.split("|") : [],
+      detectors: row.detectorsJson ? JSON.parse(row.detectorsJson) : []
+    };
+  });
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation_module_blueprints.json"),
+    { modules },
+    "data/observation_module_blueprints.json from fact-checking/observation-modules.csv",
+  );
 }
 
 async function restoreDetectorStats() {
@@ -246,8 +259,11 @@ async function restoreDetectorStats() {
       missingFromLibrary: row.feelingsMissingFromLibrary ? row.feelingsMissingFromLibrary.split("|") : []
     }
   };
-  await fs.writeFile(path.join(DATA_DIR, "observation_detector_stats.json"), JSON.stringify(payload, null, 2) + "\n");
-  console.log("• restored data/observation_detector_stats.json from fact-checking/observation-detector-stats.csv");
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation_detector_stats.json"),
+    payload,
+    "data/observation_detector_stats.json from fact-checking/observation-detector-stats.csv",
+  );
 }
 
 async function restoreObservationGuide() {
@@ -256,8 +272,12 @@ async function restoreObservationGuide() {
   if (!row?.json) {
     throw new Error("observation-guide.csv must include a 'json' column with the serialized observation guide");
   }
-  await fs.writeFile(path.join(DATA_DIR, "observation-guide.json"), `${row.json}\n`);
-  console.log("• restored data/observation-guide.json from fact-checking/observation-guide.csv");
+  const payload = JSON.parse(row.json);
+  await writeJsonIfChanged(
+    path.join(DATA_DIR, "observation-guide.json"),
+    payload,
+    "data/observation-guide.json from fact-checking/observation-guide.csv",
+  );
 }
 
 async function copyCsvBack(name, targetPath) {
@@ -275,10 +295,15 @@ async function run() {
   await copyCsvBack("Strategies.csv", path.join(DATA_DIR, "Strategies.csv"));
   await copyCsvBack("color-palettes.csv", path.join(DATA_DIR, "color-palettes.csv"));
   await copyCsvBack("citations.csv", path.join(EVIDENCE_DIR, "citations.csv"));
-  console.log("• copied core CSVs and citations back into place");
+  console.log("• copied authoritative core CSVs and citations back into place");
 
-  await restoreReverseInference();
-  await restoreBodyRegions();
+  await restoreReverseInferenceOverrides();
+
+  // Body Cues is authored in Feelings.csv. The two generated spreadsheets are
+  // review snapshots only; edits that need to survive regeneration belong in
+  // Feelings.csv or reverse-inference-overrides.csv.
+  console.log("• kept body-regions.csv and reverse-inference.csv reference-only; canonical edits round-trip through Feelings.csv and reverse-inference-overrides.csv");
+
   await restoreObservationTaxonomy();
   await restoreObservationLexicon();
   await restoreObservationTemplates();
@@ -286,7 +311,7 @@ async function run() {
   await restoreDetectorStats();
   await restoreObservationGuide();
 
-  console.log("Fact-checking spreadsheets applied. Re-run npm run build:data && npm run build:pages to regenerate the site.");
+  console.log("Fact-checking spreadsheets applied. Re-run npm run build:data && npm run build:pages to regenerate owned site artifacts.");
 }
 
 run().catch((error) => {

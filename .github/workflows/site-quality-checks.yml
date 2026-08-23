@@ -39,35 +39,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build site
-        id: build-site
-        run: npm run build
-        env:
-          LINK_CHECK_REPORT_ONLY: "1"
-
-      - name: Verify generated artifacts are committed
-        id: generated-artifacts
-        if: ${{ always() && steps.build-site.outcome == 'success' }}
-        run: |
-          if git diff --quiet; then
-            echo "Generated artifacts are up to date."
-            exit 0
-          fi
-
-          echo "::error title=Generated artifacts are out of date::npm run build changed committed files. This is a repository reproducibility issue and does not by itself mean the live site is broken."
-          echo "Changed files after build:"
-          git diff --name-only
-          echo
-          echo "Diff summary:"
-          git diff --stat
-          echo
-          echo "Representative diff (first 300 lines):"
-          git diff --unified=3 | sed -n '1,300p'
-          exit 1
-
+      # Validate the exact committed static site first. The authoring build below
+      # is intentionally allowed to mutate the checkout so its reproducibility
+      # can be checked independently without contaminating runtime regressions.
       - name: Verify data integrity
         id: data-integrity
-        if: always()
         run: npm run test:data-integrity
 
       - name: Verify customizer preload
@@ -85,23 +61,136 @@ jobs:
         if: always()
         run: npm run test:nav-magnets
 
+      - name: Verify static layout contracts
+        id: static-layout-contracts
+        if: always()
+        run: |
+          node --test tests/shared-density-polish.test.mjs
+          node tests/body-cues-static-first.test.mjs
+
+      - name: Verify page generator ownership
+        id: generator-ownership
+        if: always()
+        run: npm run test:generator-ownership
+
+      - name: Verify retired architecture stays retired
+        id: obsolete-architecture
+        if: always()
+        run: npm run test:obsolete
+
+      - name: Verify first-load performance budgets
+        id: performance-budgets
+        if: always()
+        run: npm run test:performance
+
+      - name: Verify delivery contracts
+        id: delivery-contracts
+        if: always()
+        run: npm run test:delivery
+
+      - name: Verify fact-checking authoring round-trip
+        id: fact-checking-roundtrip
+        if: always()
+        shell: bash
+        run: |
+          node scripts/fact-checking-manifest.mjs check
+          npm run export:fact-checking
+
+          if ! git diff --quiet -- fact-checking; then
+            echo "::error title=Fact-checking bundle is stale::A fresh export changed checked-in fact-checking files."
+            git diff --name-only -- fact-checking
+            git diff --stat -- fact-checking
+            exit 1
+          fi
+
+          npm run import:fact-checking
+          source_paths=(
+            data/Needs.csv
+            data/Feelings.csv
+            'data/Faux Feelings.csv'
+            data/Strategies.csv
+            data/color-palettes.csv
+            data/reverse-inference-overrides.json
+            data/observation_taxonomy.json
+            data/observation_lexicon.json
+            data/observation_need_templates.json
+            data/observation_module_blueprints.json
+            data/observation_detector_stats.json
+            data/observation-guide.json
+            _evidence/citations.csv
+          )
+          if ! git diff --quiet -- "${source_paths[@]}"; then
+            echo "::error title=Fact-checking import is lossy::A fresh export/import cycle changed canonical source files."
+            git diff --name-only -- "${source_paths[@]}"
+            git diff --stat -- "${source_paths[@]}"
+            exit 1
+          fi
+
+          # Export was already proven byte-identical; restore it explicitly so
+          # the later full-build reproducibility check starts from a clean tree.
+          git checkout -- fact-checking
+
+      - name: Build site
+        id: build-site
+        if: always()
+        run: npm run build
+        env:
+          LINK_CHECK_REPORT_ONLY: "1"
+
+      - name: Verify generated artifacts are committed
+        id: generated-artifacts
+        if: ${{ always() && steps.build-site.outcome == 'success' }}
+        run: |
+          if git diff --quiet; then
+            echo "Generated artifacts are up to date."
+            exit 0
+          fi
+
+          echo "::error title=Generated artifacts are out of date::npm run build changed committed files. This is a repository reproducibility issue and does not by itself mean the committed/live site is broken."
+          echo "Changed files after build:"
+          git diff --name-only
+          echo
+          echo "Diff summary:"
+          git diff --stat
+          echo
+          echo "Representative diff (first 300 lines):"
+          git diff --unified=3 | sed -n '1,300p'
+          exit 1
+
       - name: Summarize site quality
         if: always()
         run: |
-          echo "Build: ${{ steps.build-site.outcome }}"
-          echo "Generated artifacts: ${{ steps.generated-artifacts.outcome }}"
-          echo "Data integrity: ${{ steps.data-integrity.outcome }}"
-          echo "Customizer preload: ${{ steps.customizer-preload.outcome }}"
-          echo "Flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
-          echo "Navigation magnets: ${{ steps.navigation-magnets.outcome }}"
+          echo "Committed data integrity: ${{ steps.data-integrity.outcome }}"
+          echo "Committed customizer preload: ${{ steps.customizer-preload.outcome }}"
+          echo "Committed flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
+          echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
+          echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
+          echo "Page generator ownership: ${{ steps.generator-ownership.outcome }}"
+          echo "Retired architecture guard: ${{ steps.obsolete-architecture.outcome }}"
+          echo "First-load performance budgets: ${{ steps.performance-budgets.outcome }}"
+          echo "Delivery contracts: ${{ steps.delivery-contracts.outcome }}"
+          echo "Fact-checking round-trip: ${{ steps.fact-checking-roundtrip.outcome }}"
+          echo "Authoring build: ${{ steps.build-site.outcome }}"
+          echo "Build reproducibility: ${{ steps.generated-artifacts.outcome }}"
 
-          if [ "${{ steps.build-site.outcome }}" = "success" ] \
-            && [ "${{ steps.generated-artifacts.outcome }}" = "success" ] \
-            && [ "${{ steps.data-integrity.outcome }}" = "success" ] \
+          if [ "${{ steps.data-integrity.outcome }}" = "success" ] \
             && [ "${{ steps.customizer-preload.outcome }}" = "success" ] \
             && [ "${{ steps.flicker-jitter.outcome }}" = "success" ] \
-            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ]; then
-            echo "All site quality checks passed."
+            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
+            && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ] \
+            && [ "${{ steps.generator-ownership.outcome }}" = "success" ] \
+            && [ "${{ steps.obsolete-architecture.outcome }}" = "success" ] \
+            && [ "${{ steps.performance-budgets.outcome }}" = "success" ] \
+            && [ "${{ steps.delivery-contracts.outcome }}" = "success" ] \
+            && [ "${{ steps.fact-checking-roundtrip.outcome }}" = "success" ]; then
+            echo "Committed static-site runtime, generator ownership, architecture tombstones, performance-budget, delivery, and fact-checking round-trip checks passed."
           else
-            echo "One or more site quality checks failed; see the individual red checks above."
+            echo "One or more committed-site/authoring checks failed; inspect those before publishing this branch."
+          fi
+
+          if [ "${{ steps.build-site.outcome }}" = "success" ] \
+            && [ "${{ steps.generated-artifacts.outcome }}" = "success" ]; then
+            echo "Authoring pipeline is reproducible."
+          else
+            echo "Authoring pipeline has reproducibility debt; see the build/artifact check above."
           fi

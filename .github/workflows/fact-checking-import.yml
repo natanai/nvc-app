@@ -26,13 +26,13 @@ jobs:
       TARGET_BRANCH: ${{ inputs.target_branch }}
     steps:
       - name: Checkout target branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
           ref: ${{ env.TARGET_BRANCH }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -40,14 +40,46 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify fact-checking export is current
+        run: node scripts/fact-checking-manifest.mjs check
+
       - name: Apply fact-checking spreadsheets
         run: npm run import:fact-checking
 
-      - name: Propagate citation updates and rebuild site artifacts
+      - name: Propagate citation updates and rebuild owned site artifacts
         run: |
           npm run replace:needs-sources
           npm run build:data
           npm run build:pages
+
+      - name: Verify import ownership
+        run: |
+          unexpected=0
+          while IFS= read -r path; do
+            [[ -z "$path" ]] && continue
+            case "$path" in
+              _evidence/citations.csv|\
+              data/Needs.csv|data/Feelings.csv|data/Faux\ Feelings.csv|data/Strategies.csv|data/color-palettes.csv|\
+              data/index.json|data/body-regions.json|\
+              data/observation_taxonomy.json|data/observation_lexicon.json|data/observation_need_templates.json|\
+              data/observation_module_blueprints.json|data/observation_detector_stats.json|data/observation-guide.json|\
+              index.html|faux-feelings/index.html|faux-feelings/*/index.html|\
+              feelings/index.html|feelings/body-cues/index.html|feelings/*/index.html|\
+              needs/index.html|needs/*/index.html|\
+              inventory/index.html|inventory/journal/index.html|\
+              observations/index.html|alexithymia-support/index.html)
+                if [[ "$path" == "feelings/emotions-wheel/index.html" ]]; then
+                  echo "::error title=Protected route changed::Fact-checking import must not rewrite feelings/emotions-wheel/index.html."
+                  unexpected=1
+                fi
+                ;;
+              *)
+                echo "::error title=Fact-checking import escaped its ownership::Unexpected changed path: $path"
+                unexpected=1
+                ;;
+            esac
+          done < <(git status --porcelain | sed -E 's/^.. //')
+          exit "$unexpected"
 
       - name: Commit applied data
         id: commit
@@ -73,9 +105,9 @@ jobs:
       - name: Summarize run
         run: |
           if [ "${{ steps.commit.outputs.changes }}" = "true" ]; then
-            SUMMARY="Applied fact-checking spreadsheets, refreshed needs citations, rebuilt data + pages, and pushed changes to ${{ env.TARGET_BRANCH }}."
+            SUMMARY="Applied a freshness-verified fact-checking export, refreshed owned data/pages, and pushed changes to ${{ env.TARGET_BRANCH }}. Body Cues remains sourced from data/Feelings.csv; reverse-inference and body-regions snapshot CSVs are reference-only."
           else
-            SUMMARY="No updates detected after running the fact-checking import; nothing was pushed."
+            SUMMARY="No updates detected after running the freshness-verified fact-checking import; nothing was pushed."
           fi
 
           {
