@@ -25,6 +25,7 @@ These remain runtime by design:
 - Customizer colors/roundness and profile restore, because values come from user-selected or persisted state.
 - Magnet position, board height, dragging, shuffle, physics and tilt, because geometry and interaction are runtime state.
 - Journal entries, History filters, Feeling intensity selections and draft/save status, because they depend on local user data and interaction.
+- Journal History may choose a collapsed or expanded presentation for a long reflection because that decision depends on the user's stored entry content. The current History owner collapses reflections only when they exceed the defined word threshold and uses a native disclosure; the disclosure's deterministic presentation remains at the Journal-entry CSS owner rather than being patched after paint.
 - Observation suggestions, Body Cue results, reverse-inference results, Shared Strategy cards, and Bluesky status, because they depend on user input, fetched data, or authentication.
 - Hidden interaction surfaces such as the global Menu may be constructed when activated; they are not first-paint repair of route content. Optional Bluesky code is deferred until Account & data is opened on routes that do not otherwise need it.
 
