@@ -24,6 +24,10 @@ jobs:
       - name: Apply desktop Bedrock finalization
         shell: bash
         run: |
+          if [ -f .github/scripts/bedrock-desktop-finalize-preflight.mjs ]; then
+            node .github/scripts/bedrock-desktop-finalize-preflight.mjs
+            rm .github/scripts/bedrock-desktop-finalize-preflight.mjs
+          fi
           node .github/scripts/bedrock-desktop-finalize.mjs
           rm .github/scripts/bedrock-desktop-finalize.mjs
           npm ci --ignore-scripts
