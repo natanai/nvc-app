@@ -14,6 +14,15 @@ function replaceOnce(source, before, after, label) {
   return source.slice(0, index) + after + source.slice(index + before.length);
 }
 
+function replaceRegexOnce(source, pattern, replacement, label) {
+  const flags = pattern.flags.includes('g') ? pattern.flags : `${pattern.flags}g`;
+  const matches = [...source.matchAll(new RegExp(pattern.source, flags))];
+  if (matches.length !== 1) {
+    throw new Error(`${label} expected exactly one match; found ${matches.length}`);
+  }
+  return source.replace(pattern, replacement);
+}
+
 let build = read('scripts/build-pages.mjs');
 
 build = replaceOnce(
@@ -44,10 +53,10 @@ build = replaceOnce(
   'Feeling detail loader insertion',
 );
 
-build = replaceOnce(
+build = replaceRegexOnce(
   build,
-  "    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n  });",
-  "    canonicalPath: `feelings/${item.slug}/`,\n    description: item.description,\n    includeInventoryRuntime: false,\n  });",
+  /(\s+activeNav: 'feelings',\n\s+canonicalPath: `feelings\/\$\{item\.slug\}\/`,\n\s+description: item\.description,)/,
+  '$1\n    includeInventoryRuntime: false,',
   'Feeling detail direct Inventory removal',
 );
 
