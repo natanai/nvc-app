@@ -190,11 +190,11 @@ const JOURNAL_BASE_CONFIG = {
     notes: '',
   },
   prompts: {
-    heading: 'Need a nudge?',
+    heading: 'Optional reflection prompts',
     items: [
-      'What sensations stood out in your body?',
-      'What need might be shining through or feeling tender?',
-      'What support, boundary, or self-care step sounds kind?',
+      'What did you notice in your body, thoughts, or emotions?',
+      'What was happening when you noticed it?',
+      'What would be useful to understand, request, or do next?',
     ],
   },
   aria: {
@@ -274,12 +274,12 @@ const JOURNAL_VARIANT_CONFIG = {
       notes: 'Reflection (saved only on this device)',
     },
     prompts: {
-      heading: 'Need a gentle prompt?',
+      heading: 'Optional reflection prompts',
       items: [
-        'What was happening right before you noticed this feeling?',
-        'Does the emotion you chose fit? What signals line up or feel different?',
-        'How strong is it right now on a scale from 1 (just there) to 10 (all-consuming)?',
-        'What do you need or long for in this moment?',
+        'What did you notice in your body, thoughts, or emotions?',
+        'What was happening when you first noticed it?',
+        'Which feeling or need best fits what you noticed?',
+        'What response or support would be useful now?',
       ],
     },
     footnote: {

@@ -5115,6 +5115,66 @@ function updateJournalFiltersResetVisibility() {
   button.hidden = !active;
 }
 
+const JOURNAL_HISTORY_COLLAPSE_AFTER_WORDS = 80;
+const JOURNAL_HISTORY_PREVIEW_WORDS = 55;
+
+function getJournalHistoryNotePresentation(value) {
+  const full = String(value ?? '').trim();
+  if (!full) {
+    return null;
+  }
+  const words = full.split(/\s+/).filter(Boolean);
+  if (words.length <= JOURNAL_HISTORY_COLLAPSE_AFTER_WORDS) {
+    return { full, preview: full, collapsible: false };
+  }
+  return {
+    full,
+    preview: `${words.slice(0, JOURNAL_HISTORY_PREVIEW_WORDS).join(' ')}…`,
+    collapsible: true,
+  };
+}
+
+function buildJournalHistoryNote(value) {
+  const note = getJournalHistoryNotePresentation(value);
+  if (!note) {
+    return null;
+  }
+
+  if (!note.collapsible) {
+    const paragraph = document.createElement('p');
+    paragraph.className = 'journal-entry__notes';
+    paragraph.textContent = note.full;
+    return paragraph;
+  }
+
+  const details = document.createElement('details');
+  details.className = 'journal-entry__notes-disclosure';
+
+  const summary = document.createElement('summary');
+  summary.className = 'journal-entry__notes-summary';
+
+  const preview = document.createElement('span');
+  preview.className = 'journal-entry__notes journal-entry__notes--preview';
+  preview.textContent = note.preview;
+
+  const closedLabel = document.createElement('span');
+  closedLabel.className = 'journal-entry__notes-toggle journal-entry__notes-toggle--closed';
+  closedLabel.textContent = 'Read full entry';
+
+  const openLabel = document.createElement('span');
+  openLabel.className = 'journal-entry__notes-toggle journal-entry__notes-toggle--open';
+  openLabel.textContent = 'Show less';
+
+  summary.append(preview, closedLabel, openLabel);
+
+  const full = document.createElement('p');
+  full.className = 'journal-entry__notes journal-entry__notes--full';
+  full.textContent = note.full;
+
+  details.append(summary, full);
+  return details;
+}
+
 function renderJournalHistory() {
   if (!state.journalHistoryEl) return;
   const allEntries = Array.isArray(state.journalEntries) ? state.journalEntries : [];
@@ -5164,11 +5224,9 @@ function renderJournalHistory() {
     header.appendChild(meta);
     card.appendChild(header);
 
-    if (entry.notes) {
-      const notes = document.createElement('p');
-      notes.className = 'journal-entry__notes';
-      notes.textContent = entry.notes;
-      card.appendChild(notes);
+    const noteElement = buildJournalHistoryNote(entry.notes);
+    if (noteElement) {
+      card.appendChild(noteElement);
     }
 
     if ((entry.needs || []).length || (entry.tags || []).length) {
