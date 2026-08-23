@@ -3693,7 +3693,14 @@ main[data-need-slug] .page-title::before {
 .strategy-card--input {
   display: block;
   padding: 0;
+}
+
+.strategy-card--input:not(.strategy-need-catalog) {
   overflow: hidden;
+}
+
+.strategy-card--input.strategy-need-catalog {
+  overflow: visible;
 }
 
 .strategy-card--form .strategy-card--input {

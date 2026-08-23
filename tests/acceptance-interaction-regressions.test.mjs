@@ -81,3 +81,33 @@ test('restored category hub layouts keep manual overlap instead of reseeding the
     'restored category hubs may repair the fixed toggle locally without repacking every magnet',
   );
 });
+
+
+test('strategy Needs multiselect remains visible and preserves page defaults', () => {
+  const css = read('styles.css');
+  const runtime = read('scripts/inventory.js');
+  const needPage = read('needs/acceptance/index.html');
+  const inventoryPage = read('inventory/index.html');
+
+  assert.ok(
+    css.includes('.strategy-card--input:not(.strategy-need-catalog) {\n  overflow: hidden;\n}'),
+    'ordinary tactile input shells may keep their clipping contract',
+  );
+  assert.ok(
+    css.includes('.strategy-card--input.strategy-need-catalog {\n  overflow: visible;\n}'),
+    'the shared Needs catalog shell must not clip its absolutely positioned selector popover',
+  );
+  assert.ok(
+    runtime.includes("document.querySelectorAll('[data-strategy-need-catalog]')"),
+    'Inventory runtime must hydrate every strategy Needs selector from the shared controller',
+  );
+  assert.ok(
+    needPage.includes('<option value="acceptance" selected>Acceptance</option>'),
+    'a Need page must arrive with that page Need selected',
+  );
+  assert.ok(needPage.includes('aria-multiselectable="true"'), 'Need-page selector must allow additional Needs');
+
+  const inventorySelect = inventoryPage.match(/<select id="inventory-need"[\s\S]*?<\/select>/)?.[0] || '';
+  assert.ok(inventorySelect, 'Inventory must render the shared Needs transport select');
+  assert.equal(inventorySelect.includes(' selected'), false, 'Inventory add form must start without an arbitrary Need selected');
+});
