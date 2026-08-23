@@ -1,15 +1,17 @@
 name: One-time Observations nav first-paint repair
 
 on:
-  push:
+  pull_request:
     branches:
-      - performance/immediate-response-v1
+      - inventory-core-overhaul
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: write
 
 jobs:
   repair:
+    if: github.head_ref == 'performance/immediate-response-v1'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout canary branch
@@ -17,6 +19,7 @@ jobs:
         with:
           ref: performance/immediate-response-v1
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Detect staged migration
         id: staged
@@ -109,5 +112,3 @@ jobs:
           git add -A
           git commit -m "Unify Observations navigation first-paint ownership"
           git push origin HEAD:performance/immediate-response-v1
-
-# Trigger after workflow installation; the workflow removes itself after a successful canonical migration.
