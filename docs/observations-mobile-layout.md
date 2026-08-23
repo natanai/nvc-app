@@ -17,6 +17,10 @@ The editor follows an iOS-style grouped hierarchy: the observation text area rem
 
 The highlight layer is paint-only: highlighted text is explicitly transparent (including WebKit text fill), while the visible textarea remains the sole text owner. Highlight/formula overlays are programmatically scrollable with hidden scrollbars, and the editor re-synchronizes them after formula markup is rendered so iOS textarea scrolling cannot expose a duplicated or offset second copy of highlighted text.
 
+## Detector delivery resilience
+
+The generated `data/observation_cue_modules.json` artifact is sufficient to preserve exact-match detection and its feeling/need suggestions even if the supplemental cue-row CSV cannot be delivered. The CSV still enriches cue-level and nearby/fallback behavior when available. Runtime loading treats those assets independently instead of allowing one failed fetch to silently zero the entire detector. The built-in example is a permanent regression fixture and must produce at least one exact module hit under the normal runtime limits.
+
 ## Non-negotiable behavior
 
 The density layer must not rename/remove existing DOM hooks or change observation analysis, matching, example insertion, Quick check state, suggestion behavior, guide behavior, dialogs, Journal conversion, or navigation magnets. Touch targets remain at least 44px where controls are interactive.

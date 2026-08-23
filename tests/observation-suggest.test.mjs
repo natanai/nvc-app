@@ -70,6 +70,21 @@ test('observations page example suggests disappointment', () => {
   assert.ok(result.feelings.includes('disappointment'));
 });
 
+test('generated module artifact keeps exact matching alive without cue-row delivery', () => {
+  const observation =
+    'Last Thursday, two days after my partner and I had agreed to have dinner together at home at 7 p.m., I arrived back at the apartment at 6:50 p.m. and started setting the table. At 7:15 p.m. my partner was not home yet, and at 7:20 p.m. I saw a message on my phone sent at 6:55 p.m. that said, "I decided to stay late at work and will eat here tonight."';
+
+  const modulesJson = readFileSync(new URL('../data/observation_cue_modules.json', import.meta.url), 'utf8');
+  const modules = parseObservationCueModules(modulesJson);
+  const library = compileObservationCueLibrary({ cues: [], modules });
+  const result = suggestFromObservation(observation, library, 4);
+
+  assert.ok(library.modules.length > 0, 'compiled module artifact should be self-sufficient for exact detection');
+  assert.ok(result.hits.length > 0, 'the built-in example should produce an exact module hit');
+  assert.ok(result.needs.length > 0, 'exact module hits should retain need suggestions');
+  assert.ok(result.feelings.length > 0, 'exact module hits should retain feeling suggestions');
+});
+
 test('limits suggestions to four needs and aligned feelings', () => {
   const observation =
     'Yesterday in the lab they skipped asking me for input, they cut off maya mid sentence, we went three shifts without a break, the handoff instructions were unclear, and the sensor kept glitching.';
