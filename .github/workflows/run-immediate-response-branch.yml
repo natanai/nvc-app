@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   migrate:
-    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1' && github.event.pull_request.head.sha == 'c507358a22a64d9215dac6f971d1ab26d7af6ac2'
+    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1' && github.event.pull_request.head.sha == '512bef90baf472e50c90d50fcf96d84dab0b72ea'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
