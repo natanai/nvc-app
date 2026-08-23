@@ -3240,7 +3240,7 @@ function journalHistoryPrepaintScript() {
         }
         root.setAttribute('data-journal-state', hasEntries ? 'populated' : 'empty');
       })();
-    <\/script>`;
+    </script>`;
 }
 
 function renderInventoryJournalPage(needsList = []) {

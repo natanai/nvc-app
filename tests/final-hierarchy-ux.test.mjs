@@ -48,6 +48,12 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(build.includes('function journalHistoryPrepaintScript()'), 'Journal must classify local entry state before first paint');
   assert.ok(build.includes("prepaintExtras: journalHistoryPrepaintScript()"), 'Journal must use the prepaint hook rather than a post-paint normalizer');
   assert.ok(html.includes('data-journal-prepaint'), 'generated Journal must ship the tiny state bootstrap');
+  const prepaintStart = build.indexOf('function journalHistoryPrepaintScript()');
+  const prepaintEnd = build.indexOf('function renderInventoryJournalPage', prepaintStart);
+  const prepaintOwner = build.slice(prepaintStart, prepaintEnd);
+  assert.ok(prepaintOwner.includes('</script>'), 'Journal prepaint bootstrap must emit a real HTML closing script tag');
+  assert.equal(/<\\+\/script>/.test(prepaintOwner), false, 'escaped script closers must never leak into generated HTML');
+  assert.equal(html.includes('<\\/script>'), false, 'generated Journal must not ship an escaped script closing tag');
   assert.ok(html.indexOf('data-journal-prepaint') < html.indexOf('styles/shared-density.css'), 'Journal state bootstrap must run before render-blocking page styles');
   assert.ok(html.includes("html[data-journal-state='empty'] main[data-page-id='inventory-journal'] .journal-history-controls"), 'empty Journal filters must be hidden by first-paint CSS');
   assert.ok(runtime.includes("document.documentElement.setAttribute('data-journal-state'"), 'runtime must keep the prepaint state attribute synchronized after saves/deletes');
