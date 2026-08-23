@@ -181,6 +181,7 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
 test('mobile Observations uses one parser-discovered phone presentation owner', async () => {
   const css = await fs.readFile(path.join(root, 'styles/observations-mobile.css'), 'utf8');
   const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
+  const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
 
   const link = '<link rel="stylesheet" href="../styles/observations-mobile.css" media="(max-width: 640px)" />';
   assert.ok(html.includes(link));
@@ -202,6 +203,15 @@ test('mobile Observations uses one parser-discovered phone presentation owner', 
   assert.ok(css.includes('-webkit-line-clamp: 2;'));
   assert.ok(css.includes('#main.observations-page .observation-suggestions__why-toggle'));
   assert.ok(css.includes('#main.observations-page .observation-suggestions__action:disabled'));
+  assert.ok(css.includes('.observation-editor__field > .observation-suggestions {\n    order: 30;'));
+  assert.ok(css.includes('.observation-editor__field > .observation-editor__match-summary {\n    order: 40;'));
+  assert.ok(css.includes(".observation-suggestions[data-mode='editing'] .observation-suggestions__heading"));
+  assert.ok(css.includes(".observation-suggestions[data-mode='editing'] .observation-suggestions__action-row"));
+  assert.ok(css.includes('grid-template-columns: minmax(0, 1fr);'));
+  assert.ok(css.includes('min-height: 52px;'));
+  assert.ok(editor.includes("summary.hidden = !isResults;"));
+  assert.ok(editor.includes('syncLoadedMatchProvenance(direct, trimmed);'));
+  assert.ok(editor.includes('const loadedExactTotal = Math.max(Number(state.directSuggestions?.total) || 0, 0);'));
   assert.ok(!css.includes('!important'));
 });
 

@@ -1052,6 +1052,7 @@ function finalizeObservation() {
   state.lastSubmitted = trimmed;
   const direct = buildSuggestions(trimmed);
   state.directSuggestions = direct;
+  syncLoadedMatchProvenance(direct, trimmed);
   const hasDirect = hasSuggestions(direct);
   state.fallback = createFallbackState();
   state.fallback.shouldPrompt = !hasDirect;
@@ -1841,6 +1842,28 @@ function hasSuggestions(set) {
   return feelingCount + needCount > 0;
 }
 
+function syncLoadedMatchProvenance(suggestions, source) {
+  const normalizedSource = typeof source === 'string' ? source.trim() : '';
+  const exactTotal = Math.max(Number(suggestions?.total) || 0, 0);
+  const sameSource = state.detectionSource === normalizedSource;
+  const fallbackQueue = sameSource && Array.isArray(state.detectionFallbackQueue)
+    ? state.detectionFallbackQueue
+    : [];
+
+  state.detectionSource = normalizedSource;
+  state.detectionMatches = exactTotal;
+  if (exactTotal > 0) {
+    state.detectionStatus = 'match';
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+  } else {
+    state.detectionFallbackQueue = fallbackQueue;
+    state.detectionFallbacks = fallbackQueue.length;
+    state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
+  }
+  renderDetectionStatus();
+}
+
 function handlePrimaryAction() {
   const submitButton = document.getElementById('observation-submit');
   if (submitButton?.dataset?.action === 'done') {
@@ -2256,6 +2279,12 @@ function renderDetectionSummary() {
     return;
   }
 
+  const isResults = state.mode === 'results';
+  summary.hidden = !isResults;
+  if (!isResults) {
+    return;
+  }
+
   const status = state.detectionStatus || 'loading';
   const flagged = Boolean(state.detectionHasFlagged);
   const matchLimit = Math.max(Number(state.detectionMatchLimit) || DETECTION_MATCH_LIMIT, 1);
@@ -2266,8 +2295,14 @@ function renderDetectionSummary() {
   let nearCount = 0;
   const allowCounts = status !== 'loading' && status !== 'short' && status !== 'idle';
   if (allowCounts) {
-    exactCount = Math.min(Number(state.detectionMatches) || 0, matchLimit);
-    nearCount = Math.min(Number(state.detectionFallbacks) || 0, nearLimit || Number(state.detectionFallbacks) || 0);
+    const loadedExactTotal = Math.max(Number(state.directSuggestions?.total) || 0, 0);
+    const loadedNearTotal = state.fallback?.active && Array.isArray(state.fallback.queue)
+      ? state.fallback.queue.length
+      : Math.max(Number(state.detectionFallbacks) || 0, 0);
+    exactCount = Math.min(loadedExactTotal, matchLimit);
+    nearCount = exactCount
+      ? 0
+      : Math.min(loadedNearTotal, nearLimit || loadedNearTotal);
   }
 
   if (exactValue) {

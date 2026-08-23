@@ -67,6 +67,7 @@ The canary expands the proven intent-loaded shell model without weakening immedi
 - Body Cues keeps its dedicated `scripts/body-cues-tool.js`, Body Cues CSS, magnets, and shared shell eager while deferring unrelated Inventory-controller work.
 - Need detail pages remain eager because their personal-strategy form and save/profile controls are immediately visible.
 - Inventory, dedicated Journal, and Alexithymia Support remain eager because their primary visible features directly depend on their current controllers.
+- On phone, Observations now has one explicit primary task path: write the observation → Load matches → review results. Quick Check, examples, recipe guidance, and exact/nearby provenance remain available as secondary support rather than competing with the primary action. Exact/nearby counts are displayed only after Load matches and are derived from the same loaded suggestion result that produced the visible Needs and Feelings.
 
 `tests/route-runtime-ownership.test.mjs` protects the behavior boundary and `tests/performance-budget.test.mjs` protects the measured startup reduction. On the current canary, representative raw direct JavaScript is about 101.9 KiB for the three category hubs, 118.2 KiB for a Feeling detail, 101.9 KiB for a Faux Feeling detail, and 116.8 KiB for Body Cues, versus 337.3 KiB for the intentionally eager Need-detail reference route. See `docs/bedrock-performance-budget.md` for exact scope and limitations of this metric.
 
