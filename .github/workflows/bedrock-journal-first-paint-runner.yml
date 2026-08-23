@@ -59,8 +59,10 @@ jobs:
         env:
           LINK_CHECK_REPORT_ONLY: '1'
 
-      - name: Remove one-shot migration script
-        run: rm -f scripts/.bedrock-journal-first-paint-finalize.mjs
+      - name: Remove one-shot migration scaffolding
+        run: |
+          rm -f scripts/.bedrock-journal-first-paint-finalize.mjs
+          rm -f scripts/.bedrock-journal-first-paint-trigger
 
       - name: Verify obsolete architecture stays gone
         run: npm run test:obsolete
