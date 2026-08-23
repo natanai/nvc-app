@@ -18,6 +18,16 @@ The production-finalization audit found and removed three classes of determinist
 
 The audit also removed dead runtime fallback creators for optional navigation magnets that are already serialized by the canonical page compiler, and optional Bluesky code is no longer loaded by the global Menu shell until the user opens Account & data.
 
+## Canonical Journal semantics
+
+The same provenance rule applies inside a feature, not only between page and runtime layers. Journal now has **one semantic form definition** in `assets/js/journal/module.js`: one set of labels, placeholders, prompts, actions, field behavior, and catalog interactions. The former `inventory` / `support` semantic variant table is retired, along with per-mount dataset channels that could redefine generic Journal wording or controls.
+
+Journal contexts may supply only context that does not change Journal meaning. Today that is limited to instance identity and density such as `idPrefix` and the fallback editor's smaller reflection-row count. The fallback editor therefore remains a different container/recovery context, not a second form definition.
+
+Alexithymia Support no longer maintains a local Journal controller, local Journal draft/save implementation, local Journal history renderer, or alternate generic Journal copy. Its Journal step owns only Alexithymia-specific guidance and the entry point that opens the same global Journal used elsewhere. The selected body/emotion workflow remains Alexithymia-owned; Journal entry semantics remain Journal-owned.
+
+`tests/bedrock-runtime-provenance.test.mjs` permanently rejects the return of semantic Journal variants, per-context copy/label override channels, compiler/runtime variant markers, and a parallel Alexithymia Journal implementation.
+
 ## Legitimate runtime mutation
 
 These remain runtime by design:
@@ -33,6 +43,6 @@ These remain runtime by design:
 
 `tests/bedrock-runtime-provenance.test.mjs` protects the concrete ownership boundaries above. Existing tests that previously required post-load Inventory cleanup or save-button cosmetic normalization were inverted so CI now rejects those patterns instead of blessing them.
 
-The provenance finalizer was exercised through the canonical build, the full 78-test flicker/runtime suite, page-generator ownership checks, and retired-architecture tombstones before its one-shot scaffolding was deleted. The temporary base-branch provenance runner was also removed after the clean source transformation landed.
+The provenance finalizer was exercised through the canonical build, the full flicker/runtime suite, page-generator ownership checks, performance ceilings, and retired-architecture tombstones before its one-shot scaffolding was deleted. Temporary base-branch migration runners are removed after their clean source transformations land.
 
 This provenance gate complements, rather than replaces, generator zero-diff checks, route-runtime ownership tests, performance ceilings, persisted-state contracts, and real-device acceptance.
