@@ -471,6 +471,7 @@ function analyze(raw, options = {}) {
   renderHighlight();
   renderDetectionStatus();
   renderObservationFormula();
+  syncObservationHighlightScroll();
   renderObservationSlotStatus(state.formula);
   autoResolveValidity();
 }

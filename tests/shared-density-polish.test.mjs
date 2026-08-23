@@ -197,5 +197,21 @@ test('mobile Observations uses one parser-discovered phone presentation owner', 
   assert.ok(css.includes('#main.observations-page .observation-editor__example-toggle::after'));
   assert.ok(css.includes("content: '›';"));
   assert.ok(css.includes('min-height: 48px;'));
+  assert.ok(css.includes('#main.observations-page .need-status-toggle'));
+  assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'));
+  assert.ok(css.includes('-webkit-line-clamp: 2;'));
+  assert.ok(css.includes('#main.observations-page .observation-suggestions__why-toggle'));
+  assert.ok(css.includes('#main.observations-page .observation-suggestions__action:disabled'));
   assert.ok(!css.includes('!important'));
+});
+
+test('Observation text overlays remain paint-only and re-sync after formula rendering', async () => {
+  const critical = await fs.readFile(path.join(root, 'styles/observations-critical.css'), 'utf8');
+  const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
+
+  assert.ok(critical.includes('.observation-editor__highlight mark {\n    color: transparent;'));
+  assert.ok(critical.includes('-webkit-text-fill-color: transparent;'));
+  assert.ok(critical.includes('overflow: auto;\n    scrollbar-width: none;'));
+  assert.ok(critical.includes('.observation-editor__highlight::-webkit-scrollbar'));
+  assert.ok(editor.includes('renderObservationFormula();\n  syncObservationHighlightScroll();\n  renderObservationSlotStatus(state.formula);'));
 });

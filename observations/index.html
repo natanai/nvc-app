@@ -1971,11 +1971,14 @@ button.site-nav__magnet {
     color: transparent;
     pointer-events: none;
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
+    scrollbar-width: none;
     z-index: 1;
   }
 
   .observation-editor__highlight mark {
+    color: transparent;
+    -webkit-text-fill-color: transparent;
     border-radius: var(--radius-md-plus);
     box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--outline) 12%, transparent);
   }
@@ -1992,11 +1995,19 @@ button.site-nav__magnet {
     font-size: var(--observation-editor-font-size);
     line-height: var(--observation-editor-line-height);
     white-space: pre-wrap;
-    overflow: hidden;
+    overflow: auto;
+    scrollbar-width: none;
     pointer-events: none;
     user-select: none;
     color: color-mix(in srgb, var(--outline) 58%, transparent);
     z-index: 2;
+  }
+
+  .observation-editor__highlight::-webkit-scrollbar,
+  .observation-editor__formula::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
   }
 
   .observation-editor__formula[hidden] {

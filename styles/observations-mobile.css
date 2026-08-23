@@ -257,11 +257,13 @@
   }
 
   #main.observations-page .observation-editor__recipe {
+    min-height: 48px;
     padding: 0;
     grid-template-columns: minmax(0, 1fr) 44px;
     gap: 0;
     border-style: solid;
-    background: color-mix(in srgb, #ffffff 74%, var(--lavender) 26%);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
     overflow: hidden;
   }
 
@@ -338,8 +340,12 @@
   }
 
   #main.observations-page .observation-suggestions {
-    gap: 0.8rem;
-    padding-block: 0.95rem 0.2rem;
+    gap: 0.62rem;
+    padding-block: 0.72rem 0.12rem;
+  }
+
+  #main.observations-page .observation-suggestions[data-mode='results'] {
+    border-top: 0;
   }
 
   #main.observations-page .observation-suggestions__header,
@@ -350,56 +356,158 @@
   }
 
   #main.observations-page .observation-suggestions__title {
-    font-size: 1.15rem;
+    font-size: 1.08rem;
   }
 
-  #main.observations-page .observation-suggestions__why-details,
+  #main.observations-page .observation-suggestions__preview {
+    display: -webkit-box;
+    margin: 0;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--ink-soft) 76%, transparent);
+  }
+
+  #main.observations-page .observation-suggestions__why-details {
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
+  }
+
+  #main.observations-page .observation-suggestions__why-toggle {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.48rem 0.66rem;
+    font-size: 0.82rem;
+    line-height: 1.2;
+  }
+
+  #main.observations-page .observation-suggestions__why {
+    padding: 0 0.66rem 0.62rem;
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+
   #main.observations-page .observation-suggestions__fallback {
-    padding: 0.62rem 0.7rem;
+    padding: 0.58rem 0.66rem;
   }
 
   #main.observations-page .observation-panel {
-    gap: 0.55rem;
-    padding: 0.72rem;
+    gap: 0.48rem;
+    padding: 0.62rem 0.66rem;
+    border-radius: var(--radius-lg);
   }
 
   #main.observations-page .observation-panel__header,
   #main.observations-page .observation-panel__header-main {
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
 
   #main.observations-page .observation-panel__title {
-    font-size: 0.82rem;
-    letter-spacing: 0.055em;
+    font-size: 0.8rem;
+    font-weight: 750;
+    letter-spacing: 0;
+    text-transform: none;
   }
 
   #main.observations-page .observation-chip-list {
-    gap: 0.42rem;
+    gap: 0.34rem;
   }
 
   #main.observations-page .observation-chip {
     min-height: 44px;
-    padding: 0.4rem 0.68rem;
-    border-width: 1px;
+    padding: 0.34rem 0.6rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 24%, transparent);
+    background: color-mix(in srgb, #ffffff 88%, var(--sky) 12%);
     box-shadow: none;
     font-size: 0.82rem;
+    font-weight: 650;
   }
 
   #main.observations-page .observation-suggestions__action-row {
-    grid-template-columns: minmax(0, 1fr) minmax(5rem, auto);
-    gap: 0.45rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.38rem;
+    align-items: center;
   }
 
   #main.observations-page .observation-suggestions__action,
   #main.observations-page .observation-suggestions__clear {
-    min-height: 46px;
-    padding-inline: 0.72rem;
+    min-height: 44px;
+    padding: 0.4rem 0.66rem;
+    border: 1px solid color-mix(in srgb, var(--outline) 22%, transparent);
+    border-radius: var(--radius-lg);
     box-shadow: none;
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
+
+  #main.observations-page .observation-suggestions__action:disabled {
+    border-color: color-mix(in srgb, var(--outline) 14%, transparent);
+    background: color-mix(in srgb, #ffffff 76%, var(--gold) 24%);
+    color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  #main.observations-page .observation-suggestions__action:not(:disabled) {
+    border-color: color-mix(in srgb, var(--outline) 28%, transparent);
+    background: color-mix(in srgb, #ffffff 64%, var(--gold) 36%);
+    box-shadow: none;
+  }
+
+  #main.observations-page .observation-suggestions__clear {
+    min-width: 4.5rem;
+    background: color-mix(in srgb, #ffffff 84%, var(--rose) 16%);
   }
 
   #main.observations-page .observation-suggestions__action:not(:disabled)::after {
     content: none;
     animation: none;
+  }
+
+  #main.observations-page .observation-feelings-toggle {
+    width: 100%;
+  }
+
+  #main.observations-page .need-status-toggle {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    min-height: 42px;
+    padding: 2px;
+    border: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, #ffffff 58%, var(--lavender) 42%);
+    overflow: hidden;
+  }
+
+  #main.observations-page .need-status-toggle__option {
+    min-height: 38px;
+    padding: 0.34rem 0.5rem;
+    border: 0;
+    border-radius: calc(var(--radius-lg) - 2px);
+    background: transparent;
+    color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  #main.observations-page .need-status-toggle__option--active {
+    background: #ffffff;
+    color: var(--ink);
+    box-shadow: 0 1px 3px color-mix(in srgb, var(--outline) 12%, transparent);
+  }
+
+  #main.observations-page .observation-suggestions__links {
+    gap: 0.35rem;
+    padding-inline: 0.1rem;
+    font-size: 0.82rem;
+    line-height: 1.35;
   }
 
   #main.observations-page .observation-guide {
