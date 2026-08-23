@@ -24,7 +24,9 @@ jobs:
       - name: Run provenance audit or finalizer
         shell: bash
         run: |
-          if [ -f .github/scripts/bedrock-provenance-finalize.mjs ]; then
+          if [ -f .github/scripts/bedrock-provenance-repair.mjs ]; then
+            node .github/scripts/bedrock-provenance-repair.mjs
+          elif [ -f .github/scripts/bedrock-provenance-finalize.mjs ]; then
             node .github/scripts/bedrock-provenance-finalize.mjs
           elif [ -f .github/scripts/bedrock-provenance-audit.mjs ]; then
             node .github/scripts/bedrock-provenance-audit.mjs
