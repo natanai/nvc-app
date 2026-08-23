@@ -1,3 +1,88 @@
+# Bedrock final acceptance checklist
+
+This checklist defines the remaining acceptance boundary for the original Bedrock production-finalization effort. It is intentionally narrower than "optimize everything forever." Post-Bedrock work such as whole-site background warming, deep offline support, asset hashing/minification, font self-hosting, or speculative controller splitting is not required unless a real acceptance failure points to it.
+
+## Automated acceptance
+
+The current Bedrock branch is expected to keep all of these green in Site Quality:
+
+- canonical data integrity and reviewed reverse-inference overrides;
+- Customizer/state preload and profile/backup restore contracts;
+- flicker/jitter/runtime-load-graph regressions, including the repaired magnet paint path;
+- navigation magnet coverage and saved-layout ownership;
+- static layout contracts for shared density, Inventory, Journal, and Body Cues;
+- the Journal native-UX contract: Feeling and Needs use catalog-backed popups whose options stay hidden until opened; each Feeling row owns its own 0–10 intensity where 0 means unselected; Tags retain example text and free-form tagging; and Journal History preserves, displays, summarizes, and filters individual Feeling/intensity pairs;
+- the Journal first-paint contract: browser-local Journal state is classified synchronously in the generated document head before render-blocking page styles, so an empty Journal first-paints its empty state without flashing populated filters and a populated Journal does not first-paint the no-entry state. This bootstrap reads only enough local state to choose the static shell; normal Journal rendering remains owned by the Journal store/runtime after initialization;
+- the Journal semantic-ownership contract: `assets/js/journal/module.js` owns one canonical form definition; no `inventory`/`support` semantic variants or per-mount copy/label override channels remain; the fallback may differ only in context/density; and Alexithymia Support opens the same global Journal rather than maintaining another Journal implementation;
+- the final hierarchy contract: Journal History is the primary dedicated-Journal surface, Patterns and Backup are secondary native disclosures, Need-page strategy browsing shares one compact title/action header, and the personal-strategy editor uses light-weight grouped controls rather than nested card-strength controls;
+- legacy Journal entries remain readable: when an older entry has multiple Feelings but only one historical intensity value, that value is applied to each old Feeling during normalization because no per-Feeling information existed to recover;
+- page-generator ownership and clean scoped generation;
+- retired-architecture tombstones: deleted safe-build/finalizer layers stay deleted, temporary migration scaffolding does not remain, and the legacy Journal hash has one compatibility owner;
+- first-load JavaScript and shared-asset performance ceilings;
+- CSS/font delivery contracts, including direct shared stylesheet discovery and Google Fonts preconnect ownership;
+- fact-checking export/import round-trip;
+- full canonical authoring build;
+- zero-diff generated-artifact verification.
+
+The live delivery stack was separately measured on 2026-08-22: Cloudflare is serving the public site over HTTP/2 with active compression and static edge caching. That production-delivery verification does not need to be repeated for every commit unless hosting configuration changes.
+
+## Phone acceptance pass
+
+Use the published `bedrock/production-finalization-v2` canary. The goal is to catch things static CI cannot: first paint, touch timing, mobile compositing, persistence across real reloads, and first-interaction behavior.
+
+### 1. Home and first interaction
+
+1. Fully reload Home.
+2. Confirm the page is styled immediately and the fonts look normal.
+3. Confirm there is no obvious page-load flash/jump.
+4. Immediately after another reload, tap the Menu or Customizer magnet before waiting around. It should respond normally rather than requiring a second tap.
+
+Pass condition: first paint looks stable and an early first interaction works.
+
+### 2. Feelings and Needs magnet object permanence
+
+1. Open the Feelings hub and scroll up/down several times.
+2. Confirm Feeling artwork does not flicker while scrolling.
+3. Move one Feeling magnet to an obviously different position.
+4. Reload the page and confirm the saved position returns without a distracting load flash.
+5. Repeat the move/reload check once on the Needs hub.
+
+Pass condition: no scrolling-art flicker, saved positions survive reload, and restoration does not produce a conspicuous visual regression.
+
+### 3. Navigation persistence and Customizer
+
+1. Move one navigation magnet and reload a page.
+2. Confirm the navigation layout remains where you left it.
+3. Open Customizer, make a small reversible change such as roundness or a palette value, close it, and reload.
+4. Confirm the chosen appearance persists and the page does not briefly settle from a different theme.
+5. Restore the setting if desired.
+
+Pass condition: navigation and theme state survive real reloads without a visible incorrect-state flash.
+
+### 4. Menu and Account & data shell
+
+1. Open Menu from a normal content page, not only Inventory.
+2. Open Account & data.
+3. Confirm the controls render and are tappable.
+4. If convenient, trigger **Export localStorage** and confirm a backup file begins downloading. Import/replace is not required for this acceptance pass because the transactional restore path is already covered by automated state tests.
+
+Pass condition: global Menu/Account controls work outside the Inventory page and export remains reachable.
+
+### 5. Inventory and Shared Strategies
+
+1. Open Inventory and switch between the Needs and saved-strategy views/controls you normally use.
+2. Open Shared Strategies from the site navigation or Inventory.
+3. Confirm the feed renders normally and its first interaction does not appear dead while the heavier controller is lazy-loaded.
+
+Pass condition: the primary Inventory surface and lazy Shared Strategies route remain usable on first interaction.
+
+### 6. Journal creation, editing, and history
+
+1. Open the dedicated Journal page and then open the Journal editor.
+2. Confirm the resting metadata group is compact: **Feeling**, **Needs**, and **Tags**. There should be no standalone Intensity row because intensity now belongs to each Feeling.
+3. Before tapping either selector, confirm **no Feeling or Need words are already displayed as an option list**. The rows should simply offer **Choose feelings** and **Choose needs**.
+4. Open Feeling. Confirm a popup/dropout list appears containing valid Feelings from the site's feelings catalog. Each row should place the Feeling word on the left and its own **0–10 intensity scale** on the right.
+5. Confirm all Feeling scales begin at **0** when unselected. Move one Feeling above 0 and confirm it becomes selected; choose a different intensity for a second Feeling; return one scale to 0 and confirm that Feeling is removed from the selection.
 6. Close and reopen Feeling and confirm the independent ratings are preserved. Opening the selector should not automatically summon the iPhone keyboard; use search only when wanted.
 7. Open Needs. Confirm a popup/dropout list appears containing valid Needs from the site's needs catalog, that more than one Need can be selected, and that closing the popup collapses the catalog again.
 8. Confirm Tags remains a free-form field and shows useful examples such as `work, weekend, boundaries` when empty.
@@ -22,7 +107,7 @@ These are the screenshot-derived surfaces that were rebuilt at their canonical o
 4. Saved entries should scan like a dense native log/list: Feeling/intensity first, quiet date metadata, a concise note body when present, small Need/Tag facets, and secondary Edit/Delete actions. Entries should be separated without each becoming another heavy shadowed card. Reflections longer than 80 words should collapse to a short preview with **Read full entry** / **Show less** disclosure controls so one entry cannot dominate History. With filters, entries, and Patterns populated, the entire Journal must remain locked to the phone viewport width; the filter controls themselves must also fit in bounded grid rows rather than creating any horizontal pan surface.
 5. **Patterns** is a core Journal surface: its collapsed row should identify it as trends across entries, and opening it with no entries should explain that recurring feelings, needs, tags, and intensity trends will appear as entries accumulate. **Backup & restore** remains available below it but visually quieter.
 6. Confirm the full-screen Journal editor still opens from **New entry** and that the accepted per-Feeling intensity, Needs popup, and Tags interactions from section 6 are unchanged.
-7. Confirm the fallback editor presents the same Feeling / Needs / Tags / Reflection form semantics and the same reflection prompts as **New entry**. It may be denser because it is a recovery container, but it must not introduce alternate Journal labels, prompts, fields, or save behavior.
+7. Confirm the fallback editor presents the same Feeling / Needs / Tags / Reflection semantics and the same **Optional reflection prompts** as **New entry**. It may use fewer Reflection rows because it is a recovery container, but it must not introduce alternate Journal labels, prompts, fields, or save behavior.
 8. Open **Alexithymia Support**, advance to **Step 4: Reflect and journal**, and open Journal there. It must open the same global Journal form used elsewhere, not a support-specific form. The Alexithymia page may explain why the Journal is being offered, but the Journal itself must retain the same labels, prompts, fields, actions, storage, and history semantics.
 
 Pass condition: History and Patterns read as the two core dedicated-Journal surfaces; empty history does not expose meaningless controls or flash them during first paint; populated history does not flash an empty state; populated filters use self-explanatory neutral labels and remain bounded to the viewport; entries are easy to scan within one phone viewport, with long reflections collapsed by default and fully available on demand; Clear filters only appears when there is something to clear; Backup remains secondary; the fallback editor is visually pushed back and differs only in container/density; and every Journal entry point uses the one canonical Journal form definition.
