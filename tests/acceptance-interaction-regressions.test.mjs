@@ -118,6 +118,7 @@ test('strategy editor uses desktop width without clipping the Needs catalog', ()
   const densityCss = read('styles/shared-density.css');
   const needPage = read('needs/acceptance/index.html');
 
+  assert.equal(css.includes('/* Desktop strategy editor: use the available width'), false, 'responsive strategy density must stay out of the global stylesheet budget');
   assert.ok(densityCss.includes("body .strategy-card--form .strategy-form:has(.strategy-form__field--needs) {\n    grid-template-columns: repeat(2, minmax(0, 1fr));"), 'desktop strategy editor must use two bounded columns at the shared density owner');
   assert.ok(densityCss.includes("body .strategy-card--form .strategy-form__field:has(input[name='title']) {\n    grid-column: 1;\n    grid-row: 1;"), 'strategy name must occupy the first desktop column');
   assert.ok(densityCss.includes('body .strategy-card--form .strategy-form__field--needs {\n    grid-column: 2;\n    grid-row: 1;'), 'Needs must share the first desktop row');
