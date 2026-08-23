@@ -8,11 +8,11 @@
 
 ## Bedrock architecture
 
-The production-finalization work is intentionally moving allneeds.app toward a simple ownership rule:
+allneeds.app uses a simple ownership rule:
 
 > One canonical source → one deterministic compiler/owner → the final production asset.
 
-The final architecture should not depend on a second layer repairing what the first layer generated. In particular:
+The architecture must not depend on a second layer repairing what the first layer generated. In particular:
 
 - deterministic initial HTML/CSS should arrive correct from the parser rather than being repaired after paint;
 - persisted theme, navigation, magnet positions, account state, permissions, and other genuinely user-dependent state remain runtime concerns;
@@ -35,7 +35,7 @@ If you cannot name the canonical markup owner, style owner, and behavior owner f
 
 ### Current Bedrock status
 
-The core page and data authoring pipelines have completed their canonicalization passes:
+The core page and data authoring pipelines have completed their canonicalization passes and the accepted Bedrock baseline is merged into `inventory-core-overhaul`:
 
 - `scripts/build-pages.mjs` is the canonical owner for all 180 generated page outputs. It has explicit route scopes, does not recursively reset mixed-ownership directories, and directly emits the final committed HTML, including the shared navigation serialization, prepaint-critical navigation CSS, and canonical shell script order.
 - the former `scripts/finalize-static-assets.mjs` post-generation repair pass and `scripts/build-pages-safe.mjs` staging/semantic-preservation wrapper have been deleted. Direct generation was converged against all 180 owned outputs, the page regression suite passed, and the normal authoring build adds no further page diff.
@@ -43,17 +43,34 @@ The core page and data authoring pipelines have completed their canonicalization
 - Body Cue rows are authored in `data/Feelings.csv`. Duplicate region/option/feeling rows and the legacy `love` cue key were removed from the canonical source, and the permanent data-authoring contract prevents either source defect from returning.
 - formula-derived reverse inference remains the default. The small set of reviewed production exceptions lives explicitly in `data/reverse-inference-overrides.json`, which the canonical compiler validates and applies while generating `data/reverse-inference.json`.
 - the former `scripts/build-data-safe.mjs` staging wrapper and `scripts/finalize-generated-data.mjs` repair pass have been deleted. Direct data generation preserves the reviewed production semantics and is byte-deterministic on repeated runs.
-- `npm run build` now runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
+- `npm run build` runs both canonical compilers directly. Site Quality CI validates the committed site first, runs the real authoring build, and fails if generated artifacts differ from the committed tree.
 - the **Push Poems**, rebuild, and fact-checking workflows route regeneration through these same declared owners rather than a second repair layer or broad collateral staging.
-- representative first-load JavaScript graphs and the largest shared browser assets have explicit regression ceilings in `tests/performance-budget.test.mjs`, so Home/Shared Strategies lazy-loading gains cannot silently disappear as the codebase evolves.
-- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack that were identified during Bedrock phone testing.
-- the Need strategy-card deck has been extracted byte-for-byte from the former `inventory.js` tail into route-owned `scripts/strategy-deck.js`. Need pages still load the Inventory runtime for their real save controls, while unrelated eager routes no longer parse the deck behavior.
+- representative first-load JavaScript graphs and the largest shared browser assets have explicit regression ceilings in `tests/performance-budget.test.mjs`, so validated lazy-loading gains cannot silently disappear as the codebase evolves.
+- category hubs paint normally and let the existing magnet runtime own saved-position restoration and handmade tilt/offset. Navigation alone retains the established lightweight saved-layout prepaint path. Permanent regressions forbid the global JavaScript-readiness visibility gate, mobile fixed-root-background trigger, and compensating Feeling-art compositor hack identified during Bedrock phone testing.
+- the Need strategy-card deck has been extracted byte-for-byte from the former `inventory.js` tail into route-owned `scripts/strategy-deck.js`. Need pages still load the Inventory runtime for their real save controls, while unrelated routes do not need to parse deck behavior.
 - the legacy Inventory `#journal-dashboard` compatibility redirect is owned by `scripts/inventory-legacy-journal-redirect.js` rather than the shared controller. The obsolete-architecture guard keeps that hash and the deleted safe-build/finalizer layers from drifting back into shared ownership.
 - shared CSS dependencies are parser-discovered directly rather than hidden behind nested imports. Google Fonts consumers preconnect to both font origins before requesting font CSS, and `tests/font-delivery.test.mjs` makes that delivery order permanent.
-- a live production-header audit confirmed that the published site is already served through Cloudflare with HTTP/2, active compression, and static edge caching. A repeated CSS request produced a Cloudflare cache hit, so adding a second repository-owned cache/header layer is not a Bedrock requirement.
-- the earlier root-scoped Bedrock service-worker cache canary has been retired during the rapid phone-acceptance phase. Home no longer registers a cache worker; it only removes a lingering `/service-worker.js` registration and the retired `allneeds-static-*` cache namespace after normal load/idle. `service-worker.js` is a fetch-free retirement shim for browsers that previously installed the experiment. Full-site background warming remains a post-Bedrock performance/PWA opportunity rather than a Bedrock completion requirement.
+- a live production-header audit confirmed that the published site is served through Cloudflare with HTTP/2, active compression, and static edge caching. A repeated CSS request produced a Cloudflare cache hit, so adding a second repository-owned cache/header layer is not a Bedrock requirement.
+- the earlier root-scoped Bedrock service-worker cache canary is retired. Home does not register a cache worker; it only removes a lingering `/service-worker.js` registration and the retired `allneeds-static-*` cache namespace after normal load/idle. `service-worker.js` is a fetch-free retirement shim for browsers that previously installed the experiment.
 
-With page/data authoring, runtime ownership, mobile regression repair, and production delivery now largely locked, the remaining Bedrock work is primarily final real-device acceptance and any defect that acceptance actually exposes. The exact completion boundary is documented in `docs/bedrock-acceptance-checklist.md`; protected runtime and delivery invariants are documented further in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, `docs/bedrock-route-runtime-matrix.md`, `docs/bedrock-performance-budget.md`, and `docs/bedrock-offline-cache.md`.
+The accepted ownership and delivery boundaries are documented in `docs/bedrock-runtime-contract.md`, `docs/bedrock-home-canary.md`, `docs/bedrock-route-runtime-matrix.md`, `docs/bedrock-performance-budget.md`, and `docs/bedrock-offline-cache.md`.
+
+### Post-Bedrock immediate-response canary
+
+`performance/immediate-response-v1` is a designated live-device performance canary built from the merged Bedrock baseline. It is intentionally **not production truth until phone and desktop acceptance is complete**.
+
+The canary expands the proven intent-loaded shell model without weakening immediately visible function:
+
+- Feelings, Needs, and Faux Feelings indexes no longer parser-load the large shared `scripts/inventory.js` controller.
+- Feeling detail pages keep magnets and `scripts/feeling-reverse-inference.js` eager, while loading `inventory.js` only when a shared shell capability is requested.
+- Faux Feeling detail pages keep their content/magnets eager and use the same shell intent-loader boundary.
+- Body Cues keeps its dedicated `scripts/body-cues-tool.js`, Body Cues CSS, magnets, and shared shell eager while deferring unrelated Inventory-controller work.
+- Need detail pages remain eager because their personal-strategy form and save/profile controls are immediately visible.
+- Inventory, dedicated Journal, and Alexithymia Support remain eager because their primary visible features directly depend on their current controllers.
+
+`tests/route-runtime-ownership.test.mjs` protects the behavior boundary and `tests/performance-budget.test.mjs` protects the measured startup reduction. On the current canary, representative raw direct JavaScript is about 101.9 KiB for the three category hubs, 118.2 KiB for a Feeling detail, 101.9 KiB for a Faux Feeling detail, and 116.8 KiB for Body Cues, versus 337.3 KiB for the intentionally eager Need-detail reference route. See `docs/bedrock-performance-budget.md` for exact scope and limitations of this metric.
+
+When testing this branch, verify both primary route interactions and first use of Customizer, Journal, Account & data, backup/restore, and sharing. The small `scripts/shell-runtime-loader.js` is responsible for loading the canonical controller on those explicit intents and replaying an early interaction after initialization where necessary. Do not merge the canary solely because source-level CI is green; real phone and desktop acceptance is part of the performance change.
 
 ## How information is organised
 
@@ -84,7 +101,7 @@ python -m http.server  # or any static server
 # visit http://localhost:8000/
 ```
 
-For a full production verification, run `npm run build` from a clean checkout and confirm it leaves no Git diff. The current Bedrock branch does not install a service worker for normal browsing; `service-worker.js` exists only as a retirement shim for browsers that installed the earlier cache experiment.
+For a full production verification, run `npm run build` from a clean checkout and confirm it leaves no Git diff. The production baseline does not install a service worker for normal browsing; `service-worker.js` exists only as a retirement shim for browsers that installed the earlier cache experiment.
 
 ## Development workflow
 
@@ -100,7 +117,7 @@ For a full production verification, run `npm run build` from a clean checkout an
   - `npm run test:customizer`
   - `npm run test:home-regressions`
   - `npm run test:nav-magnets`
-  - `npm run test:flicker-jitter` (includes Home runtime, cache-retirement, magnet first-paint/mobile compositing, and strategy-deck ownership contracts)
+  - `npm run test:flicker-jitter` (includes runtime ownership, cache-retirement, magnet first-paint/mobile compositing, and strategy-deck ownership contracts)
   - `npm run test:performance`
   - `npm run test:delivery`
   - `npm run test:obsolete`
@@ -171,7 +188,7 @@ The integrity test confirms valid cue references and synchronized outputs; the s
     ├── build-pages.mjs         # canonical page compiler
     ├── strategy-deck.js        # Need-only strategy card deck runtime
     ├── inventory-legacy-journal-redirect.js # Inventory-only compatibility redirect
-    └── shell-runtime-loader.js # Home lazy-runtime + retired-cache cleanup owner
+    └── shell-runtime-loader.js # shared shell intent-loader + retired-cache cleanup owner
 ```
 
 ### Spreadsheet columns
@@ -196,5 +213,5 @@ The data build validates strategy slugs and relationship lookups, failing fast w
 
 - **Strategy deck controls:** `scripts/strategy-deck.js` owns the Need-page deck and preserves the pointer-swipe guard that prevents gestures from intercepting clicks on interactive elements such as "Save to inventory" buttons inside strategy cards.
 - **Restore ownership:** full profile/backup restore must synchronize required storage mirrors before rehydrating the current document and must protect restored magnet state from the running persistence engine.
-- **Route runtime ownership:** Home and Shared Strategies currently prove the lazy-controller model; Inventory, Need detail pages, and the dedicated Journal remain eager until their visible first-load responsibilities are explicitly separated.
-- **Offline-cache retirement:** Home does not register a root cache worker during Bedrock acceptance. It only cleans the abandoned worker/cache namespace after load/idle, and the retirement shim itself owns no fetch traffic. Full-site warming is deferred to the separate post-Bedrock design in `docs/bedrock-offline-cache.md`.
+- **Route runtime ownership:** Home, Shared Strategies, the three generated category hubs, Feeling/Faux Feeling detail pages, and Body Cues use the intent-loaded controller model on the performance canary. Inventory, Need detail pages, dedicated Journal, and Alexithymia Support remain eager where visible first-load responsibilities require it. See `docs/bedrock-route-runtime-matrix.md` before changing route startup scripts.
+- **Offline-cache retirement:** the site does not register a root cache worker during normal browsing. It only cleans the abandoned worker/cache namespace after load/idle, and the retirement shim itself owns no fetch traffic. Full-site warming is a separate post-Bedrock design in `docs/bedrock-offline-cache.md`.
