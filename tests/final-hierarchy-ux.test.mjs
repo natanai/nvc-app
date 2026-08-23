@@ -11,6 +11,7 @@ test('Journal history is the primary surface and utilities are native disclosure
   const runtime = await load('scripts/inventory.js');
   const moduleSource = await load('assets/js/journal/module.js');
   const css = await load('styles.css');
+  const densityCss = await load('styles/shared-density.css');
   const html = await load('inventory/journal/index.html');
   for (const source of [build, html]) {
     assert.ok(source.includes('journal-fullscreen-button--compact'));
@@ -78,7 +79,7 @@ test('Journal history is the primary surface and utilities are native disclosure
   assert.ok(runtime.includes("details.className = 'journal-entry__notes-disclosure'"), 'long entries must use a native disclosure rather than overpowering History');
   assert.ok(runtime.includes("closedLabel.textContent = 'Read full entry'"), 'collapsed long entries must have an explicit expansion action');
   assert.ok(runtime.includes("openLabel.textContent = 'Show less'"), 'expanded long entries must be collapsible again');
-  assert.ok(css.includes('.journal-entry__notes-disclosure[open] .journal-entry__notes--preview'), 'History disclosure state must be styled at the canonical Journal-entry owner');
+  assert.ok(densityCss.includes('.journal-entry__notes-disclosure[open] .journal-entry__notes--preview'), 'History disclosure state must be styled at the canonical shared-density owner');
   assert.ok(moduleSource.includes("heading: 'Optional reflection prompts'"), 'Journal prompts must use neutral professional labeling');
   assert.equal(moduleSource.includes('Need a nudge?'), false, 'retired conversational Journal prompt heading must not return');
   assert.equal(moduleSource.includes('shining through or feeling tender'), false, 'retired anthropomorphic Journal prompt copy must not return');

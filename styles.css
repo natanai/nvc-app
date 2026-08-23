@@ -5372,51 +5372,6 @@ main[data-need-slug] .page-title::before {
 .journal-entry__notes {
   margin: 0;
   white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-
-.journal-entry__notes-disclosure {
-  margin: 0;
-  min-width: 0;
-}
-
-.journal-entry__notes-summary {
-  min-width: 0;
-  min-height: 44px;
-  cursor: pointer;
-  color: inherit;
-}
-
-.journal-entry__notes--preview {
-  display: block;
-  margin-bottom: 0.35rem;
-}
-
-.journal-entry__notes--full {
-  margin-top: 0.55rem;
-}
-
-.journal-entry__notes-toggle {
-  display: inline-block;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: color-mix(in srgb, var(--ink) 78%, var(--ink-soft) 22%);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 2px;
-}
-
-.journal-entry__notes-toggle--open {
-  display: none;
-}
-
-.journal-entry__notes-disclosure[open] .journal-entry__notes--preview,
-.journal-entry__notes-disclosure[open] .journal-entry__notes-toggle--closed {
-  display: none;
-}
-
-.journal-entry__notes-disclosure[open] .journal-entry__notes-toggle--open {
-  display: inline-block;
 }
 
 .journal-entry__actions {
