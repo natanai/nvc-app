@@ -45,4 +45,4 @@ These remain runtime by design:
 
 `tests/bedrock-runtime-provenance.test.mjs` protects the concrete ownership boundaries above. Existing tests that previously required post-load Inventory cleanup or save-button cosmetic normalization were inverted so CI now rejects those patterns instead of blessing them.
 
-The latest documented clean checkpoint after Journal semantic unification is Site Quality run 588. This provenance gate complements, rather than replaces, generator zero-diff checks, route-runtime ownership tests, performance ceilings, persisted-state contracts, and real-device acceptance.
+This provenance gate complements, rather than replaces, generator zero-diff checks, route-runtime ownership tests, performance ceilings, persisted-state contracts, and real-device acceptance.
