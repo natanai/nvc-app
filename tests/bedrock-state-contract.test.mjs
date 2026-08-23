@@ -8,10 +8,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 const read = (relativePath) => fs.readFile(path.join(root, relativePath), 'utf8');
 
-test('Bedrock preserves persisted presentation-state namespaces and first-paint hydration', async () => {
-  const [inventory, magnets, buildPages, inventoryHtml, needsHtml] = await Promise.all([
+test('Bedrock preserves persisted presentation-state namespaces and responsive first-paint hydration', async () => {
+  const [inventory, magnetPhysics, magnetRuntime, buildPages, inventoryHtml, needsHtml] = await Promise.all([
     read('scripts/inventory.js'),
     read('scripts/magnets/magnetPhysics.js'),
+    read('scripts/magnets.js'),
     read('scripts/build-pages.mjs'),
     read('inventory/index.html'),
     read('needs/index.html'),
@@ -19,21 +20,33 @@ test('Bedrock preserves persisted presentation-state namespaces and first-paint 
 
   assert.ok(inventory.includes("const THEME_STORAGE_KEY = 'nvcApp.theme';"));
   assert.ok(inventory.includes("const NAV_SETTINGS_STORAGE_KEY = 'nvcApp.navSettings';"));
-  assert.ok(magnets.includes("const STORAGE_PREFIX = 'magnetPositions:';"));
-  assert.ok(magnets.includes('export function loadPositions('));
-  assert.ok(magnets.includes('export function savePositions('));
+  assert.ok(magnetPhysics.includes("const STORAGE_PREFIX = 'magnetPositions:';"));
+  assert.ok(magnetPhysics.includes('export function loadPositions('));
+  assert.ok(magnetPhysics.includes('export function savePositions('));
 
   assert.ok(buildPages.includes("const NAV_MAGNET_STORAGE_KEY = 'site-nav';"));
   assert.ok(buildPages.includes('const magnetPrefillScript = (storageKey) => String.raw`'));
-  assert.ok(buildPages.includes("var STORAGE_KEY = 'magnetPositions:${storageKey}';"));
+  assert.ok(buildPages.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';"));
+  assert.ok(buildPages.includes("var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';"));
+  assert.ok(buildPages.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
+  assert.ok(buildPages.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
   assert.ok(buildPages.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!buildPages.includes("magnetPrefillScript(type + '-hub-v4'"));
   assert.ok(buildPages.includes("var storageKey = 'nvcApp.navSettings';"));
-  assert.ok(inventoryHtml.includes("var STORAGE_KEY = 'magnetPositions:site-nav';"));
-  assert.ok(inventoryHtml.includes("var storageKey = 'nvcApp.navSettings';"));
-  assert.ok(needsHtml.includes("var STORAGE_KEY = 'magnetPositions:site-nav';"));
-  assert.ok(!needsHtml.includes("var STORAGE_KEY = 'magnetPositions:needs-hub-v4';"));
-  assert.ok(needsHtml.includes("var storageKey = 'nvcApp.navSettings';"));
+
+  assert.ok(magnetRuntime.includes("const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';"));
+  assert.ok(magnetRuntime.includes("const RESPONSIVE_LAYOUT_MIGRATION_SUFFIX = '@responsive-v1';"));
+  assert.ok(magnetRuntime.includes('persistenceKey: resolveResponsiveStorageKey(resolvedStorageKey)'));
+  assert.ok(magnetRuntime.includes('loadPositions(\n    state.persistenceKey,'));
+  assert.ok(magnetRuntime.includes('savePositions(\n      state.persistenceKey,') || magnetRuntime.includes('savePositions(\n        state.persistenceKey,'));
+
+  for (const html of [inventoryHtml, needsHtml]) {
+    assert.ok(html.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';"));
+    assert.ok(html.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
+    assert.ok(html.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
+    assert.ok(html.includes("var storageKey = 'nvcApp.navSettings';"));
+  }
+  assert.ok(!needsHtml.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:needs-hub-v4';"));
 });
 
 test('Bedrock keeps the Customizer and conditional navigation capabilities wired', async () => {
