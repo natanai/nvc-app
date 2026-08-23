@@ -1449,6 +1449,22 @@ function setupScrollTopButton() {
   }
 }
 
+let catalogMultiselectModulePromise = null;
+
+function ensureCatalogMultiselectModule() {
+  if (!catalogMultiselectModulePromise) {
+    catalogMultiselectModulePromise = import(resolveAssetPath('assets/js/catalog-multiselect.js'));
+  }
+  return catalogMultiselectModulePromise;
+}
+
+async function hydrateStrategyNeedSelectors() {
+  const roots = Array.from(document.querySelectorAll('[data-strategy-need-catalog]'));
+  if (!roots.length) return;
+  const module = await ensureCatalogMultiselectModule();
+  roots.forEach((root) => module.hydrateCatalogMultiselect(root, { placeholder: 'Choose needs', delimiter: '|' }));
+}
+
 let inventoryRuntimeInitialized = false;
 
 function initializeInventoryRuntime() {
@@ -1459,6 +1475,9 @@ function initializeInventoryRuntime() {
 
   state.basePath = document.body?.dataset?.basePath || '';
   state.journalDraftPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  hydrateStrategyNeedSelectors().catch((error) => {
+    console.warn('Unable to initialize shared Needs selector', error);
+  });
   setupViewportHeightProperty();
   state.inventory = loadInventory();
   refreshSavedStrategyIndex();

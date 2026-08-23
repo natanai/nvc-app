@@ -1133,13 +1133,24 @@ button.site-nav__magnet {
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:site-nav';
+          var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';
+          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
+          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
           var raw;
           try {
             if (!('localStorage' in window)) {
               return;
             }
             raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
+              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+              if (legacyRaw) {
+                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
+                raw = legacyRaw;
+              }
+              window.localStorage.setItem(MIGRATION_KEY, bucket);
+            }
           } catch (error) {
             return;
           }
@@ -1364,15 +1375,23 @@ button.site-nav__magnet {
               </div>
             </div>
             
-        <div class="strategy-form__field">
-          <label for="suggestion-need">Primary need</label>
-          <p id="suggestion-need-hint" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="suggestion-need" name="need" multiple aria-describedby="suggestion-need-hint" required>
-              <option value="" disabled>Select a need</option>
-              <option value="love-caring">Love/Caring</option><option value="nurturing">Nurturing</option><option value="connection">Connection</option><option value="belonging">Belonging</option><option value="support">Support</option><option value="consideration">Consideration</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="inclusion">Inclusion</option><option value="community">Community</option><option value="safety">Safety</option><option value="contribution">Contribution</option><option value="peer-respect">Peer Respect</option><option value="respect">Respect</option><option value="autonomy">Autonomy</option><option value="to-be-seen">To be seen</option><option value="acknowledgement">Acknowledgement</option><option value="appreciation">Appreciation</option><option value="trust">Trust</option><option value="dependability">Dependability</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="commitment">Commitment</option><option value="clarity">Clarity</option><option value="accountability">Accountability</option><option value="causality">Causality</option><option value="fairness">Fairness</option><option value="justice">Justice</option><option value="choice">Choice</option><option value="freedom">Freedom</option><option value="reliability">Reliability</option><option value="act-freely" selected>Act Freely</option><option value="choose-freely">Choose Freely</option><option value="understanding">Understanding</option><option value="recognition">Recognition</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="need-to-matter">Need to matter</option><option value="friendship">Friendship</option><option value="space">Space</option><option value="peace">Peace</option><option value="serenity">Serenity</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="calm">Calm</option><option value="participation">Participation</option><option value="to-be-heard">To be heard</option><option value="equality">Equality</option><option value="empowerment">Empowerment</option><option value="consistency">Consistency</option><option value="genuineness">Genuineness</option><option value="mattering">Mattering</option><option value="rest">Rest</option><option value="mutuality">Mutuality</option><option value="relaxation">Relaxation</option><option value="closeness">Closeness</option><option value="authenticity">Authenticity</option><option value="self-expression">Self expression</option><option value="integrity">Integrity</option><option value="empathy">Empathy</option><option value="privacy">Privacy</option><option value="order">Order</option><option value="beauty">Beauty</option><option value="control">Control</option><option value="predictability">Predictability</option><option value="accomplishment">Accomplishment</option><option value="physical-fitness">Physical Fitness</option><option value="acceptance">Acceptance</option><option value="growth">Growth</option><option value="security">Security</option>
-            </select>
-          </div>
+        <div class="strategy-form__field strategy-form__field--needs">
+          <label for="suggestion-need-trigger">Needs</label>
+          <div class="journal-catalog-select strategy-card strategy-card--input strategy-need-catalog" data-catalog-multiselect="needs" data-catalog-delimiter="|" data-journal-catalog-select="needs" data-strategy-need-catalog>
+  <select id="suggestion-need" name="need" multiple hidden data-catalog-multiselect-transport><option value="acceptance">Acceptance</option><option value="accomplishment">Accomplishment</option><option value="accountability">Accountability</option><option value="acknowledgement">Acknowledgement</option><option value="act-freely" selected>Act Freely</option><option value="appreciation">Appreciation</option><option value="authenticity">Authenticity</option><option value="autonomy">Autonomy</option><option value="beauty">Beauty</option><option value="belonging">Belonging</option><option value="calm">Calm</option><option value="causality">Causality</option><option value="choice">Choice</option><option value="choose-freely">Choose Freely</option><option value="clarity">Clarity</option><option value="closeness">Closeness</option><option value="commitment">Commitment</option><option value="community">Community</option><option value="connection">Connection</option><option value="consideration">Consideration</option><option value="consistency">Consistency</option><option value="contribution">Contribution</option><option value="control">Control</option><option value="dependability">Dependability</option><option value="do-things-at-my-own-pace-and-in-my-own-way">Do things at my own pace and in my own way</option><option value="empathy">Empathy</option><option value="empowerment">Empowerment</option><option value="equality">Equality</option><option value="fairness">Fairness</option><option value="freedom">Freedom</option><option value="friendship">Friendship</option><option value="genuineness">Genuineness</option><option value="growth">Growth</option><option value="honesty">Honesty</option><option value="honor">Honor</option><option value="inclusion">Inclusion</option><option value="integrity">Integrity</option><option value="justice">Justice</option><option value="love-caring">Love/Caring</option><option value="mattering">Mattering</option><option value="mutuality">Mutuality</option><option value="need-for-all-living-things-to-flourish">Need for all living things to flourish</option><option value="need-to-matter">Need to matter</option><option value="non-judgmental-communication">Non-judgmental Communication</option><option value="nurturing">Nurturing</option><option value="order">Order</option><option value="participation">Participation</option><option value="peace">Peace</option><option value="peer-respect">Peer Respect</option><option value="physical-fitness">Physical Fitness</option><option value="predictability">Predictability</option><option value="privacy">Privacy</option><option value="recognition">Recognition</option><option value="relaxation">Relaxation</option><option value="reliability">Reliability</option><option value="respect">Respect</option><option value="rest">Rest</option><option value="safety">Safety</option><option value="security">Security</option><option value="self-expression">Self expression</option><option value="serenity">Serenity</option><option value="space">Space</option><option value="support">Support</option><option value="to-be-heard">To be heard</option><option value="to-be-seen">To be seen</option><option value="trust">Trust</option><option value="understanding">Understanding</option></select>
+  <button class="journal-catalog-select__trigger" id="suggestion-need-trigger" type="button" aria-expanded="false" aria-controls="suggestion-need-popover" aria-haspopup="dialog" data-journal-catalog-trigger data-catalog-kind="needs">
+    <span class="journal-catalog-select__value" data-journal-catalog-value>Act Freely</span>
+    <span class="journal-catalog-select__chevron" aria-hidden="true"></span>
+  </button>
+  <div class="journal-catalog-popover" id="suggestion-need-popover" hidden role="dialog" aria-label="Choose one or more needs" data-journal-catalog-popover data-catalog-kind="needs">
+    <div class="journal-catalog-popover__toolbar"><input class="journal-catalog-popover__search" type="search" autocomplete="off" placeholder="Search needs" data-journal-catalog-search></div>
+    <div class="journal-catalog-popover__options" role="listbox" aria-multiselectable="true" data-journal-catalog-options></div>
+    <div class="journal-catalog-popover__footer">
+      <button class="journal-catalog-popover__action" type="button" data-journal-catalog-clear>Clear</button>
+      <button class="journal-catalog-popover__action journal-catalog-popover__action--done" type="button" data-journal-catalog-done>Done</button>
+    </div>
+  </div>
+</div>
         </div>
             
         <div class="strategy-form__row">

@@ -3,6 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { updateObservationGuidePage } from './observation-guide.mjs';
+import { renderCatalogMultiselectMarkup } from '../assets/js/catalog-multiselect.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'index.json');
@@ -93,13 +94,24 @@ const magnetPrefillScript = (storageKey) => String.raw`
           if (!board) {
             return;
           }
-          var STORAGE_KEY = 'magnetPositions:${storageKey}';
+          var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';
+          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
+          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
+          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
           var raw;
           try {
             if (!('localStorage' in window)) {
               return;
             }
             raw = window.localStorage.getItem(STORAGE_KEY);
+            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
+              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
+              if (legacyRaw) {
+                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
+                raw = legacyRaw;
+              }
+              window.localStorage.setItem(MIGRATION_KEY, bucket);
+            }
           } catch (error) {
             return;
           }
@@ -1258,34 +1270,29 @@ function renderStrategyForm({
   includeLocalStorageReminder = false,
   includeSaveTargets = false,
 }) {
-  const needOptions = data.needs
-    .map(
-      (need) =>
-        `<option value="${escapeHtml(need.slug)}"${
-          need.slug === defaultNeedSlug ? ' selected' : ''
-        }>${escapeHtml(need.title)}</option>`
-    )
-    .join('');
-
-  const placeholderOption = includePlaceholderOption
-    ? `<option value="" disabled${!needSelectMultiple && !defaultNeedSlug ? ' selected' : ''}>Select a need</option>`
-    : '';
-
-  const multipleAttr = needSelectMultiple ? ' multiple' : '';
-  const needHintId = `${idPrefix}-need-hint`;
-  const needDescribedByAttr = ` aria-describedby="${needHintId}"`;
+  const needOptions = data.needs.map((need) => ({
+    label: need.title,
+    value: need.slug,
+    slug: need.slug,
+  }));
 
   const needField = includeNeedSelect
     ? `
-        <div class="strategy-form__field">
-          <label for="${idPrefix}-need">Primary need</label>
-          <p id="${needHintId}" class="strategy-form__hint">Tip: On desktop, hold Ctrl (Windows/Linux) or Command (Mac) to pick more than one need.</p>
-          <div class="strategy-card strategy-card--input">
-            <select id="${idPrefix}-need" name="need"${multipleAttr}${needDescribedByAttr} required>
-              ${placeholderOption}
-              ${needOptions}
-            </select>
-          </div>
+        <div class="strategy-form__field strategy-form__field--needs">
+          <label for="${idPrefix}-need-trigger">Needs</label>
+          ${renderCatalogMultiselectMarkup({
+            inputId: `${idPrefix}-need`,
+            name: 'need',
+            kind: 'needs',
+            placeholder: 'Choose needs',
+            ariaLabel: 'Choose one or more needs',
+            transport: 'select',
+            delimiter: '|',
+            options: needOptions,
+            selectedValues: defaultNeedSlug ? [defaultNeedSlug] : [],
+            classes: ['strategy-card', 'strategy-card--input', 'strategy-need-catalog'],
+            attributes: { 'data-strategy-need-catalog': '' },
+          })}
         </div>`
     : '';
 
@@ -3310,10 +3317,6 @@ function renderInventoryJournalPage(needsList = []) {
       }
 
       @media (min-width: 760px) {
-        main[data-page-id='inventory-journal'] .journal-overview-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
         main[data-page-id='inventory-journal'] .journal-history-controls__filters {
           grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
         }

@@ -1,5 +1,5 @@
-/* Body Cues explorer — page-specific UX refinements.
-   Loaded by scripts/body-cues-tool.js so generated pages can remain unchanged. */
+/* Body Cues explorer — page-specific deterministic presentation.
+   Parser-loaded by the generated Body Cues route before the interaction module runs. */
 
 .body-cues-page .body-cues-tool {
   gap: clamp(1rem, 3vw, 1.5rem);
@@ -187,6 +187,11 @@
   display: flex;
   justify-content: flex-start;
   margin: 0;
+}
+
+/* Pinning changes the compact sticky result shelf and is therefore a phone-only action. */
+.body-cues-page .body-cues-tool__pin-toggle {
+  display: none;
 }
 
 .body-cues-page .body-cues-tool__reset {

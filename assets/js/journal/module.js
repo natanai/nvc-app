@@ -1,5 +1,6 @@
 import store, { loadDraft, saveDraft, clearDraft } from './store.js';
 import { getSuggestions as getTagSuggestions } from './tags.js';
+import { createCatalogMultiselectElement, hydrateCatalogMultiselect } from '../catalog-multiselect.js';
 
 const DEFAULT_INTENSITY = 5;
 const DEFAULT_TAG_LIMIT = 8;
@@ -445,14 +446,25 @@ const buildFeelingField = (config) => buildCatalogSelectorField(config, {
   ariaLabel: 'Choose one or more feelings',
 });
 
-const buildNeedsField = (config) => buildCatalogSelectorField(config, {
-  kind: 'needs',
-  name: 'needs',
-  label: config.labels.needs,
-  placeholder: config.placeholders.needs || 'Choose needs',
-  dataAttribute: 'data-journal-needs',
-  ariaLabel: 'Choose one or more needs',
-});
+const buildNeedsField = (config) => {
+  const inputId = `${config.idPrefix}-needs`;
+  const selector = createCatalogMultiselectElement({
+    inputId,
+    name: 'needs',
+    kind: 'needs',
+    placeholder: config.placeholders.needs || 'Choose needs',
+    ariaLabel: 'Choose one or more needs',
+    transport: 'input',
+    delimiter: ', ',
+    transportAttributes: { 'data-journal-needs': '' },
+  });
+  return buildJournalMetaRow({
+    label: config.labels.needs,
+    id: `${inputId}-trigger`,
+    input: selector,
+    modifier: 'needs',
+  });
+};
 
 const buildTagsField = (config) => {
   const id = `${config.idPrefix}-tags`;
@@ -727,6 +739,9 @@ class JournalFormController {
     this.saveButton = this.root.querySelector('[data-journal-submit]');
     this.feelingSelectRoot = this.root.querySelector('[data-journal-catalog-select="feeling"]');
     this.needsSelectRoot = this.root.querySelector('[data-journal-catalog-select="needs"]');
+    this.needsCatalogController = this.needsSelectRoot
+      ? hydrateCatalogMultiselect(this.needsSelectRoot, { placeholder: 'Choose needs', delimiter: ', ' })
+      : null;
     this.notesBaseHeight = null;
 
     this.emotionOptions = [];
@@ -850,6 +865,7 @@ class JournalFormController {
 
   attachCatalogSelectEvents() {
     ['feeling', 'needs'].forEach((kind) => {
+      if (kind === 'needs' && this.needsCatalogController) return;
       const root = this.getCatalogRoot(kind);
       if (!root) return;
       const trigger = root.querySelector('[data-journal-catalog-trigger]');
@@ -933,6 +949,7 @@ class JournalFormController {
 
   getCatalogValues(kind) {
     if (kind === 'feeling') return this.getFeelingRatings().map((item) => item.feeling);
+    if (kind === 'needs' && this.needsCatalogController) return this.needsCatalogController.getValues();
     const input = this.getCatalogInput(kind);
     return normalizeList(input?.value || '');
   }
@@ -1012,6 +1029,11 @@ class JournalFormController {
       })));
       return;
     }
+    if (kind === 'needs' && this.needsCatalogController) {
+      const normalized = this.normalizeCatalogValues(kind, values);
+      this.needsCatalogController.setValues(normalized, { dispatch: false });
+      return;
+    }
     const input = this.getCatalogInput(kind);
     if (!input) return;
     const normalized = this.normalizeCatalogValues(kind, values);
@@ -1028,6 +1050,10 @@ class JournalFormController {
   }
 
   updateCatalogSummary(kind) {
+    if (kind === 'needs' && this.needsCatalogController) {
+      this.needsCatalogController.updateSummary();
+      return;
+    }
     const root = this.getCatalogRoot(kind);
     const valueEl = root?.querySelector('[data-journal-catalog-value]');
     if (!valueEl) return;
@@ -1048,6 +1074,11 @@ class JournalFormController {
   }
 
   openCatalogSelect(kind) {
+    if (kind === 'needs' && this.needsCatalogController) {
+      this.closeCatalogSelect('feeling');
+      this.needsCatalogController.open();
+      return;
+    }
     ['feeling', 'needs'].forEach((other) => { if (other !== kind) this.closeCatalogSelect(other); });
     const root = this.getCatalogRoot(kind);
     const trigger = root?.querySelector('[data-journal-catalog-trigger]');
@@ -1061,6 +1092,10 @@ class JournalFormController {
   }
 
   closeCatalogSelect(kind) {
+    if (kind === 'needs' && this.needsCatalogController) {
+      this.needsCatalogController.close();
+      return;
+    }
     const root = this.getCatalogRoot(kind);
     const trigger = root?.querySelector('[data-journal-catalog-trigger]');
     const popover = root?.querySelector('[data-journal-catalog-popover]');
@@ -1069,6 +1104,10 @@ class JournalFormController {
   }
 
   renderCatalogOptions(kind) {
+    if (kind === 'needs' && this.needsCatalogController) {
+      this.needsCatalogController.renderOptions();
+      return;
+    }
     const root = this.getCatalogRoot(kind);
     const list = root?.querySelector('[data-journal-catalog-options]');
     const search = root?.querySelector('[data-journal-catalog-search]');
@@ -1131,6 +1170,10 @@ class JournalFormController {
 
   toggleCatalogValue(kind, value) {
     if (!value) return;
+    if (kind === 'needs' && this.needsCatalogController) {
+      this.needsCatalogController.toggleValue(value, { dispatch: true });
+      return;
+    }
     const values = this.getCatalogValues(kind);
     const key = value.toLowerCase();
     const index = values.findIndex((item) => item.toLowerCase() === key);
@@ -1267,6 +1310,13 @@ class JournalFormController {
           .sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }))
       : [];
     this.needsOptions = normalizedList;
+    if (this.needsCatalogController) {
+      this.needsCatalogController.setOptions(normalizedList.map((option) => ({
+        label: option.label,
+        value: option.label,
+        slug: option.slug || '',
+      })));
+    }
     this.setCatalogValues('needs', this.getCatalogValues('needs'));
   }
 

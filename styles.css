@@ -4437,30 +4437,6 @@ main[data-need-slug] .page-title::before {
   align-items: stretch;
 }
 
-@media (min-width: 960px) {
-  .journal-overview-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
-    grid-template-areas:
-      "fullscreen storage"
-      "summary summary";
-  }
-}
-
-@media (min-width: 960px) {
-  .journal-overview-grid .journal-storage-panel {
-    grid-area: storage;
-    align-self: start;
-  }
-
-  .journal-overview-grid .journal-summary-section {
-    grid-area: summary;
-  }
-
-  .journal-overview-grid .journal-fullscreen-slot {
-    grid-area: fullscreen;
-    align-self: center;
-  }
-}
 
 .journal-fullscreen-slot {
   display: flex;
