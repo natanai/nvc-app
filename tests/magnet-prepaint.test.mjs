@@ -67,14 +67,18 @@ test('magnet runtime remains the single owner of handmade tilt and offset', asyn
 });
 
 test('Observations compiles the same responsive navigation first-paint contract as generated pages', async () => {
-  const [html, criticalCss] = await Promise.all([
+  const [html, criticalCss, observationsCriticalCss] = await Promise.all([
     read('observations/index.html'),
     read('styles/nav-critical.css'),
+    read('styles/observations-critical.css'),
   ]);
   const { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } = await import('../scripts/nav-prepaint.mjs');
   assert.ok(html.includes('<!-- shared-nav-critical:start -->'));
   assert.ok(html.includes('<!-- shared-nav-critical:end -->'));
-  assert.ok(html.includes(`<style>${criticalCss.trim()}</style>`));
+  assert.ok(html.includes(`<style>${criticalCss.trim()}\n${observationsCriticalCss.trim()}</style>`));
+  assert.ok(observationsCriticalCss.includes('.observations-page'));
+  assert.ok(observationsCriticalCss.includes('.observation-editor__card'));
+  assert.ok(observationsCriticalCss.includes('.observation-suggestions__actions'));
   assert.ok(html.includes('<!-- shared-nav-prefill:start -->'));
   assert.ok(html.includes('<!-- shared-nav-prefill:end -->'));
   assert.ok(html.includes(magnetPrefillScript(NAV_MAGNET_STORAGE_KEY).trim()));

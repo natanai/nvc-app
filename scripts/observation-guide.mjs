@@ -8,6 +8,7 @@ const rootDir = join(__dirname, '..');
 const dataPath = join(rootDir, 'data', 'observation-guide.json');
 const pagePath = join(rootDir, 'observations', 'index.html');
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
+const observationsCriticalCssPath = join(rootDir, 'styles', 'observations-critical.css');
 const SHARED_NAV_CRITICAL_START = '<!-- shared-nav-critical:start -->';
 const SHARED_NAV_CRITICAL_END = '<!-- shared-nav-critical:end -->';
 const SHARED_NAV_PREFILL_START = '<!-- shared-nav-prefill:start -->';
@@ -344,12 +345,13 @@ export function updateObservationGuidePage() {
   const content = `\n${markup}\n          `;
   let updated = `${before}${content}${after}`;
   const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
+  const observationsCriticalCss = readFileSync(observationsCriticalCssPath, 'utf8').trim();
   updated = replaceOwnedRegion(
     updated,
     SHARED_NAV_CRITICAL_START,
     SHARED_NAV_CRITICAL_END,
-    `<style>${navCriticalCss}</style>`,
-    'shared navigation critical CSS',
+    `<style>${navCriticalCss}\n${observationsCriticalCss}</style>`,
+    'shared navigation plus Observations critical CSS',
   );
   updated = replaceOwnedRegion(
     updated,
