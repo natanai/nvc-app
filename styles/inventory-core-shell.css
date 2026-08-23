@@ -522,8 +522,9 @@
 
   /* The shared-strategies feed also becomes a viewport-width app surface on phones. */
   body:has(#main [data-feed-list]) #main.page {
-    width: calc(100% + 2rem);
-    margin-inline: -1rem;
+    width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));
+    min-width: 0;
+    margin-inline: var(--page-inline-bleed);
     padding: 1rem 0 2rem;
     border: 0;
     border-radius: 0;

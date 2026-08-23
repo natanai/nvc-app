@@ -18,10 +18,13 @@
 
   /* Preserve the established phone structure that previously lived in the
      generator's legacy <=640px block. Keeping it here means the mobile route has
-     one owner without losing its edge-to-edge app surface or two-column Needs grid. */
+     one owner without losing its edge-to-edge app surface or two-column Needs grid.
+     Bleed against the body's declared gutter so the surface cannot create a
+     transient horizontal page scrollbar. */
   .inventory-page {
-    width: calc(100% + 2rem);
-    margin-inline: -1rem;
+    width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));
+    min-width: 0;
+    margin-inline: var(--page-inline-bleed);
     padding: 1rem 0 2rem;
     border: 0;
     border-radius: 0;

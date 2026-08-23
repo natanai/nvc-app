@@ -2682,7 +2682,9 @@
   }
 
   body:has(#main.observations-page) {
-    padding-inline: 1rem;
+    --page-inline-gutter: 1rem;
+    --page-inline-bleed: calc(0px - var(--page-inline-gutter));
+    padding-inline: var(--page-inline-gutter);
   }
 
   body:has(#main.observations-page) .page-wrapper {
@@ -2699,9 +2701,10 @@
   }
 
   body:has(#main.observations-page) #main.observations-page {
-    width: calc(100% + 2rem);
+    width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));
+    min-width: 0;
     max-width: none;
-    margin: 0 -1rem;
+    margin: 0 var(--page-inline-bleed);
     padding: 0.45rem max(0.78rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(0.78rem, env(safe-area-inset-left));
     gap: 0.72rem;
     border: 0;
