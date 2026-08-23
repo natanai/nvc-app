@@ -1,4 +1,4 @@
-name: Bedrock Needs selector finalization runner
+name: Bedrock strategy selector finalization runner
 
 on:
   push:
@@ -24,11 +24,11 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Apply canonical Needs selector repair
+      - name: Apply canonical strategy selector and desktop-layout repair
         shell: bash
         run: |
-          node .github/scripts/bedrock-needs-selector-finalize.mjs
-          rm .github/scripts/bedrock-needs-selector-finalize.mjs
+          node .github/scripts/bedrock-strategy-desktop-finalize.mjs
+          rm .github/scripts/bedrock-strategy-desktop-finalize.mjs
           rm .github/workflows/bedrock-needs-selector-finalization-runner.yml
           npm ci --ignore-scripts
           node --check assets/js/catalog-multiselect.js
@@ -39,11 +39,11 @@ jobs:
           npm run test:generator-ownership
           npm run test:obsolete
           git diff --check
-      - name: Commit Bedrock selector repair
+      - name: Commit Bedrock strategy repair
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Fix strategy Needs selector overflow contract" || exit 0
+          git commit -m "Refine strategy Needs selector and desktop form layout" || exit 0
           git push origin HEAD:bedrock/production-finalization-v2
