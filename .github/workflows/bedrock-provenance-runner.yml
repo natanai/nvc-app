@@ -1,0 +1,45 @@
+name: Bedrock provenance audit runner
+
+on:
+  pull_request:
+    branches: [inventory-core-overhaul]
+    types: [synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  provenance:
+    if: github.event.pull_request.head.ref == 'bedrock/production-finalization-v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Run provenance audit or finalizer
+        shell: bash
+        run: |
+          if [ -f .github/scripts/bedrock-provenance-finalize.mjs ]; then
+            node .github/scripts/bedrock-provenance-finalize.mjs
+          elif [ -f .github/scripts/bedrock-provenance-audit.mjs ]; then
+            node .github/scripts/bedrock-provenance-audit.mjs
+          else
+            echo "No Bedrock provenance script present; nothing to do."
+          fi
+      - name: Commit finalized Bedrock changes when present
+        shell: bash
+        run: |
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No generated provenance changes to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Canonicalize Bedrock runtime provenance"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
