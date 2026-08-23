@@ -11,6 +11,7 @@ test('Observations has one route-specific presentation owner', async () => {
   const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
   const guide = await fs.readFile(path.join(root, 'scripts/observation-guide.mjs'), 'utf8');
+  const navPrepaint = await fs.readFile(path.join(root, 'scripts/nav-prepaint.mjs'), 'utf8');
 
   const routeLink = '<link rel="stylesheet" href="../styles/observations.css" />';
   assert.ok(html.includes(routeLink));
@@ -20,6 +21,9 @@ test('Observations has one route-specific presentation owner', async () => {
   assert.ok(!css.includes('!important'));
   assert.ok(!guide.includes('observationsCriticalCssPath'));
   assert.ok(guide.includes('OBSERVATIONS_STYLESHEET_LINK'));
+  assert.ok(guide.includes('navVisibilityBootstrapScript()'));
+  assert.ok(html.includes('<!-- shared-nav-visibility:start -->'));
+  assert.ok(navPrepaint.includes('export const navVisibilityBootstrapScript'));
   await assert.rejects(fs.access(path.join(root, 'styles/observations-critical.css')), { code: 'ENOENT' });
   await assert.rejects(fs.access(path.join(root, 'styles/observations-mobile.css')), { code: 'ENOENT' });
 });
@@ -94,6 +98,8 @@ test('Desktop results use the full editor width and keep completed actions quiet
 });
 
 test('Journal conversion prefills before opening without a fixed-delay retry', async () => {
+  const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
   const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
 
   const moduleReady = editor.indexOf("await import('./journal/module.js');");
@@ -104,5 +110,14 @@ test('Journal conversion prefills before opening without a fixed-delay retry', a
   assert.ok(editor.includes('journalButton.click();'));
   assert.ok(editor.includes("notesField.dispatchEvent(new Event('input', { bubbles: true }));"));
   assert.ok(editor.includes("convertButton.textContent = 'Preparing journal…';"));
+  assert.ok(editor.includes("convertButton.textContent = 'Open in Journal';"));
   assert.ok(!editor.includes('}, 200);'));
+
+  assert.ok(html.includes('id="observation-journal-handoff"'));
+  assert.ok(html.includes('Bring this observation into Journal'));
+  assert.ok(html.includes('Journal will open with your observation already filled in.'));
+  assert.ok(css.includes('.observation-editor__journal-handoff'));
+  assert.ok(css.includes('.observation-editor__journal-handoff[hidden]'));
+  assert.ok(css.includes('background: color-mix(in srgb, var(--plum) 82%, var(--ink) 18%);'));
+  assert.ok(!css.includes('.observation-editor__next-link--cta::after'));
 });

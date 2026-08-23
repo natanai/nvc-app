@@ -1907,14 +1907,15 @@ function handleSubmit() {
 
 function renderJournalConversion() {
   const convertButton = document.getElementById('observation-journal-convert');
-  if (!convertButton) {
+  const handoff = document.getElementById('observation-journal-handoff');
+  if (!convertButton || !handoff) {
     return;
   }
   const hasSubmission = Boolean((state.lastSubmitted || '').trim());
   const isReady = hasSubmission && state.validityStatus === 'valid';
-  convertButton.hidden = !isReady;
+  handoff.hidden = !isReady;
+  handoff.ariaHidden = isReady ? 'false' : 'true';
   convertButton.tabIndex = isReady ? 0 : -1;
-  convertButton.ariaHidden = isReady ? 'false' : 'true';
   convertButton.disabled = !isReady;
 }
 
@@ -1952,7 +1953,7 @@ async function convertObservationToJournal() {
     }
     setValidityStatus('error', 'Journal unavailable. Refresh and try again.');
   } finally {
-    convertButton.textContent = 'Convert into journal entry';
+    convertButton.textContent = 'Open in Journal';
     convertButton.disabled = false;
   }
 }

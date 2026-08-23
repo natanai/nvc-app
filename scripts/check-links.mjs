@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const DATA_PATH = join(ROOT, 'data', 'Needs.csv');
 const SUPPRESSIONS_PATH = join(ROOT, 'scripts', 'link-suppressions.json');
 const REPORT_ONLY = ['1', 'true', 'yes'].includes(

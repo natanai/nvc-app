@@ -762,19 +762,10 @@
   .observation-editor__status {
     display: grid;
     gap: 0.5rem;
-    flex: 1 1 auto;
-    min-width: min(100%, 18rem);
-    margin-left: auto;
-  }
-
-  @media (min-width: 720px) {
-    .observation-editor__status {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 1.25rem;
-      min-width: 0;
-    }
+    flex: 1 1 100%;
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
   }
 
   .observation-editor__status--inline {
@@ -1381,12 +1372,9 @@
   }
 
   .observation-editor__footer {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid color-mix(in srgb, var(--outline) 14%, transparent);
+    display: block;
+    padding-top: 0;
+    border-top: 0;
   }
 
   .observation-editor__actions {
@@ -1450,6 +1438,68 @@
   .observation-editor__next-link:focus-visible {
     background: color-mix(in srgb, var(--sky) 18%, #ffffff 82%);
     border-color: color-mix(in srgb, var(--sky) 30%, transparent);
+  }
+
+  .observation-editor__journal-handoff {
+    width: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid color-mix(in srgb, var(--mint) 34%, var(--obs-group-border));
+    border-radius: var(--radius-2xl);
+    background: color-mix(in srgb, #ffffff 82%, var(--mint) 18%);
+  }
+
+  .observation-editor__journal-handoff[hidden] {
+    display: none;
+  }
+
+  .observation-editor__journal-handoff-copy {
+    min-width: 0;
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .observation-editor__journal-handoff-eyebrow {
+    color: var(--obs-secondary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.075em;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .observation-editor__journal-handoff-title {
+    color: var(--ink);
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  .observation-editor__journal-handoff-description {
+    color: var(--obs-secondary);
+    font-size: 0.84rem;
+    line-height: 1.4;
+  }
+
+  .observation-editor__next-link--cta {
+    justify-content: center;
+    min-height: 48px;
+    padding: 0.62rem 0.9rem;
+    border-color: color-mix(in srgb, var(--plum) 70%, var(--outline) 30%);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--plum) 82%, var(--ink) 18%);
+    color: #ffffff;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  .observation-editor__next-link--cta:hover,
+  .observation-editor__next-link--cta:focus-visible {
+    border-color: var(--outline);
+    background: color-mix(in srgb, var(--plum) 72%, var(--ink) 28%);
+    color: #ffffff;
   }
 
   .observation-editor__match-summary-row {
@@ -1562,6 +1612,37 @@
 
   .observation-editor__status-indicator--validity[data-state='valid'] {
     color: color-mix(in srgb, var(--mint) 64%, var(--outline) 30%);
+  }
+
+  .observations-page #observation-validity-container[data-state='idle'],
+  .observations-page #observation-validity-container[data-state='pending'],
+  .observations-page #observation-validity-container[data-state='valid'] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .observations-page #observation-validity-container[data-state='invalid'],
+  .observations-page #observation-validity-container[data-state='error'] {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.52rem 0.68rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    border: 1px solid color-mix(in srgb, var(--rose) 42%, var(--obs-group-border));
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, #ffffff 84%, var(--rose) 16%);
+    font-size: 0.8rem;
+    line-height: 1.35;
   }
 
   .observation-suggestions {
@@ -3498,54 +3579,19 @@
     gap: 0.5rem;
   }
 
-  #main.observations-page #observation-validity-container[data-state='idle'],
-  #main.observations-page #observation-validity-container[data-state='pending'],
-  #main.observations-page #observation-validity-container[data-state='valid'] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  #main.observations-page #observation-validity-container[data-state='invalid'],
-  #main.observations-page #observation-validity-container[data-state='error'] {
-    padding: 0.52rem 0.68rem;
-    border: 1px solid color-mix(in srgb, var(--rose) 42%, var(--obs-group-border));
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, #ffffff 84%, var(--rose) 16%);
-    font-size: 0.8rem;
-    line-height: 1.35;
+  #main.observations-page .observation-editor__journal-handoff {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.72rem;
+    padding: 0.78rem;
+    border-radius: var(--radius-xl);
+    box-shadow: none;
   }
 
   #main.observations-page .observation-editor__next-link--cta {
     width: 100%;
     min-height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.68rem 0.76rem;
-    border: 1px solid var(--obs-group-border);
-    border-radius: var(--radius-xl);
-    background: var(--obs-group-bg);
-    box-shadow: none;
-    color: var(--ink);
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  #main.observations-page .observation-editor__next-link--cta::after {
-    content: '›';
-    font-size: 1.35rem;
-    font-weight: 500;
-    line-height: 1;
-    color: var(--obs-secondary);
+    white-space: normal;
   }
 
   #main.observations-page .observation-info-dialog {

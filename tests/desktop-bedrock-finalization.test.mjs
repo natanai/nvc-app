@@ -16,11 +16,11 @@ test('desktop Journal preserves core Patterns-before-Backup hierarchy', async ()
 });
 
 test('magnet persistence separates mobile and desktop profile keys', async () => {
-  const [build, magnets, inventory] = await Promise.all([load('scripts/build-pages.mjs'), load('scripts/magnets.js'), load('scripts/inventory.js')]);
+  const [navPrepaint, magnets, inventory] = await Promise.all([load('scripts/nav-prepaint.mjs'), load('scripts/magnets.js'), load('scripts/inventory.js')]);
   assert.ok(magnets.includes("RESPONSIVE_LAYOUT_MIGRATION_SUFFIX = '@responsive-v1'"));
   assert.ok(magnets.includes('persistenceKey: resolveResponsiveStorageKey(resolvedStorageKey)'));
-  assert.ok(build.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
-  assert.ok(build.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
+  assert.ok(navPrepaint.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
+  assert.ok(navPrepaint.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
   assert.ok(inventory.includes("if (key.startsWith('magnetPositions:'))"));
 });
 

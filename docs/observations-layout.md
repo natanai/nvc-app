@@ -4,7 +4,7 @@
 
 - `styles/observations.css` is the single route-specific presentation owner for `/observations/` on desktop and phone.
 - Phone presentation lives in the one `@media (max-width: 640px)` block in that file. The former route-critical and separate phone stylesheets are retired.
-- `scripts/observation-guide.mjs` keeps the shared navigation critical region navigation-only and ensures the route stylesheet is parser-discovered after `styles.css`.
+- `scripts/observation-guide.mjs` keeps the shared navigation critical region navigation-only, installs the shared visibility and responsive-position prepaint from `scripts/nav-prepaint.mjs`, and ensures the route stylesheet is parser-discovered after `styles.css`.
 - Shared navigation, Journal overlays, fonts, and other cross-route primitives keep their existing shared owners. Their presence is not a second Observations presentation owner.
 
 ## Primary flow
@@ -19,7 +19,7 @@ Before loading, the result heading, panels, and exact/nearby provenance are abse
 
 Observations follows `docs/native-app-visual-language.md`. Quick Check uses an inset grouped list. Example, Observation recipe, Why these matches, Why try this, Full guide & research, and guide subpanels share the grouped-row/disclosure grammar. Closed disclosures use a right chevron; open disclosures rotate it downward. A quiet secondary label identifies each row’s function—such as match rationale, writing example, step-by-step prompts, purpose, or detailed reference—without inventing a different affordance for each one. Result panels use one neutral grouped surface rather than independent yellow and green card treatments. Desktop results use the full editor width rather than nesting a two-column result grid inside the former left editor column.
 
-Journal conversion loads the shared Journal form module before activating the existing Journal opener. The form is created, prefilled with the submitted observation in the same browser task, and therefore paints already populated; a fixed-delay post-open retry is not an accepted handoff mechanism.
+Journal conversion is a next-step action, not a disclosure. Once a valid result is loaded, one tinted grouped handoff surface explains that Journal will open with the observation already filled in and presents a distinct **Open in Journal** button without a disclosure chevron. The action loads the shared Journal form module before activating the existing Journal opener. The form is created, prefilled with the submitted observation in the same browser task, and therefore paints already populated; a fixed-delay post-open retry is not an accepted handoff mechanism.
 
 The ordinary validity messages “Ready for matches,” pending, and valid remain available to assistive technology without occupying another visual card. Invalid and error guidance stays visible.
 

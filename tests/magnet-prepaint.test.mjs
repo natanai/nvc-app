@@ -16,7 +16,9 @@ const HUBS = [
 
 test('navigation alone keeps the lightweight saved-layout prepaint path', async () => {
   const [compiler, prepaint] = await Promise.all([read('scripts/build-pages.mjs'), read('scripts/nav-prepaint.mjs')]);
-  assert.ok(compiler.includes("import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } from './nav-prepaint.mjs';"));
+  assert.ok(compiler.includes("from './nav-prepaint.mjs';"));
+  assert.ok(compiler.includes('magnetPrefillScript'));
+  assert.ok(compiler.includes('navVisibilityBootstrapScript'));
   assert.ok(prepaint.includes('export const magnetPrefillScript = (storageKey) => String.raw`'));
   assert.ok(compiler.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!compiler.includes("magnetPrefillScript(type + '-hub-v4'"));

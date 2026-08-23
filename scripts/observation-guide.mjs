@@ -1,7 +1,11 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } from './nav-prepaint.mjs';
+import {
+  NAV_MAGNET_STORAGE_KEY,
+  magnetPrefillScript,
+  navVisibilityBootstrapScript,
+} from './nav-prepaint.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -12,6 +16,8 @@ const SHARED_NAV_CRITICAL_START = '<!-- shared-nav-critical:start -->';
 const SHARED_NAV_CRITICAL_END = '<!-- shared-nav-critical:end -->';
 const SHARED_NAV_PREFILL_START = '<!-- shared-nav-prefill:start -->';
 const SHARED_NAV_PREFILL_END = '<!-- shared-nav-prefill:end -->';
+const SHARED_NAV_VISIBILITY_START = '<!-- shared-nav-visibility:start -->';
+const SHARED_NAV_VISIBILITY_END = '<!-- shared-nav-visibility:end -->';
 const OBSERVATIONS_STYLESHEET_LINK = '    <link rel="stylesheet" href="../styles/observations.css" />';
 
 const START_MARKER = '<!-- observation-guide:start -->';
@@ -359,6 +365,13 @@ export function updateObservationGuidePage() {
     }
     updated = updated.replace(sharedStylesheetLink, `${sharedStylesheetLink}\n${OBSERVATIONS_STYLESHEET_LINK}`);
   }
+  updated = replaceOwnedRegion(
+    updated,
+    SHARED_NAV_VISIBILITY_START,
+    SHARED_NAV_VISIBILITY_END,
+    navVisibilityBootstrapScript(),
+    'shared navigation visibility prepaint',
+  );
   updated = replaceOwnedRegion(
     updated,
     SHARED_NAV_PREFILL_START,

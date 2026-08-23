@@ -13,9 +13,9 @@
     "data/reverse-inference.json": "47ef4b4d9fb009e8a1064797cdab9068cdcda050b295337afe8a08ee42b620cc",
     "data/observation_taxonomy.json": "ea730a89bfe2bee86f88637c068ac134d6b3b23cca96fa92eae6267e6b1001a1",
     "data/observation_lexicon.json": "b4a346e3edc52e1b2fed91a52331434b4f8cb629ea028fc95f04b92131001bb4",
-    "data/observation_need_templates.json": "2387f913d2142e175c3a759bf3e6e70023c5c6064bcfcbd36fa4173c34f6fa60",
-    "data/observation_module_blueprints.json": "871bd98a8fcbd54e7436939cde9d2f85dce05b655fa9365e9048ae9ee6bb12f5",
-    "data/observation_detector_stats.json": "126cc70b475c78b0f2bdaa99c26fb199a1e71e87eb60eae891d4d7c94323f94c",
+    "data/observation_need_templates.json": "832eb25553bf726de8dd74176d2595408ef5469634f21a0675897cf8d1d406de",
+    "data/observation_module_blueprints.json": "4375d543c379cfcc0d930705a6d89a4f203cc065a4d2cf50de3ff1c3e782ba62",
+    "data/observation_detector_stats.json": "264854b648751fa02eed882f460bb17c61a195a67eb14298171fc5de6df45efa",
     "data/observation-guide.json": "48b85776fd064e16850782329d95908568eaa1c7fe78f915f836d6bd84ac798b"
   }
 }

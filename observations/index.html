@@ -879,7 +879,8 @@ button.site-nav__magnet {
         </div>
       </nav>
 
-      <script>
+      <!-- shared-nav-visibility:start -->
+<script>
         (function() {
           if (typeof window === 'undefined' || typeof document === 'undefined') {
             return;
@@ -1118,6 +1119,7 @@ button.site-nav__magnet {
           }
         })();
       </script>
+<!-- shared-nav-visibility:end -->
 
       <!-- shared-nav-prefill:start -->
 <script>
@@ -1611,15 +1613,33 @@ button.site-nav__magnet {
                     Ready for matches.
                   </span>
                 </div>
-                <button
-                  id="observation-journal-convert"
-                  class="observation-editor__next-link observation-editor__next-link--cta"
-                  type="button"
+                <section
+                  id="observation-journal-handoff"
+                  class="observation-editor__journal-handoff"
+                  aria-labelledby="observation-journal-handoff-title"
                   aria-hidden="true"
                   hidden
                 >
-                  Convert into journal entry
-                </button>
+                  <div class="observation-editor__journal-handoff-copy">
+                    <span class="observation-editor__journal-handoff-eyebrow">Continue your reflection</span>
+                    <strong
+                      id="observation-journal-handoff-title"
+                      class="observation-editor__journal-handoff-title"
+                    >
+                      Bring this observation into Journal
+                    </strong>
+                    <span class="observation-editor__journal-handoff-description">
+                      Journal will open with your observation already filled in.
+                    </span>
+                  </div>
+                  <button
+                    id="observation-journal-convert"
+                    class="observation-editor__next-link observation-editor__next-link--cta"
+                    type="button"
+                  >
+                    Open in Journal
+                  </button>
+                </section>
               </div>
             </footer>
           </div>

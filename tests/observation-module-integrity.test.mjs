@@ -7,10 +7,17 @@ import {
   compileObservationCueLibrary,
   parseObservationCueCSV,
   parseObservationCueModules,
+  splitCuePatternColumn,
 } from '../lib/observationCueData.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
+
+assert.deepEqual(
+  splitCuePatternColumn(String.raw`\\b(?:one\|two)\\b|plain`),
+  [String.raw`\b(?:one|two)\b`, 'plain'],
+  'escaped regex alternation pipes must survive the generated CSV delimiter decoder',
+);
 
 async function loadLibrary() {
   const csvPath = path.join(rootDir, 'data', 'observation_cues.csv');
@@ -19,9 +26,35 @@ async function loadLibrary() {
     fs.readFile(csvPath, 'utf8'),
     fs.readFile(modulesPath, 'utf8'),
   ]);
-  const cues = parseObservationCueCSV(csvText);
-  const moduleDefs = parseObservationCueModules(modulesText);
-  return compileObservationCueLibrary({ cues, modules: moduleDefs });
+  const invalidPatternWarnings = [];
+  const originalWarn = console.warn;
+  console.warn = (...args) => {
+    if (String(args[0] || '').startsWith('Skipping invalid observation')) {
+      invalidPatternWarnings.push(args.map(String).join(' '));
+      return;
+    }
+    originalWarn(...args);
+  };
+
+  try {
+    const cues = parseObservationCueCSV(csvText);
+    const moduleDefs = parseObservationCueModules(modulesText);
+    const library = compileObservationCueLibrary({ cues, modules: moduleDefs });
+    assert.deepEqual(
+      invalidPatternWarnings,
+      [],
+      'generated observation cue patterns must all compile as complete regex expressions',
+    );
+    return library;
+  } finally {
+    console.warn = originalWarn;
+  }
+}
+
+async function loadNeedTemplates() {
+  const templatePath = path.join(rootDir, 'data', 'observation_need_templates.json');
+  const text = await fs.readFile(templatePath, 'utf8');
+  return JSON.parse(text);
 }
 
 async function loadTaxonomy() {
@@ -89,14 +122,26 @@ function assertVocabulary({
 }
 
 async function run() {
-  const [library, blueprintModules, taxonomy, feelingSlugs, needSlugs] = await Promise.all([
+  const [library, blueprintModules, needTemplates, taxonomy, feelingSlugs, needSlugs] = await Promise.all([
     loadLibrary(),
     loadBlueprint(),
+    loadNeedTemplates(),
     loadTaxonomy(),
     listLandingPageSlugs('feelings'),
     listLandingPageSlugs('needs'),
   ]);
   const { modules, cues } = library;
+
+  Object.entries(needTemplates).forEach(([category, template]) => {
+    (Array.isArray(template?.cues) ? template.cues : []).forEach(cue => {
+      (Array.isArray(cue?.patterns) ? cue.patterns : []).forEach(pattern => {
+        assert.doesNotThrow(
+          () => new RegExp(pattern, 'iu'),
+          `canonical observation template ${category}/${cue?.suffix || '(missing suffix)'} contains a fragmented regex`,
+        );
+      });
+    });
+  });
 
   assert.ok(modules.length > 0, 'Expected compiled modules');
   assert.ok(cues.length > 0, 'Expected cue rows');

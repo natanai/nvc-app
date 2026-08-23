@@ -26,7 +26,8 @@ test('Bedrock preserves persisted presentation-state namespaces and responsive f
   assert.ok(magnetPhysics.includes('export function loadPositions('));
   assert.ok(magnetPhysics.includes('export function savePositions('));
 
-  assert.ok(buildPages.includes("import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript } from './nav-prepaint.mjs';"));
+  assert.ok(buildPages.includes("from './nav-prepaint.mjs';"));
+  assert.ok(buildPages.includes('navVisibilityBootstrapScript'));
   assert.ok(navPrepaint.includes("export const NAV_MAGNET_STORAGE_KEY = 'site-nav';"));
   assert.ok(navPrepaint.includes('export const magnetPrefillScript = (storageKey) => String.raw`'));
   assert.ok(navPrepaint.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';"));
@@ -35,7 +36,7 @@ test('Bedrock preserves persisted presentation-state namespaces and responsive f
   assert.ok(navPrepaint.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
   assert.ok(buildPages.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!buildPages.includes("magnetPrefillScript(type + '-hub-v4'"));
-  assert.ok(buildPages.includes("var storageKey = 'nvcApp.navSettings';"));
+  assert.ok(navPrepaint.includes("var storageKey = 'nvcApp.navSettings';"));
 
   assert.ok(magnetRuntime.includes("const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';"));
   assert.ok(magnetRuntime.includes("const RESPONSIVE_LAYOUT_MIGRATION_SUFFIX = '@responsive-v1';"));
