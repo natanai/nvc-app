@@ -1302,8 +1302,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Long or short it doesn&#39;t matter. Drive around the block in silence or with music. Maybe plan a trip somewhere.</p>
                         <p class="strategy-card__meta">Nat • Missouri</p>
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1388,8 +1389,11 @@ button.site-nav__magnet {
             </select>
           </div>
         </div>
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Save to device</button>
+            
+            <input type="hidden" name="save-target" value="device" />
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+              <button type="submit" class="strategy-form__submit strategy-form__submit--secondary strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
             </div>
             
           </form>

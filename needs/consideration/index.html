@@ -1302,8 +1302,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Trust us, they want to hear from you &lt;3</p>
                         <p class="strategy-card__meta">Nat • Missouri</p>
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1313,8 +1314,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Tend to the life in others. Looks for ways that seem like trustworthy strategies to truly make life more wonderful for others. Sometimes we find that serving life in others turns out to serve life in us as well. Be careful to truly hear and identify what someone is needing before you try to do something you think they&#39;d enjoy as it can turn out to be especially discouraging to have tried to make life wonderful for someone only to realize they were needing something else altogether. Make space for them to share their needs and make a clear request or seek out volunteer work that are confident really is doing good work.</p>
                         <p class="strategy-card__meta">Nat • Missouri</p>
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1324,8 +1326,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Say: “Could we take a 5-minute pause and return at :15?”</p>
                         
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1335,8 +1338,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Say: “Could we move this to text so I can think?”</p>
                         
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1346,8 +1350,9 @@ button.site-nav__magnet {
                         <p class="strategy-card__description">Take three breaths before sending your next message.</p>
                         
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   
@@ -1432,8 +1437,11 @@ button.site-nav__magnet {
             </select>
           </div>
         </div>
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">Save to device</button>
+            
+            <input type="hidden" name="save-target" value="device" />
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+              <button type="submit" class="strategy-form__submit strategy-form__submit--secondary strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
             </div>
             
           </form>

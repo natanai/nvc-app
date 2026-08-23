@@ -186,15 +186,22 @@ test('From Nat sharing is global and reuses the canonical Inventory sharing impl
   assert.ok(!home.includes('id="inventory-list"'), 'regression fixture should prove personal sharing works without Inventory page DOM');
 });
 
-test('Inventory keeps system management out of its primary workspace', async () => {
+test('Inventory compiler omits system-management chrome instead of deleting it after paint', async () => {
   const controller = await fs.readFile(path.join(root, 'scripts/inventory-core-shell.js'), 'utf8');
+  const pages = await fs.readFile(path.join(root, 'scripts/build-pages.mjs'), 'utf8');
+  const inventoryHtml = await fs.readFile(path.join(root, 'inventory/index.html'), 'utf8');
   const css = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
 
-  assert.ok(controller.includes("document.querySelector('.inventory-bluesky-panel')?.remove()"), 'old Bluesky panel should leave the Inventory workspace');
-  assert.ok(controller.includes("document.querySelector('.inventory-main > .inventory-actions')?.remove()"), 'old backup/import section should leave the Inventory workspace');
-  assert.ok(controller.includes("document.querySelector('.inventory-header .inventory-shared-button')?.remove()"), 'Shared strategies should not compete with Inventory in its header');
-
-  assert.ok(css.includes('.inventory-page .inventory-main > .inventory-actions'), 'system controls should be hidden before JS to prevent flash');
+  assert.ok(!controller.includes('prepareInventoryExperience'), 'shared runtime must not normalize the deterministic Inventory shell');
+  assert.ok(!controller.includes("document.querySelector('.inventory-bluesky-panel')?.remove()"));
+  assert.ok(!controller.includes("document.querySelector('.inventory-main > .inventory-actions')?.remove()"));
+  assert.ok(!controller.includes("document.querySelector('.inventory-header .inventory-shared-button')?.remove()"));
+  assert.ok(!pages.includes('<details class=\"inventory-bluesky-panel\">'), 'compiler must not emit the retired Bluesky panel');
+  assert.ok(!pages.includes('<a class=\"inventory-shared-button\"'), 'compiler must not emit retired Shared chrome');
+  assert.ok(!inventoryHtml.includes('class=\"inventory-bluesky-panel\"'));
+  assert.ok(!inventoryHtml.includes('class=\"inventory-actions inventory-actions--collapsible\"'));
+  assert.ok(inventoryHtml.includes('class=\"inventory-message inventory-page__status\" data-inventory-message'), 'status belongs directly in the final Inventory shell');
+  assert.ok(!css.includes('.inventory-page .inventory-main > .inventory-actions'), 'CSS must not hide markup that should not exist');
   assert.ok(css.includes('inset: auto 0 0 0;'), 'mobile Menu should present as a lightweight bottom sheet');
 });
 

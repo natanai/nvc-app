@@ -1256,6 +1256,7 @@ function renderStrategyForm({
   includeVisibilitySelect = false,
   notice = '',
   includeLocalStorageReminder = false,
+  includeSaveTargets = false,
 }) {
   const needOptions = data.needs
     .map(
@@ -1336,6 +1337,18 @@ function renderStrategyForm({
             ${localStorageReminderHtml}`
     : '';
 
+  const saveActions = includeSaveTargets
+    ? `
+            <input type="hidden" name="save-target" value="device" />
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+              <button type="submit" class="strategy-form__submit strategy-form__submit--secondary strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
+            </div>`
+    : `
+            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
+              <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
+            </div>`;
+
   return `
       <div class="strategy-form__container" data-strategy-form-container>
         <div class="strategy-card strategy-card--form">
@@ -1355,9 +1368,7 @@ function renderStrategyForm({
             ${needField}
             ${contactFields}
             ${visibilityField}
-            <div class="strategy-card__actions strategy-card__actions--stacked strategy-form__actions">
-              <button type="submit" class="strategy-form__submit strategy-card__save">${escapeHtml(submitLabel)}</button>
-            </div>
+            ${saveActions}
             ${localStorageNote}
           </form>
         </div>
@@ -1390,6 +1401,7 @@ function buildPersonalStrategyFormOptions({
     includeMessage: true,
     notice,
     includeLocalStorageReminder: false,
+    includeSaveTargets: true,
   };
 }
 
@@ -1911,6 +1923,7 @@ function renderFeeling(item) {
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
     description: item.description,
+    headExtras: '    <link rel="stylesheet" href="../../styles/feeling-inference-mobile.css" />',
   });
 
   writePage(`feelings/${item.slug}/index.html`, html);
@@ -1982,8 +1995,9 @@ function renderNeed(item, allStrategies) {
                         <p class="strategy-card__description">${escapeHtml(description)}</p>
                         ${contributorHtml}
                       </div>
-                      <div class="strategy-card__actions strategy-card__actions--stacked">
-                        <button type="button" class="strategy-card__save">Save to device</button>
+                      <div class="strategy-card__actions strategy-card__actions--stacked strategy-card__actions--save-targets">
+                        <button type="button" class="strategy-card__save strategy-card__save--device app-action app-action--primary" data-save-to-device-button="true" data-app-icon="device" aria-label="Save to device" title="Save to device">Device</button>
+                        <button type="button" class="strategy-card__save strategy-card__save--profile app-action app-action--secondary" data-save-to-profile-button="true" data-app-icon="profile" aria-label="Save to profile" aria-disabled="true" title="Sign in to save to profile" disabled>Profile</button>
                       </div>
                     </article>
                   `;
@@ -2016,7 +2030,6 @@ function renderNeed(item, allStrategies) {
         </section>`
     : `<section class="strategy-section" aria-labelledby="strategy-heading">
           <h2 id="strategy-heading" class="section-title">Strategies</h2>
-${strategiesNote}
           <p class="empty-state">Strategies for this need are coming soon.</p>
         </section>`;
 
@@ -2174,10 +2187,7 @@ function renderNeedEvidence(item) {
 
 function renderInventoryPage() {
   const basePath = basePathFromDepth(1);
-  const inventoryFormNotice = buildPersonalStrategyNotice(
-    basePath,
-    'Use the export tools above whenever you would like a backup.'
-  );
+  const inventoryFormNotice = buildPersonalStrategyNotice();
   const personalStrategyForm = renderStrategyForm(
     buildPersonalStrategyFormOptions({
       formId: 'inventory-form',
@@ -2186,205 +2196,8 @@ function renderInventoryPage() {
     })
   );
 
-  const blueskyPanelStyles = `    <style>
-           /* Optional Bluesky sync panel */
-
-      .inventory-bluesky-panel {
-        margin-top: 1.75rem;
-        border: 3px solid var(--outline);
-        border-radius: var(--radius-xl);
-        background: color-mix(in srgb, var(--lavender) 65%, #ffffff 35%);
-        box-shadow: 0 14px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-        overflow: hidden;
-      }
-
-      .inventory-bluesky-panel__summary {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 0.9rem;
-        padding: 1rem 1.1rem;
-        cursor: pointer;
-        list-style: none;
-      }
-
-      .inventory-bluesky-panel__summary::-webkit-details-marker {
-        display: none;
-      }
-
-      .inventory-bluesky-panel__titles {
-        display: grid;
-        gap: 0.15rem;
-      }
-
-      .inventory-bluesky-panel__title {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: 1.05rem;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-      }
-
-      .inventory-bluesky-panel__subtitle {
-        margin: 0;
-        font-size: 0.9rem;
-        color: var(--ink-soft);
-        max-width: 32rem;
-      }
-
-      .inventory-bluesky-panel__chevron {
-        flex-shrink: 0;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 999px;
-        border: 2px solid var(--outline);
-        background: rgba(255, 255, 255, 0.9);
-        font-size: 0.9rem;
-        transform: rotate(90deg);
-        transition: transform 0.18s ease, background 0.18s ease;
-      }
-
-      .inventory-bluesky-panel[open] .inventory-bluesky-panel__chevron {
-        transform: rotate(270deg);
-        background: color-mix(in srgb, var(--sky) 45%, #ffffff 55%);
-      }
-
-      .inventory-bluesky-panel__content {
-        padding: 1rem 1.1rem 1.1rem;
-        border-top: 3px solid var(--outline);
-        background: color-mix(in srgb, #ffffff 82%, var(--lavender) 18%);
-        display: grid;
-        gap: 1rem;
-        max-width: 100%;
-        border-bottom-left-radius: var(--radius-xl);
-        border-bottom-right-radius: var(--radius-xl);
-      }
-
-      .inventory-bluesky-panel__content p,
-      .inventory-bluesky-panel__content li {
-        margin: 0.25rem 0;
-        font-size: 0.9rem;
-        line-height: 1.5;
-        color: var(--ink-soft);
-        max-width: 100%;
-        word-break: break-word;
-        overflow-wrap: anywhere;
-      }
-
-      .inventory-bluesky-panel__content ul {
-        padding-left: 1.15rem;
-      }
-
-      /* Card-like sections inside the panel */
-
-      .inventory-auth-panel,
-      .inventory-backend-sync {
-        border-radius: var(--radius-lg);
-        border: 2px solid color-mix(in srgb, var(--outline) 55%, transparent);
-        background: rgba(255, 255, 255, 0.85);
-        padding: 0.9rem 0.9rem 0.95rem;
-        display: grid;
-        gap: 0.55rem;
-      }
-
-      .inventory-auth-panel h2,
-      .inventory-backend-sync__heading {
-        margin: 0;
-        font-family: var(--font-display);
-        font-size: 0.9rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .inventory-auth-note {
-        font-size: 0.85rem;
-        color: var(--ink-soft);
-      }
-
-      .inventory-auth-note ul {
-        margin: 0.4rem 0 0;
-        padding-left: 1.15rem;
-      }
-
-      .inventory-auth-warning {
-        margin: 0.35rem 0 0;
-        padding: 0.5rem 0.6rem;
-        border-radius: var(--radius-md);
-        border: 2px dashed color-mix(in srgb, var(--outline) 60%, transparent);
-        background: color-mix(in srgb, #ffffff 82%, var(--sky) 18%);
-        font-size: 0.8rem;
-        color: color-mix(in srgb, var(--ink) 80%, #000 20%);
-      }
-
-      .inventory-auth-panel__field {
-        flex: 1 1 12rem;
-        min-width: 0;
-      }
-
-      .inventory-auth-panel__field label {
-        display: block;
-        font-size: 0.8rem;
-        font-weight: 600;
-        margin-bottom: 0.2rem;
-      }
-
-      .inventory-auth-panel__field input[type='text'] {
-        width: 100%;
-        padding: 0.45rem 0.75rem;
-        border-radius: var(--radius-pill);
-        border: 2px solid color-mix(in srgb, var(--outline) 50%, transparent);
-        background: rgba(255, 255, 255, 0.95);
-        font: inherit;
-        color: inherit;
-      }
-
-      .inventory-auth-panel__field input[type='text']:focus-visible {
-        outline: 3px solid color-mix(in srgb, var(--sky) 70%, transparent);
-        outline-offset: 1px;
-      }
-
-      /* Backend save/load + feed sections */
-
-      .inventory-backend-sync__buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 0.35rem;
-      }
-
-      .inventory-backend-sync__status {
-        font-size: 0.8rem;
-        color: var(--ink-soft);
-        min-height: 1.1em;
-        margin-top: 0.25rem;
-      }
-
-      /* Small non-phone screens. Inventory phone layout is owned by inventory-mobile.css. */
-
-      @media (min-width: 641px) and (max-width: 720px) {
-        .inventory-bluesky-panel__summary {
-          align-items: center;
-        }
-
-        .inventory-bluesky-panel__title {
-          font-size: 0.98rem;
-        }
-
-        .inventory-bluesky-panel__subtitle {
-          font-size: 0.85rem;
-        }
-
-        .inventory-auth-panel,
-        .inventory-backend-sync {
-          padding: 0.85rem 0.8rem 0.9rem;
-        }
-      }
-
-
-      /* Inventory UX first pass v2 — inline pre-paint base styles */
+  const inventoryPageStyles = `    <style>
+           /* Inventory UX first pass v2 — inline pre-paint base styles */
       .inventory-header {
         gap: clamp(0.85rem, 2vw, 1.25rem);
       }
@@ -2404,48 +2217,18 @@ function renderInventoryPage() {
         line-height: 1.45;
       }
 
-      /* Journal stays immediately available without competing with the
-         Inventory's primary task. */
-      .inventory-journal-button {
-        min-height: 44px;
-        padding: 0.42rem 0.72rem;
-        border-width: 2px;
-        border-radius: var(--radius-pill);
-        background: color-mix(in srgb, var(--sky) 32%, #ffffff 68%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-        font-weight: 700;
-      }
-
-      .inventory-journal-button:hover,
-      .inventory-journal-button:focus-visible {
-        transform: translateY(-1px);
-        box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-      }
-
-      .inventory-journal-button__icon {
-        width: 1.35rem;
-        height: 1.35rem;
-      }
-
-      .inventory-journal-button__label {
-        font-size: 0.82rem;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-      }
-
       /* One task hierarchy: add is primary; saved/community destinations are
          quieter utilities. */
       .inventory-header__quick-actions {
         display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.9fr);
+        grid-template-columns: minmax(0, 18rem);
         gap: clamp(0.55rem, 1.5vw, 0.8rem);
         margin: 0.15rem 0 0;
         align-items: stretch;
         width: 100%;
       }
 
-      .inventory-header__quick-actions .strategy-quick-actions__link,
-      .inventory-header__quick-actions .inventory-shared-button {
+      .inventory-header__quick-actions .strategy-quick-actions__link {
         width: 100%;
         min-height: 52px;
         margin: 0;
@@ -2468,90 +2251,6 @@ function renderInventoryPage() {
         box-shadow: 0 11px 0 color-mix(in srgb, var(--outline) 40%, transparent);
       }
 
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--sky) 46%, #ffffff 54%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 20%, transparent);
-        font-size: 0.9rem;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button {
-        border-width: 2px;
-        background: color-mix(in srgb, var(--lavender) 55%, #ffffff 45%);
-        box-shadow: 0 5px 0 color-mix(in srgb, var(--outline) 18%, transparent);
-      }
-
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary:hover,
-      .inventory-header__quick-actions .strategy-quick-actions__link--secondary:focus-visible,
-      .inventory-header__quick-actions .inventory-shared-button:hover,
-      .inventory-header__quick-actions .inventory-shared-button:focus-visible {
-        transform: translateY(-1px);
-        box-shadow: 0 7px 0 color-mix(in srgb, var(--outline) 24%, transparent);
-      }
-
-      .inventory-header__quick-actions .strategy-quick-actions__icon,
-      .inventory-header__quick-actions .inventory-shared-button__icon {
-        flex: 0 0 auto;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__text {
-        gap: 0.05rem;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__eyebrow {
-        font-size: 0.62rem;
-        letter-spacing: 0.08em;
-      }
-
-      .inventory-header__quick-actions .inventory-shared-button__label {
-        font-size: 0.84rem;
-        line-height: 1.2;
-      }
-
-      /* Sync is useful but optional. Give it the visual weight of settings
-         rather than another primary destination. */
-      .inventory-bluesky-panel {
-        margin-top: 0.45rem;
-        border-width: 2px;
-        border-radius: var(--radius-lg);
-        background: color-mix(in srgb, var(--lavender) 45%, #ffffff 55%);
-        box-shadow: 0 6px 0 color-mix(in srgb, var(--outline) 16%, transparent);
-      }
-
-      .inventory-bluesky-panel__summary {
-        gap: 0.7rem;
-        padding: 0.72rem 0.85rem;
-        align-items: center;
-      }
-
-      .inventory-bluesky-panel__titles {
-        gap: 0.08rem;
-      }
-
-      .inventory-bluesky-panel__title {
-        font-size: 0.86rem;
-        letter-spacing: 0.05em;
-      }
-
-      .inventory-bluesky-panel__subtitle {
-        font-size: 0.78rem;
-        line-height: 1.35;
-      }
-
-      .inventory-bluesky-panel__chevron {
-        flex: 0 0 auto;
-      }
-
-      @media (min-width: 641px) and (max-width: 760px) {
-        .inventory-header__quick-actions {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        }
-
-        .inventory-header__quick-actions > .strategy-quick-actions__link:first-child {
-          grid-column: 1 / -1;
-        }
-      }
-
       /* Inventory model prototype v1 — base presentation only. */
       .inventory-main {
         display: flex;
@@ -2564,7 +2263,7 @@ function renderInventoryPage() {
       .inventory-actions { order: 3; }
 
       .inventory-header__quick-actions {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 18rem);
       }
 
       .inventory-view-switch {
@@ -2937,15 +2636,6 @@ function renderInventoryPage() {
           <div class="inventory-header__content">
             <div class="inventory-header__title-row">
               <h1 class="page-title">Strategy inventory</h1>
-              <a class="inventory-journal-button" href="./journal/">
-                <img
-                  src="../icons/journal-32bit.svg"
-                  class="inventory-journal-button__icon"
-                  alt=""
-                  aria-hidden="true"
-                />
-                <span class="inventory-journal-button__label">Journal</span>
-              </a>
             </div>
             <p class="page-description">
               Build a personal library of strategies that help you care for your needs. Browse by need or review everything you have saved.
@@ -2955,151 +2645,13 @@ function renderInventoryPage() {
                 <span class="strategy-quick-actions__icon" aria-hidden="true">+</span>
                 <span>Add strategy</span>
               </a>
-              <a class="inventory-shared-button" href="../feed/">
-                <span class="inventory-shared-button__icon" aria-hidden="true">⇢</span>
-                <span class="inventory-shared-button__text">
-                  <span class="inventory-shared-button__eyebrow">Shared feed</span>
-                  <span class="inventory-shared-button__label">View shared strategies</span>
-                </span>
-              </a>
             </div>
-
-            <details class="inventory-bluesky-panel">
-              <summary class="inventory-bluesky-panel__summary">
-                <div class="inventory-bluesky-panel__titles">
-                  <h2 class="inventory-bluesky-panel__title">Optional Bluesky sync</h2>
-                  <p class="inventory-bluesky-panel__subtitle">
-                    Sign in to unlock profile saves and backend load, or keep everything local.
-                  </p>
-                </div>
-                <span class="inventory-bluesky-panel__chevron" aria-hidden="true">➤</span>
-              </summary>
-
-              <div class="inventory-bluesky-panel__content">
-                <p class="inventory-bluesky-panel__intro">
-                  Use Bluesky sign-in if you want profile save/load. You can still keep everything local using export/import only.
-                </p>
-
-                <!-- OAuth sign-in / sign-out -->
-                <section class="inventory-auth-panel" aria-label="Bluesky sign-in">
-                  <h2 class="inventory-auth-panel__heading">Bluesky sign-in</h2>
-
-                  <p class="inventory-auth-note">
-                    Sign in with your Bluesky account so this browser can prove who you are to the allneeds backend.
-                    After a fresh sign-in, the app loads your backend snapshot once. Then you can save either to device only or to profile (which also syncs backend).
-                  </p>
-
-                  <div class="inventory-auth-panel__field" data-bluesky-handle-field>
-                    <label for="bluesky-handle-input">Bluesky handle (e.g. yourname.bsky.social)</label>
-                    <input id="bluesky-handle-input" type="text" autocomplete="username" />
-                  </div>
-                  <button
-                    id="bluesky-auth-button"
-                    type="button"
-                    class="inventory-button inventory-button--compact"
-                  >
-                    <span class="inventory-button__text">Sign in</span>
-                  </button>
-                  <p id="bluesky-auth-status-text" class="inventory-auth-panel__status-text"></p>
-
-                  <p class="inventory-auth-warning">
-                    We never see your Bluesky password. Authentication happens only on Bluesky’s servers.
-                    You can ignore this sign-in and keep everything local if you prefer.
-                  </p>
-                </section>
-
-                <!-- Optional backend save/load -->
-                <section class="inventory-backend-sync" aria-labelledby="inventory-backend-sync-heading">
-                  <h3 id="inventory-backend-sync-heading" class="inventory-backend-sync__heading">
-                    Optional backend save/load
-                  </h3>
-                  <p>
-                    When you are signed in, these buttons send and retrieve a single JSON snapshot of your inventory
-                    (the same data you can export as a file). Profile saves also trigger backend save automatically, while
-                    device saves remain local-only. Use “Load data from allneeds backend” any time you want to pull the latest snapshot manually.
-                  </p>
-                  <p>
-                    This makes it easier to continue your work on another device, but it also means that snapshot is stored
-                    on the allneeds backend and could be seen by the server operator or exposed in a breach. If that doesn’t
-                    feel right for you, keep using the local export/import buttons instead.
-                  </p>
-
-                  <div class="inventory-backend-sync__buttons">
-                    <button
-                      type="button"
-                      data-backend-save-button
-                      class="inventory-button inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Save current data to allneeds backend</span>
-                    </button>
-                    <button
-                      type="button"
-                      data-backend-load-button
-                      class="inventory-button inventory-button--ghost inventory-button--compact"
-                    >
-                      <span class="inventory-button__text">Load data from allneeds backend</span>
-                    </button>
-                  </div>
-
-                  <div
-                    class="inventory-backend-sync__status"
-                    data-backend-sync-status
-                    aria-live="polite"
-                  ></div>
-                </section>
-
-              </div>
-            </details>
           </div>
         </div>
       </header>
 
       <section class="inventory-main" aria-labelledby="inventory-overview-heading">
-        <details class="inventory-actions inventory-actions--collapsible">
-          <summary class="inventory-disclosure-summary">
-            <span>Backup &amp; restore</span>
-            <span class="inventory-disclosure-summary__glyph" aria-hidden="true">+</span>
-          </summary>
-          <div class="inventory-disclosure-body">
-          <div class="inventory-actions__header">
-            <h2 id="inventory-actions-heading" class="visually-hidden">Backup and restore</h2>
-            <p class="inventory-actions__hint">
-              Export or import a JSON dump of this site's localStorage (inventory, journal, and customizer settings).
-            </p>
-          </div>
-          <div class="inventory-actions__buttons">
-            <button
-              type="button"
-              id="inventory-export"
-              class="inventory-button inventory-button--compact"
-              aria-label="Export localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤓</span>
-              <span class="inventory-button__text">Export localStorage</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-email-personal"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Export personal strategies and email them to Nat"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">✉️</span>
-              <span class="inventory-button__text">email me your strategies pretty please 🙏 - Nat</span>
-            </button>
-            <button
-              type="button"
-              id="inventory-import-trigger"
-              class="inventory-button inventory-button--ghost inventory-button--compact"
-              aria-label="Import localStorage JSON"
-            >
-              <span class="inventory-button__glyph" aria-hidden="true">⤒</span>
-              <span class="inventory-button__text">Import localStorage</span>
-            </button>
-            <input type="file" id="inventory-import" accept="application/json,.json,text/csv,.csv" hidden />
-          </div>
-          <p class="inventory-message" data-inventory-message hidden aria-live="polite"></p>
-          </div>
-        </details>
+        <p class=\"inventory-message inventory-page__status\" data-inventory-message hidden aria-live=\"polite\"></p>
 
         <section class="inventory-overview" aria-label="Strategy inventory views">
         <div class="inventory-view-switch" role="tablist" aria-label="Inventory view">
@@ -3207,7 +2759,7 @@ function renderInventoryPage() {
       { src: 'scripts/inventory-legacy-journal-redirect.js', defer: true, beforeBase: true },
       { src: 'scripts/inventory-bluesky.js?v=2026-02-12', module: true },
     ],
-    headExtras: `${blueskyPanelStyles}\n${inventoryMobileStyles}`,
+    headExtras: `${inventoryPageStyles}\n${inventoryMobileStyles}`,
     main,
     mainClass: 'page inventory-page',
     activeNav: 'inventory',

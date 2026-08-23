@@ -12,34 +12,6 @@ const VISIBILITY_VALUES = ['private', 'followers', 'public'];
 const SAVE_TARGET_DEVICE = 'device';
 const SAVE_TARGET_PROFILE = 'profile';
 
-function applyCompactSaveTargetControls(deviceButton, profileButton) {
-  if (deviceButton) {
-    deviceButton.textContent = 'Device';
-    deviceButton.classList.add('app-action', 'app-action--primary');
-    deviceButton.dataset.appIcon = 'device';
-    deviceButton.setAttribute('aria-label', 'Save to device');
-    deviceButton.setAttribute('title', 'Save to device');
-  }
-
-  if (profileButton) {
-    profileButton.textContent = 'Profile';
-    profileButton.classList.remove(
-      'strategy-form__submit--secondary',
-      'strategy-card__save--device',
-      'app-action--primary',
-    );
-    profileButton.classList.add('app-action', 'app-action--secondary', 'strategy-card__save--profile');
-    profileButton.dataset.appIcon = 'profile';
-    profileButton.setAttribute('aria-label', 'Save to profile');
-    profileButton.setAttribute('title', 'Save to profile');
-  }
-
-  const actionBar = deviceButton?.parentElement;
-  if (actionBar && profileButton?.parentElement === actionBar) {
-    actionBar.classList.add('strategy-card__actions--save-targets');
-  }
-}
-
 function normalizeVisibilityValue(value) {
   try {
     if (window?.NVCInventoryStore?.normalizeVisibility) {
@@ -326,19 +298,6 @@ const NAV_ITEM_DEFINITIONS = [
     label: 'Faux feelings magnet',
     defaultEnabled: false,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-faux-feelings"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--faux-feelings';
-      link.href = `${basePath}faux-feelings/`;
-      link.dataset.magnetId = 'nav-faux-feelings';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Faux feelings';
-      link.appendChild(label);
-      return link;
-    },
   },
   {
     id: 'feelings',
@@ -361,19 +320,6 @@ const NAV_ITEM_DEFINITIONS = [
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-body-cues"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--body-cues';
-      link.href = `${basePath}feelings/body-cues/`;
-      link.dataset.magnetId = 'nav-body-cues';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Body cues';
-      link.appendChild(label);
-      return link;
-    },
   },
   {
     id: 'journalDashboard',
@@ -382,19 +328,6 @@ const NAV_ITEM_DEFINITIONS = [
     defaultEnabled: false,
     isSupplemental: true,
     getElement: (nav) => nav?.querySelector('[data-magnet-id="nav-journal-dashboard"]') || null,
-    createElement: () => {
-      const basePath = typeof state?.basePath === 'string' ? state.basePath : document.body?.dataset?.basePath || '';
-      const link = document.createElement('a');
-      link.className = 'pill magnet site-nav__magnet site-nav__magnet--journal-dashboard';
-      link.href = `${basePath}inventory/journal/`;
-      link.dataset.magnetId = 'nav-journal-dashboard';
-      link.dataset.navDynamic = 'true';
-      const label = document.createElement('span');
-      label.className = 'site-nav__magnet-label';
-      label.textContent = 'Journal History';
-      link.appendChild(label);
-      return link;
-    },
   },
 ];
 
@@ -1744,20 +1677,10 @@ function setupNeedPage() {
       return;
     }
 
-    saveToDeviceButton.textContent = 'Device';
-    saveToDeviceButton.classList.add('strategy-card__save--device');
-
-    let saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
-    if (!saveToProfileButton) {
-      saveToProfileButton = document.createElement('button');
-      saveToProfileButton.type = 'button';
-      saveToProfileButton.className = saveToDeviceButton.className;
-      saveToProfileButton.dataset.saveToProfileButton = 'true';
-      saveToProfileButton.textContent = 'Profile';
-      saveToDeviceButton.insertAdjacentElement('afterend', saveToProfileButton);
+    const saveToProfileButton = card.querySelector('[data-save-to-profile-button="true"]');
+    if (!(saveToProfileButton instanceof HTMLButtonElement)) {
+      return;
     }
-    saveToProfileButton.classList.add('strategy-card__save--profile');
-    applyCompactSaveTargetControls(saveToDeviceButton, saveToProfileButton);
     registerProfileSaveButton(saveToProfileButton);
 
     const strategySlug = normalizeStrategySlug(card.dataset.strategySlug || '');
@@ -1852,34 +1775,20 @@ function setupNeedPage() {
       .closest('[data-strategy-form-container]')
       ?.querySelector('[data-form-message]');
 
-    const saveTargetField = document.createElement('input');
-    saveTargetField.type = 'hidden';
-    saveTargetField.name = 'save-target';
-    saveTargetField.value = SAVE_TARGET_DEVICE;
-    suggestionForm.appendChild(saveTargetField);
+    const saveTargetField = suggestionForm.querySelector('input[name="save-target"]');
+    if (!(saveTargetField instanceof HTMLInputElement)) {
+      throw new Error('Canonical suggestion form is missing its save-target field');
+    }
 
-    const formSaveToDevice = suggestionForm.querySelector('.strategy-form__submit');
-    if (formSaveToDevice) {
-      formSaveToDevice.textContent = 'Device';
-      formSaveToDevice.classList.add('strategy-card__save--device');
+    const formSaveToDevice = suggestionForm.querySelector('[data-save-to-device-button="true"]');
+    const formSaveToProfile = suggestionForm.querySelector('[data-save-to-profile-button="true"]');
+    if (formSaveToDevice instanceof HTMLButtonElement && formSaveToProfile instanceof HTMLButtonElement) {
       formSaveToDevice.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
-
-      let formSaveToProfile = suggestionForm.querySelector('[data-save-to-profile-button="true"]');
-      if (!formSaveToProfile) {
-        formSaveToProfile = document.createElement('button');
-        formSaveToProfile.type = 'submit';
-        formSaveToProfile.className = formSaveToDevice.className;
-        formSaveToProfile.dataset.saveToProfileButton = 'true';
-        formSaveToProfile.textContent = 'Profile';
-        formSaveToProfile.addEventListener('click', () => {
-          saveTargetField.value = SAVE_TARGET_PROFILE;
-        });
-        formSaveToDevice.insertAdjacentElement('afterend', formSaveToProfile);
-      }
-      formSaveToProfile.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
-      applyCompactSaveTargetControls(formSaveToDevice, formSaveToProfile);
+      formSaveToProfile.addEventListener('click', () => {
+        saveTargetField.value = SAVE_TARGET_PROFILE;
+      });
       registerProfileSaveButton(formSaveToProfile);
     }
 
@@ -2076,34 +1985,22 @@ function setupInventoryPage() {
   if (form) {
     state.inventoryForm = form;
     state.inventorySubmitButton = form.querySelector('.strategy-form__submit');
-    const saveTargetField = document.createElement('input');
-    saveTargetField.type = 'hidden';
-    saveTargetField.name = 'save-target';
-    saveTargetField.value = SAVE_TARGET_DEVICE;
-    form.appendChild(saveTargetField);
+    const saveTargetField = form.querySelector('input[name="save-target"]');
+    if (!(saveTargetField instanceof HTMLInputElement)) {
+      throw new Error('Canonical Inventory form is missing its save-target field');
+    }
 
     if (state.inventorySubmitButton) {
-      state.inventorySubmitButton.textContent = 'Device';
-      state.inventorySubmitButton.classList.add('strategy-card__save--device');
       state.inventorySubmitButton.addEventListener('click', () => {
         saveTargetField.value = SAVE_TARGET_DEVICE;
       });
-
-      let saveToProfileButton = form.querySelector('[data-save-to-profile-button="true"]');
-      if (!saveToProfileButton) {
-        saveToProfileButton = document.createElement('button');
-        saveToProfileButton.type = 'submit';
-        saveToProfileButton.className = state.inventorySubmitButton.className;
-        saveToProfileButton.dataset.saveToProfileButton = 'true';
-        saveToProfileButton.textContent = 'Profile';
+      const saveToProfileButton = form.querySelector('[data-save-to-profile-button="true"]');
+      if (saveToProfileButton instanceof HTMLButtonElement) {
         saveToProfileButton.addEventListener('click', () => {
           saveTargetField.value = SAVE_TARGET_PROFILE;
         });
-        state.inventorySubmitButton.insertAdjacentElement('afterend', saveToProfileButton);
+        registerProfileSaveButton(saveToProfileButton);
       }
-      saveToProfileButton.classList.add('strategy-form__submit--secondary', 'strategy-card__save--profile');
-      applyCompactSaveTargetControls(state.inventorySubmitButton, saveToProfileButton);
-      registerProfileSaveButton(saveToProfileButton);
     }
 
     setInventoryFormMode({ entry: null });

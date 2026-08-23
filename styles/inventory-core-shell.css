@@ -442,17 +442,6 @@
   display: none;
 }
 
-/* Inventory should be about the inventory itself. System/account controls live
-   in Menu → Account & data, and Shared strategies lives under Discover. Hide
-   the old placements before JS runs so the page never flashes as a settings
-   dashboard. */
-.inventory-page .inventory-header .inventory-journal-button,
-.inventory-page .inventory-header .inventory-shared-button,
-.inventory-page .inventory-header .inventory-bluesky-panel,
-.inventory-page .inventory-main > .inventory-actions {
-  display: none !important;
-}
-
 .inventory-page .inventory-header__title-row {
   display: block;
 }

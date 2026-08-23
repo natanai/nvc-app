@@ -6,24 +6,28 @@ import test from 'node:test';
 const root = new URL('../', import.meta.url).pathname;
 const read = (path) => readFileSync(join(root, path), 'utf8');
 
-test('strategy save destinations use compact native controls without emoji-era labels', () => {
+test('strategy save destinations are compiler-authored and runtime only binds stateful behavior', () => {
   const inventory = read('scripts/inventory.js');
+  const pages = read('scripts/build-pages.mjs');
+  const need = read('needs/acceptance/index.html');
+  const inventoryHtml = read('inventory/index.html');
   const styles = read('styles.css');
 
   assert.equal(inventory.includes('💾'), false, 'save controls must not use the floppy-disk emoji');
-  assert.equal(inventory.includes('✓ Saved on this device'), false, 'saved state must not use a text glyph as its icon');
-  assert.ok(inventory.includes("deviceButton.dataset.appIcon = 'device'"));
-  assert.ok(inventory.includes("profileButton.dataset.appIcon = 'profile'"));
-  assert.ok(inventory.includes("actionBar.classList.add('strategy-card__actions--save-targets')"));
-  assert.ok(inventory.includes("deviceButton.textContent = 'Device'"));
-  assert.ok(inventory.includes("profileButton.textContent = 'Profile'"));
+  assert.equal(inventory.includes('applyCompactSaveTargetControls'), false, 'runtime must not cosmetically normalize deterministic save controls');
+  assert.equal(inventory.includes('insertAdjacentElement(\'afterend\', saveToProfileButton)'), false, 'runtime must not create the deterministic Profile control');
+  assert.ok(pages.includes('data-save-to-device-button=\"true\" data-app-icon=\"device\"'));
+  assert.ok(pages.includes('data-save-to-profile-button=\"true\" data-app-icon=\"profile\"'));
+  assert.ok(pages.includes('name=\"save-target\" value=\"device\"'));
+  assert.ok(need.includes('data-save-to-device-button=\"true\"'));
+  assert.ok(need.includes('data-save-to-profile-button=\"true\"'));
+  assert.ok(inventoryHtml.includes('data-save-to-device-button=\"true\"'));
+  assert.ok(inventoryHtml.includes('data-save-to-profile-button=\"true\"'));
 
   assert.ok(styles.includes('/* Compact native action controls */'));
   assert.match(styles, /\.app-action \{[\s\S]*?min-height:\s*44px;[\s\S]*?font-family:\s*-apple-system/);
   assert.match(styles, /\.strategy-card__actions--save-targets \{[\s\S]*?grid-template-columns:\s*repeat\(2, minmax\(0, 1fr\)\)/);
   assert.match(styles, /\.app-action:disabled,[\s\S]*?border-style:\s*solid/);
-  assert.ok(styles.includes(".app-action[data-app-icon='device']"));
-  assert.ok(styles.includes(".app-action[data-app-icon='profile']"));
 });
 
 test('Journal uses one compact horizontal Clear and Save action row', () => {

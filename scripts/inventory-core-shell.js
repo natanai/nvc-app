@@ -35,16 +35,6 @@ function getMagnetHref(nav, rootUrl, magnetId, fallbackPath) {
   return toSiteUrl(rootUrl, fallbackPath);
 }
 
-function isInventoryWorkspace(rootUrl) {
-  try {
-    const inventoryUrl = new URL('inventory/', rootUrl);
-    const current = new URL(window.location.href);
-    return current.pathname.replace(/index\.html$/i, '') === inventoryUrl.pathname;
-  } catch (error) {
-    return /\/inventory\/(?:index\.html)?$/i.test(window.location.pathname || '');
-  }
-}
-
 function escapeHtml(value) {
   return String(value ?? '')
     .replaceAll('&', '&amp;')
@@ -308,28 +298,6 @@ function toggleMenu(menu, menuMagnet) {
   else openMenu(menu, menuMagnet);
 }
 
-function prepareInventoryExperience(rootUrl) {
-  if (!isInventoryWorkspace(rootUrl)) return;
-
-  const emailButton = document.querySelector('#inventory-email-personal');
-  if (emailButton instanceof HTMLElement) {
-    emailButton.remove();
-  }
-
-  const inventoryMessage = document.querySelector('.inventory-main > .inventory-actions [data-inventory-message]');
-  if (inventoryMessage instanceof HTMLElement) {
-    inventoryMessage.remove();
-    inventoryMessage.classList.add('inventory-page__status');
-    const main = document.querySelector('.inventory-main');
-    if (main instanceof HTMLElement) main.prepend(inventoryMessage);
-  }
-
-  document.querySelector('.inventory-header .inventory-journal-button')?.remove();
-  document.querySelector('.inventory-header .inventory-shared-button')?.remove();
-  document.querySelector('.inventory-bluesky-panel')?.remove();
-  document.querySelector('.inventory-main > .inventory-actions')?.remove();
-}
-
 function triggerCustomizer() {
   const control = document.querySelector('.site-nav [data-palette-toggle]');
   if (!(control instanceof HTMLElement)) return false;
@@ -569,7 +537,6 @@ function initSharedMoreMagnet() {
   if (hiddenLabel) hiddenLabel.textContent = 'Menu';
 
   const rootUrl = getSiteRootUrl(nav);
-  prepareInventoryExperience(rootUrl);
 
   let menu = document.getElementById(MENU_ID);
   if (!(menu instanceof HTMLElement)) {
@@ -587,7 +554,6 @@ function initSharedMoreMagnet() {
 
   syncInventoryCount(menu, nav);
   syncAccountStatus(menu);
-  ensureBlueskyModule(rootUrl);
   setupAccountDataControls(menu);
   setupPersonalShareControls(menu);
   installReliableMenuActivation(menuMagnet, menu);
@@ -597,6 +563,7 @@ function initSharedMoreMagnet() {
   });
 
   menu.querySelector('[data-menu-drill="account-data"]')?.addEventListener('click', () => {
+    ensureBlueskyModule(rootUrl);
     showMenuView(menu, MENU_ACCOUNT_VIEW);
   });
   menu.querySelector('[data-menu-back]')?.addEventListener('click', () => {
