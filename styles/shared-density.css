@@ -406,3 +406,85 @@ body:has(#main [data-feed-list]) #main .feed-auth-hint:empty {
 .journal-feeling-rating__slider { width:100%; min-width:0; margin:0; accent-color:var(--plum); }
 .journal-feeling-rating__value { font-size:.78rem; font-weight:750; color:var(--ink-soft); text-align:right; font-variant-numeric:tabular-nums; }
 @media (max-width:420px) { .journal-feeling-rating { grid-template-columns:minmax(6.4rem,.82fr) minmax(7.6rem,1.18fr); gap:.48rem; padding-inline:.42rem; } .journal-feeling-rating__label { font-size:.82rem; } }
+
+
+/* Personal strategy editor: desktop density and shared Needs catalog fit. */
+body .strategy-card--form .strategy-need-catalog .journal-catalog-select__trigger {
+  width: 100%;
+  padding-inline: 0.62rem 0.76rem;
+  text-align: left;
+}
+
+body .strategy-card--form .strategy-need-catalog .journal-catalog-select__value {
+  text-align: left;
+}
+
+body .strategy-card--form .strategy-need-catalog .journal-catalog-select__chevron {
+  margin-right: 0.08rem;
+}
+
+body .strategy-card--form .strategy-need-catalog .journal-catalog-popover {
+  left: 0;
+  right: auto;
+  width: 100%;
+  max-width: 100%;
+  z-index: 80;
+}
+
+@media (min-width: 760px) {
+  body .strategy-card--form {
+    padding: clamp(0.9rem, 1.4vw, 1.15rem);
+    gap: 0.72rem;
+  }
+
+  body .strategy-card--form .strategy-form:has(.strategy-form__field--needs) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 0.9rem;
+    row-gap: 0.72rem;
+    align-items: start;
+  }
+
+  body .strategy-card--form .strategy-form__field:has(input[name='title']) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  body .strategy-card--form .strategy-form__field--needs {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  body .strategy-card--form .strategy-form__field:has(textarea[name='description']) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  body .strategy-card--form .strategy-form__row,
+  body .strategy-card--form .strategy-form__notice,
+  body .strategy-card--form .strategy-form__message,
+  body .strategy-card--form .strategy-form__actions,
+  body .strategy-card--form .strategy-card__actions {
+    grid-column: 1 / -1;
+  }
+
+  body .strategy-card--form .strategy-form__row {
+    gap: 0.9rem;
+  }
+
+  body .strategy-card--form .strategy-card--input input[type='text'],
+  body .strategy-card--form .strategy-card--input select,
+  body .strategy-card--form .strategy-card--input textarea,
+  body .strategy-card--form .strategy-need-catalog .journal-catalog-select__trigger {
+    min-height: 48px;
+  }
+
+  body .strategy-card--form .strategy-card--input input[type='text'],
+  body .strategy-card--form .strategy-card--input select,
+  body .strategy-card--form .strategy-card--input textarea {
+    padding: 0.52rem 0.68rem;
+  }
+
+  body .strategy-card--form .strategy-card--input textarea {
+    min-height: 6.25rem;
+  }
+}
