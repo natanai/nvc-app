@@ -84,7 +84,12 @@ test('checked-in static artifacts already contain the final UI', async () => {
   assert.ok(!feedHtml.includes('Browse strategies that other allneeds users have chosen to share.'));
   assert.ok(inventoryHtml.includes('Backup, restore, and account sync are in Menu → Account &amp; data.'));
   assert.ok(!needHtml.includes('💾 Save to device'));
-  assert.ok(needHtml.includes('>Save to device</button>'));
+  assert.ok(needHtml.includes('data-save-to-device-button="true"'));
+  assert.ok(needHtml.includes('data-app-icon="device"'));
+  assert.ok(needHtml.includes('>Device</button>'));
+  assert.ok(needHtml.includes('data-save-to-profile-button="true"'));
+  assert.ok(needHtml.includes('data-app-icon="profile"'));
+  assert.ok(needHtml.includes('>Profile</button>'));
   assert.ok(journalHtml.includes('<h2 id="journal-form-heading" class="section-title">New entry</h2>'));
   assert.ok(!journalHtml.includes('Tag what’s present now. Feeling optional—notes are enough.'));
   assert.ok(journalHtml.includes('class="journal-history-controls" data-journal-filters'));
