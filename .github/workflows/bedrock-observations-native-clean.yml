@@ -1,0 +1,233 @@
+name: One-time Observations native cleanup
+
+on:
+  push:
+    branches: [performance/immediate-response-v1]
+    paths:
+      - '.github/workflows/bedrock-observations-native-clean.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  clean:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: performance/immediate-response-v1
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply canonical Observations cleanup
+        run: node .github/scripts/bedrock-observations-native-clean.mjs
+
+      - name: Normalize contributor docs and desktop chevrons
+        shell: bash
+        run: |
+          cat > docs/native-app-visual-language.md <<'EOF'
+          # Native app visual language
+
+          allneeds.app uses an iOS-inspired native-app target for task-oriented screens. The goal is not to imitate Safari chrome or reproduce proprietary Apple assets; it is to use platform conventions people already understand: clear hierarchy, grouped controls, restrained surfaces, predictable disclosure affordances, and large touch targets.
+
+          ## Reference implementations
+
+          The existing Journal metadata groups and Inventory segmented controls are the reference implementations for this language. New work should borrow their values and interaction structure before inventing a new component treatment.
+
+          - Grouped surfaces use a near-white/lavender background, a one-pixel low-contrast outline, and separators between rows.
+          - Interactive rows are at least 44px high; primary phone actions generally use 52px.
+          - Segmented controls use one shared capsule, a quiet tinted track, and a white selected segment with only a small elevation shadow.
+          - Ordinary phone surfaces do not use stacked drop shadows. Shadows are reserved for overlays, sheets, or the selected segment when depth communicates state.
+          - Secondary copy uses the shared ink-soft color at reduced contrast instead of a new tint for every section.
+
+          ## Hierarchy
+
+          A screen should make the next useful action obvious. One task stage gets one dominant action. Completed actions become status/context rather than disabled buttons that continue to compete for attention. Help, examples, explanations, and research remain available but sit below the primary task.
+
+          Use color to communicate content or meaning, not to give every container its own visual identity. When two surfaces have the same interaction role, they should normally share the same background, border, radius, typography, and affordance.
+
+          ## Grouped rows and disclosures
+
+          Disclosure rows use one trailing chevron (`›`). Closed points right; open rotates downward. Do not mix plus buttons, literal v glyphs, circled plus controls, and chevrons for equivalent expand/collapse behavior on the same screen. The row owns the visible surface; opened content stays inside that surface behind a one-pixel separator rather than becoming a second nested card.
+
+          Top-level optional learning sections may include a short secondary label such as “Optional context,” but the action/title remains the strongest text in the row.
+
+          ## Buttons and state
+
+          Use sentence case for task actions. Primary actions can span the available phone width when they are the clear next step. After completion, remove that primary emphasis and expose only useful follow-up actions. Destructive/reset actions such as Clear should be visually secondary unless data-loss risk requires stronger treatment.
+
+          Do not use a disabled primary button as a persistent status badge. Use compact metadata or plain status text instead.
+
+          ## Typography
+
+          Phone page titles use the same compact, non-uppercase app-screen treatment already established on Inventory. Section labels may use the small uppercase grouped-section style. Row titles and action labels use sentence case. Avoid introducing a new display treatment for each component.
+
+          ## Ownership
+
+          Shared foundations live in the shared stylesheet owners. A complex route may have one route-specific presentation file when needed, but it should not split the same screen across a critical stylesheet, a mobile repair stylesheet, and browser-side cosmetic mutation. Responsive rules belong in that route owner.
+
+          For Observations, `styles/observations.css` is the sole route-specific presentation owner. Shared navigation remains independently owned by the shared navigation CSS/prepaint contract. Runtime JavaScript owns state and interaction lifecycle, not deterministic styling.
+
+          ## Review checklist
+
+          Before accepting a phone UI change, check: one obvious next action; 44px minimum touch targets; one disclosure grammar; one segmented-control grammar; grouped rows rather than card-on-card nesting; restrained color and shadow use; sentence-case actions; no runtime cosmetic mutation; and one named canonical style owner for the route-specific presentation.
+          EOF
+
+          cat > docs/observations-layout.md <<'EOF'
+          # Observations presentation and task-flow contract
+
+          ## Ownership
+
+          - `styles/observations.css` is the single route-specific presentation owner for `/observations/` on desktop and phone.
+          - Phone presentation lives in the one `@media (max-width: 640px)` block in that file. The former route-critical and separate phone stylesheets are retired.
+          - `scripts/observation-guide.mjs` keeps the shared navigation critical region nav-only and ensures the route stylesheet is parser-discovered after `styles.css`.
+          - Shared navigation, Journal overlays, fonts, and other cross-route primitives keep their existing shared owners. Their presence is not a second Observations presentation owner.
+
+          ## Primary flow
+
+          The authored DOM order is: observation input → Load matches/results → Quick Check → example → recipe. CSS must not reorder those task stages.
+
+          Before loading, the result heading/panels and exact/nearby provenance are absent from the visual flow. Load matches is the one primary action. After loading, Needs/Feelings become primary content, exact/nearby appears as compact provenance under the result context, and the completed Load matches button no longer remains as a large disabled control.
+
+          “Why these matches?” explains which detector groups/observation slots led to the suggestions. It does not replace exact/nearby provenance. Exact counts are synchronized from the same loaded module result that renders the visible direct suggestions; nearby counts come from the fallback queue.
+
+          ## Native visual language
+
+          Observations follows `docs/native-app-visual-language.md`. Quick Check uses an inset grouped list. Example, Observation recipe, Why these matches, Why try this, the full guide, and guide subpanels share the same grouped-row/disclosure grammar. Closed disclosures use a right chevron and open disclosures rotate it downward. Result panels use one neutral grouped surface rather than independent yellow/green card treatments.
+
+          The ordinary validity messages “Ready for matches,” pending, and valid remain available to assistive technology without occupying another visual card. Invalid/error guidance stays visible.
+
+          ## Detector resilience
+
+          The generated module artifact remains sufficient for direct matching if cue-row delivery is unavailable. `tests/observation-suggest.test.mjs` protects detector delivery/data behavior; `tests/observations-native-language.test.mjs` protects presentation ownership, real DOM task order, loaded-result provenance, and the shared disclosure grammar.
+
+          ## Acceptance
+
+          On iPhone: type and load both the built-in example and a manually written observation; verify exact/nearby appears only after loading and agrees with the visible result; verify all disclosures use the same chevron language; verify Quick Check and help remain secondary; and repeatedly scroll a long highlighted observation to confirm overlays remain aligned. On desktop: verify the editor, recipe, guide tabs, dialogs, and result interactions remain functional after the stylesheet consolidation.
+          EOF
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'styles/observations.css';
+          let css = fs.readFileSync(path, 'utf8');
+          function matchingBrace(source, open) {
+            let depth = 0, quote = '', escaped = false;
+            for (let i = open; i < source.length; i += 1) {
+              const ch = source[i];
+              if (quote) {
+                if (escaped) escaped = false;
+                else if (ch === '\\') escaped = true;
+                else if (ch === quote) quote = '';
+                continue;
+              }
+              if (ch === '"' || ch === "'") { quote = ch; continue; }
+              if (ch === '{') depth += 1;
+              if (ch === '}' && --depth === 0) return i;
+            }
+            throw new Error('Unbalanced CSS');
+          }
+          function replaceRule(selector, body) {
+            const start = css.indexOf(selector);
+            if (start < 0) throw new Error(`Missing base rule: ${selector}`);
+            const open = css.indexOf('{', start + selector.length);
+            const end = matchingBrace(css, open);
+            css = css.slice(0, start) + `${selector} {\n${body}\n  }` + css.slice(end + 1);
+          }
+          replaceRule('  .observation-overview__summary-icon', `    display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+            width: auto;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+            margin-left: auto;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+            font-size: 1.35rem;
+            font-weight: 500;
+            line-height: 1;
+            box-shadow: none;
+            transition: transform 0.16s ease;`);
+          replaceRule('  .observation-overview__details[open] .observation-overview__summary-icon', `    transform: rotate(90deg);
+            background: transparent;`);
+          replaceRule('  .observation-guide__toggle-icon', `    display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: auto;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+            margin-left: auto;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            color: color-mix(in srgb, var(--ink-soft) 72%, transparent);
+            font-size: 1.35rem;
+            font-weight: 500;
+            line-height: 1;
+            box-shadow: none;
+            transition: transform 0.16s ease;`);
+          replaceRule('  .observation-guide[open] .observation-guide__toggle-icon', `    transform: rotate(90deg);`);
+          fs.writeFileSync(path, css);
+          NODE
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run focused Observations contracts
+        run: |
+          node --test tests/observations-native-language.test.mjs
+          node --test tests/shared-density-polish.test.mjs
+          npm run test:data-integrity
+
+      - name: Run Bedrock runtime and performance contracts
+        run: |
+          npm run test:flicker-jitter
+          npm run test:performance
+          npm run test:generator-ownership
+          npm run test:obsolete
+
+      - name: Verify canonical build is stable
+        env:
+          LINK_CHECK_REPORT_ONLY: '1'
+        run: |
+          npm run build
+          git diff --binary > /tmp/observations-build-1.diff
+          npm run build
+          git diff --binary > /tmp/observations-build-2.diff
+          cmp /tmp/observations-build-1.diff /tmp/observations-build-2.diff
+
+      - name: Verify ownership cleanup
+        shell: bash
+        run: |
+          test -f styles/observations.css
+          test ! -e styles/observations-critical.css
+          test ! -e styles/observations-mobile.css
+          if grep -R -n -E 'observations-(critical|mobile)[.]css' README.md docs scripts tests observations package.json; then
+            echo 'Retired Observations stylesheet reference remains.' >&2
+            exit 1
+          fi
+          git diff --check
+
+      - name: Remove one-time scaffolding
+        run: |
+          rm .github/scripts/bedrock-observations-native-clean.mjs
+          rm .github/workflows/bedrock-observations-native-clean.yml
+
+      - name: Commit canonical cleanup
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --check
+          git commit -m 'Consolidate Observations native visual language'
+          git push origin HEAD:performance/immediate-response-v1
