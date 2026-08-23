@@ -1844,7 +1844,8 @@ function hasSuggestions(set) {
 
 function syncLoadedMatchProvenance(suggestions, source) {
   const normalizedSource = typeof source === 'string' ? source.trim() : '';
-  const exactTotal = Math.max(Number(suggestions?.total) || 0, 0);
+  const moduleCount = Array.isArray(suggestions?.modules) ? suggestions.modules.length : 0;
+  const exactTotal = moduleCount || Math.max(Number(suggestions?.total) || 0, 0);
   const sameSource = state.detectionSource === normalizedSource;
   const fallbackQueue = sameSource && Array.isArray(state.detectionFallbackQueue)
     ? state.detectionFallbackQueue
@@ -1852,6 +1853,8 @@ function syncLoadedMatchProvenance(suggestions, source) {
 
   state.detectionSource = normalizedSource;
   state.detectionMatches = exactTotal;
+  state.detectionMatchLimit = Math.max(exactTotal, 1);
+
   if (exactTotal > 0) {
     state.detectionStatus = 'match';
     state.detectionFallbacks = 0;
@@ -1859,9 +1862,11 @@ function syncLoadedMatchProvenance(suggestions, source) {
   } else {
     state.detectionFallbackQueue = fallbackQueue;
     state.detectionFallbacks = fallbackQueue.length;
+    state.detectionNearLimit = Math.max(fallbackQueue.length, DETECTION_NEAR_LIMIT);
     state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
   }
-  renderDetectionStatus();
+
+  renderDetectionSummary();
 }
 
 function handlePrimaryAction() {

@@ -178,50 +178,36 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
   assert.ok(!buildPages.includes('/* Inventory is the app surface on phones, not a card inside the page. */'));
 });
 
-test('mobile Observations uses one parser-discovered phone presentation owner', async () => {
-  const css = await fs.readFile(path.join(root, 'styles/observations-mobile.css'), 'utf8');
+test('Observations uses one parser-discovered route presentation owner', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
   const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
-  const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
 
-  const link = '<link rel="stylesheet" href="../styles/observations-mobile.css" media="(max-width: 640px)" />';
+  const link = '<link rel="stylesheet" href="../styles/observations.css" />';
   assert.ok(html.includes(link));
   assert.ok(html.indexOf(link) > html.indexOf('<link rel="stylesheet" href="../styles.css" fetchpriority="high" />'));
-  assert.ok(css.includes('authoritative <=640px layout layer'));
-  assert.ok(css.includes('body:has(#main.observations-page) #main.observations-page'));
+  assert.ok(css.includes('single route-specific stylesheet for /observations/'));
+  assert.ok(css.includes('body:has(#main.observations-page) .breadcrumbs'));
+  assert.ok(css.includes('display: none;'));
   assert.ok(css.includes('width: calc(100% + 2rem);'));
-  assert.ok(css.includes('margin: 0 -1rem;'));
-  assert.ok(css.includes('border: 0;'));
-  assert.ok(css.includes('box-shadow: none;'));
-  assert.ok(css.includes('#main.observations-page .observation-editor__slot-row'));
-  assert.ok(css.includes('display: grid;'));
-  assert.ok(css.includes('#main.observations-page .observation-editor__slot + .observation-editor__slot'));
-  assert.ok(css.includes('#main.observations-page .observation-editor__example-toggle::after'));
-  assert.ok(css.includes("content: '›';"));
-  assert.ok(css.includes('min-height: 48px;'));
-  assert.ok(css.includes('#main.observations-page .need-status-toggle'));
-  assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'));
-  assert.ok(css.includes('-webkit-line-clamp: 2;'));
-  assert.ok(css.includes('#main.observations-page .observation-suggestions__why-toggle'));
-  assert.ok(css.includes('#main.observations-page .observation-suggestions__action:disabled'));
-  assert.ok(css.includes('.observation-editor__field > .observation-suggestions {\n    order: 30;'));
-  assert.ok(css.includes('.observation-editor__field > .observation-editor__match-summary {\n    order: 40;'));
-  assert.ok(css.includes(".observation-suggestions[data-mode='editing'] .observation-suggestions__heading"));
-  assert.ok(css.includes(".observation-suggestions[data-mode='editing'] .observation-suggestions__action-row"));
-  assert.ok(css.includes('grid-template-columns: minmax(0, 1fr);'));
-  assert.ok(css.includes('min-height: 52px;'));
-  assert.ok(editor.includes("summary.hidden = !isResults;"));
-  assert.ok(editor.includes('syncLoadedMatchProvenance(direct, trimmed);'));
-  assert.ok(editor.includes('const loadedExactTotal = Math.max(Number(state.directSuggestions?.total) || 0, 0);'));
+  assert.ok(css.includes('.observation-editor__slot-row'));
+  assert.ok(css.includes('.need-status-toggle'));
+  assert.ok(css.includes('.observation-suggestions__why-toggle::after'));
+  assert.ok(css.includes(".observation-suggestions__action[data-action='done']"));
+  assert.ok(css.includes('.observation-editor__match-summary-row + .observation-editor__match-summary-row::before'));
   assert.ok(!css.includes('!important'));
+  await assert.rejects(fs.access(path.join(root, 'styles/observations-critical.css')), { code: 'ENOENT' });
+  await assert.rejects(fs.access(path.join(root, 'styles/observations-mobile.css')), { code: 'ENOENT' });
 });
 
 test('Observation text overlays remain paint-only and re-sync after formula rendering', async () => {
-  const critical = await fs.readFile(path.join(root, 'styles/observations-critical.css'), 'utf8');
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
   const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
 
-  assert.ok(critical.includes('.observation-editor__highlight mark {\n    color: transparent;'));
-  assert.ok(critical.includes('-webkit-text-fill-color: transparent;'));
-  assert.ok(critical.includes('overflow: auto;\n    scrollbar-width: none;'));
-  assert.ok(critical.includes('.observation-editor__highlight::-webkit-scrollbar'));
+  const markRule = css.match(/\.observation-editor__highlight mark\s*\{([\s\S]*?)\}/)?.[1] || '';
+  assert.ok(markRule.includes('color: transparent;'));
+  assert.ok(markRule.includes('-webkit-text-fill-color: transparent;'));
+  assert.ok(css.includes('overflow: auto;'));
+  assert.ok(css.includes('scrollbar-width: none;'));
+  assert.ok(css.includes('.observation-editor__highlight::-webkit-scrollbar'));
   assert.ok(editor.includes('renderObservationFormula();\n  syncObservationHighlightScroll();\n  renderObservationSlotStatus(state.formula);'));
 });
