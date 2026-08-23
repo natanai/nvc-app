@@ -123,5 +123,6 @@ test('strategy editor uses desktop width without clipping the Needs catalog', ()
   assert.ok(css.includes(".strategy-card--form .strategy-form__field:has(textarea[name='description']) {\n    grid-column: 1 / -1;\n    grid-row: 2;"), 'strategy details must keep the full desktop width');
   assert.ok(css.includes('.strategy-card--form .strategy-need-catalog .journal-catalog-select__trigger {\n  width: 100%;\n  padding-inline: 0.62rem 0.76rem;'), 'Needs trigger must keep its chevron inside the field border');
   assert.ok(css.includes('.strategy-card--form .strategy-need-catalog .journal-catalog-popover {\n  left: 0;\n  right: auto;\n  width: 100%;\n  max-width: 100%;'), 'Needs popup must be bounded by its strategy field');
+  assert.ok(css.includes('@media (max-width: 600px) {\n  .strategy-form__row {\n    grid-template-columns: 1fr;'), 'mobile strategy contact fields must remain single-column');
   assert.equal(needPage.includes('journal-feeling-rating'), false, 'Needs selector must not acquire Feeling intensity controls');
 });
