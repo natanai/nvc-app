@@ -1,0 +1,61 @@
+name: One-time Observations task-flow Bedrock repair
+
+on:
+  pull_request:
+    branches:
+      - inventory-core-overhaul
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: performance/immediate-response-v1
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply canonical task-flow repair
+        run: node .github/scripts/repair-observation-flow.mjs
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate canonical owners and behavior
+        run: |
+          node --test tests/shared-density-polish.test.mjs
+          npm run test:data-integrity
+          npm run test:flicker-jitter
+          npm run test:nav-magnets
+          npm run test:performance
+          npm run test:delivery
+          npm run build
+          npm run test:generator-ownership
+          npm run test:obsolete
+          git diff --check
+
+      - name: Remove one-time repair scaffolding
+        run: |
+          rm .github/scripts/repair-observation-flow.mjs
+          rm .github/workflows/repair-observation-flow.yml
+
+      - name: Commit canonical repair
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Streamline Observations match flow"
+          git push origin HEAD:performance/immediate-response-v1
