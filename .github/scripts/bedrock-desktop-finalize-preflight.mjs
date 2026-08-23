@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
+// Temporary preflight aligns the one-shot migration with canonical source indentation.
 const path = '.github/scripts/bedrock-desktop-finalize.mjs';
 let source = readFileSync(path, 'utf8');
 
