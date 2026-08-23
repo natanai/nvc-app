@@ -28,6 +28,8 @@ Alexithymia Support no longer maintains a local Journal controller, local Journa
 
 `tests/bedrock-runtime-provenance.test.mjs` permanently rejects the return of semantic Journal variants, per-context copy/label override channels, compiler/runtime variant markers, and a parallel Alexithymia Journal implementation.
 
+The single-owner migration was run through the canonical full build, runtime/Journal/provenance regressions, first-load performance budgets, generator ownership, and retired-architecture checks. Its one-shot migration script removed itself after landing, and the temporary base-branch runner was deleted. The permanent Site Quality suite subsequently passed on the clean post-migration branch head.
+
 ## Legitimate runtime mutation
 
 These remain runtime by design:
@@ -42,7 +44,5 @@ These remain runtime by design:
 ## Permanent gate
 
 `tests/bedrock-runtime-provenance.test.mjs` protects the concrete ownership boundaries above. Existing tests that previously required post-load Inventory cleanup or save-button cosmetic normalization were inverted so CI now rejects those patterns instead of blessing them.
-
-The provenance finalizer was exercised through the canonical build, the full flicker/runtime suite, page-generator ownership checks, performance ceilings, and retired-architecture tombstones before its one-shot scaffolding was deleted. Temporary base-branch migration runners are removed after their clean source transformations land.
 
 This provenance gate complements, rather than replaces, generator zero-diff checks, route-runtime ownership tests, performance ceilings, persisted-state contracts, and real-device acceptance.
