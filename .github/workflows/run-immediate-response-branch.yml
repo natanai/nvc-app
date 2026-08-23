@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   migrate:
-    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1' && github.event.pull_request.head.sha == '07de231bff1b78029967ae63d959680de2b2822e'
+    if: github.event.pull_request.head.ref == 'performance/immediate-response-v1'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -19,17 +19,31 @@ jobs:
           ref: performance/immediate-response-v1
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+      - id: gate
+        name: Check whether migration is still staged
+        shell: bash
+        run: |
+          if [[ -f .github/scripts/immediate-performance-v1.mjs ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v7
+        if: steps.gate.outputs.run == 'true'
         with:
           node-version: 22
           cache: npm
       - name: Apply canonical route-runtime migration
+        if: steps.gate.outputs.run == 'true'
         run: node .github/scripts/immediate-performance-v1.mjs
       - name: Install dependencies
+        if: steps.gate.outputs.run == 'true'
         run: npm ci
       - name: Rebuild through canonical owners
+        if: steps.gate.outputs.run == 'true'
         run: npm run build
       - name: Verify behavior and ownership contracts
+        if: steps.gate.outputs.run == 'true'
         run: |
           npm run test:data-integrity
           npm run test:customizer
@@ -40,6 +54,7 @@ jobs:
           npm run test:generator-ownership
           npm run test:obsolete
       - name: Reject collateral changes
+        if: steps.gate.outputs.run == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -64,10 +79,12 @@ jobs:
           done < <(git status --porcelain | sed -E 's/^.. //')
           exit "$bad"
       - name: Remove target-branch migration scaffolding
+        if: steps.gate.outputs.run == 'true'
         run: |
           rm .github/scripts/immediate-performance-v1.mjs
           rm .github/workflows/immediate-performance-v1-runner.yml
       - name: Commit performance canary
+        if: steps.gate.outputs.run == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -88,10 +105,13 @@ jobs:
           ref: inventory-core-overhaul
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Remove one-time runner
+      - name: Remove one-time runner if still present
         shell: bash
         run: |
           set -euo pipefail
+          if [[ ! -f .github/workflows/run-immediate-response-branch.yml ]]; then
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git rm .github/workflows/run-immediate-response-branch.yml
