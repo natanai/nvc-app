@@ -177,3 +177,25 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
   assert.ok(!shell.includes('body .inventory-page.inventory-page'));
   assert.ok(!buildPages.includes('/* Inventory is the app surface on phones, not a card inside the page. */'));
 });
+
+test('mobile Observations uses one parser-discovered phone presentation owner', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/observations-mobile.css'), 'utf8');
+  const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
+
+  const link = '<link rel="stylesheet" href="../styles/observations-mobile.css" media="(max-width: 640px)" />';
+  assert.ok(html.includes(link));
+  assert.ok(html.indexOf(link) > html.indexOf('<link rel="stylesheet" href="../styles.css" fetchpriority="high" />'));
+  assert.ok(css.includes('authoritative <=640px layout layer'));
+  assert.ok(css.includes('body:has(#main.observations-page) #main.observations-page'));
+  assert.ok(css.includes('width: calc(100% + 2rem);'));
+  assert.ok(css.includes('margin: 0 -1rem;'));
+  assert.ok(css.includes('border: 0;'));
+  assert.ok(css.includes('box-shadow: none;'));
+  assert.ok(css.includes('#main.observations-page .observation-editor__slot-row'));
+  assert.ok(css.includes('display: grid;'));
+  assert.ok(css.includes('#main.observations-page .observation-editor__slot + .observation-editor__slot'));
+  assert.ok(css.includes('#main.observations-page .observation-editor__example-toggle::after'));
+  assert.ok(css.includes("content: '›';"));
+  assert.ok(css.includes('min-height: 48px;'));
+  assert.ok(!css.includes('!important'));
+});
