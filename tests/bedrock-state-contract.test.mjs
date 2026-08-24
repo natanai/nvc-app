@@ -9,13 +9,15 @@ const root = path.resolve(__dirname, '..');
 const read = (relativePath) => fs.readFile(path.join(root, relativePath), 'utf8');
 
 test('Bedrock preserves persisted presentation-state namespaces and responsive first-paint hydration', async () => {
-  const [inventory, magnetPhysics, magnetRuntime, buildPages, inventoryHtml, needsHtml] = await Promise.all([
+  const [inventory, magnetPhysics, magnetRuntime, buildPages, navPrepaint, inventoryHtml, needsHtml, observationsHtml] = await Promise.all([
     read('scripts/inventory.js'),
     read('scripts/magnets/magnetPhysics.js'),
     read('scripts/magnets.js'),
     read('scripts/build-pages.mjs'),
+    read('scripts/nav-prepaint.mjs'),
     read('inventory/index.html'),
     read('needs/index.html'),
+    read('observations/index.html'),
   ]);
 
   assert.ok(inventory.includes("const THEME_STORAGE_KEY = 'nvcApp.theme';"));
@@ -24,15 +26,22 @@ test('Bedrock preserves persisted presentation-state namespaces and responsive f
   assert.ok(magnetPhysics.includes('export function loadPositions('));
   assert.ok(magnetPhysics.includes('export function savePositions('));
 
-  assert.ok(buildPages.includes("const NAV_MAGNET_STORAGE_KEY = 'site-nav';"));
-  assert.ok(buildPages.includes('const magnetPrefillScript = (storageKey) => String.raw`'));
-  assert.ok(buildPages.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';"));
-  assert.ok(buildPages.includes("var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';"));
-  assert.ok(buildPages.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
-  assert.ok(buildPages.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
+  assert.ok(buildPages.includes("from './nav-prepaint.mjs';"));
+  assert.ok(buildPages.includes('navVisibilityBootstrapScript'));
+  assert.ok(navPrepaint.includes("export const NAV_MAGNET_STORAGE_KEY = 'site-nav';"));
+  assert.ok(navPrepaint.includes('export const magnetPrefillScript = (storageKey) => String.raw`'));
+  assert.ok(navPrepaint.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';"));
+  assert.ok(navPrepaint.includes("var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';"));
+  assert.ok(navPrepaint.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
+  assert.ok(navPrepaint.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));
+  assert.equal(
+    navPrepaint.includes('parsed.boardHeight'),
+    false,
+    'responsive navigation prepaint must not restore a route-specific historical board height',
+  );
   assert.ok(buildPages.includes('const prefill = magnetPrefillScript(NAV_MAGNET_STORAGE_KEY);'));
   assert.ok(!buildPages.includes("magnetPrefillScript(type + '-hub-v4'"));
-  assert.ok(buildPages.includes("var storageKey = 'nvcApp.navSettings';"));
+  assert.ok(navPrepaint.includes("var storageKey = 'nvcApp.navSettings';"));
 
   assert.ok(magnetRuntime.includes("const NAV_MOBILE_ORDER_QUERY = '(max-width: 640px)';"));
   assert.ok(magnetRuntime.includes("const RESPONSIVE_LAYOUT_MIGRATION_SUFFIX = '@responsive-v1';"));
@@ -40,7 +49,7 @@ test('Bedrock preserves persisted presentation-state namespaces and responsive f
   assert.ok(magnetRuntime.includes('loadPositions(\n    state.persistenceKey,'));
   assert.ok(magnetRuntime.includes('savePositions(\n      state.persistenceKey,') || magnetRuntime.includes('savePositions(\n        state.persistenceKey,'));
 
-  for (const html of [inventoryHtml, needsHtml]) {
+  for (const html of [inventoryHtml, needsHtml, observationsHtml]) {
     assert.ok(html.includes("var LEGACY_STORAGE_KEY = 'magnetPositions:site-nav';"));
     assert.ok(html.includes("var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;"));
     assert.ok(html.includes("var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';"));

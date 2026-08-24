@@ -63,7 +63,9 @@ test('generator explicitly owns the Home canary', async () => {
   assert.ok(generator.includes("...(includeInventoryRuntime ? [{ src: 'scripts/inventory.js', defer: true }] : [])"));
   assert.ok(generator.includes("bodyExtras = '',"));
   assert.ok(generator.includes('includeInventoryRuntime = true,'));
-  assert.ok(generator.includes("scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],"));
+  assert.ok(generator.includes('const shellRuntimeLoaderScript = Object.freeze({'));
+  assert.ok(generator.includes("src: 'scripts/shell-runtime-loader.js'"));
+  assert.ok(generator.includes('scripts: [shellRuntimeLoaderScript],'));
   assert.ok(generator.includes('bodyExtras: customizerShellPlaceholderHtml,'));
   assert.ok(generator.includes('includeInventoryRuntime: false,'));
 });

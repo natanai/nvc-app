@@ -80,17 +80,16 @@ test('generated and explicit blocking owners share the same dependency order', a
   assert.ok(compiler.includes('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible'));
 });
 
-test('Alexithymia Support preserves its non-blocking stylesheet strategy while flattening dependencies', async () => {
+test('Alexithymia Support loads its final shared layout before eager interactive runtimes', async () => {
   const html = await fs.readFile(path.join(root, 'alexithymia-support/index.html'), 'utf8');
   const expectedHrefs = [FONT_HREF, ...LOCAL_DEPENDENCIES.map((dependency) => `../${dependency}`), '../styles.css'];
   for (const href of expectedHrefs) {
     assert.ok(
-      html.includes(`<link rel="stylesheet" href="${href}" media="print" onload="this.media='all'" />`),
-      `Alexithymia async graph missing ${href}`,
+      html.includes(`<link rel="stylesheet" href="${href}"${href === '../styles.css' ? ' fetchpriority="high"' : ''} />`),
+      `Alexithymia blocking graph missing ${href}`,
     );
   }
-  assert.ok(html.includes('<noscript>'));
-  for (const href of expectedHrefs) {
-    assert.ok(html.includes(`<link rel="stylesheet" href="${href}" />`), `Alexithymia noscript graph missing ${href}`);
-  }
+  assert.equal(html.includes('media="print" onload="this.media=\'all\'"'), false);
+  assert.equal(html.includes('<noscript>'), false);
+  assert.ok(html.indexOf('../styles.css') < html.indexOf('../scripts/magnets.js'));
 });

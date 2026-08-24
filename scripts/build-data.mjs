@@ -1,9 +1,10 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
+import { fileURLToPath } from 'url';
 
 import { buildReverseInferenceIndex } from './reverse-inference-index.js';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const DATA_DIR = join(ROOT, 'data');
 
 const PAGE_TO_MODEL_KEY = new Map([

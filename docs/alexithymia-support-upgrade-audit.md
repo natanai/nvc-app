@@ -1,4 +1,6 @@
-ashwood, yes, i got to the the end — Alexithymia Support Lane upgrade audit
+# Alexithymia Support Lane upgrade audit
+
+> Historical audit record. It explains the origin of current behavior but is not a current implementation or release checklist. See `docs/README.md` and `docs/architecture-map.md` for current ownership.
 
 ## Summary
 - The production code already implements the evidence-grounded refactor requirements: circumplex anchoring, affect-zone inference, evidence-linked suggestions, "Not it" feedback, breathing pattern logic, journal field extensions, and clinician documentation.

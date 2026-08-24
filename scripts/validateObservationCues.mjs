@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { splitCuePatternColumn } from '../lib/observationCueData.js';
+
 const EXPECTED_HEADERS = ['cue', 'patterns (|)', 'feelings (|)', 'needs (|)', 'example'];
 
 function slugify(label) {
@@ -173,7 +175,7 @@ rows.slice(1).forEach((cols, rowIndex) => {
     seenCues.add(cue);
   }
 
-  const patterns = splitPipeList(patternsRaw);
+  const patterns = splitCuePatternColumn(patternsRaw);
   if (!patterns.length) {
     errors.push(`Cue "${cue || `line ${lineNumber}`}" must include at least one pattern.`);
   }

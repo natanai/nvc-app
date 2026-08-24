@@ -3,6 +3,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import { updateObservationGuidePage } from './observation-guide.mjs';
+import { NAV_MAGNET_STORAGE_KEY, magnetPrefillScript, navVisibilityBootstrapScript } from './nav-prepaint.mjs';
 import { renderCatalogMultiselectMarkup } from '../assets/js/catalog-multiselect.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = join(__dirname, '..');
@@ -14,6 +15,8 @@ const bodyRegionsPath = join(rootDir, 'data', 'body-regions.json');
 const bodyRegions = JSON.parse(readFileSync(bodyRegionsPath, 'utf8'));
 const navCriticalCssPath = join(rootDir, 'styles', 'nav-critical.css');
 const navCriticalCss = readFileSync(navCriticalCssPath, 'utf8').trim();
+const SHARED_NAV_CRITICAL_START = '<!-- shared-nav-critical:start -->';
+const SHARED_NAV_CRITICAL_END = '<!-- shared-nav-critical:end -->';
 
 const KNOWN_SCOPES = new Set([
   'home',
@@ -79,398 +82,6 @@ const HOME_ICON_INLINE = (basePath = '') => {
   </svg>`;
 };
 
-const NAV_MAGNET_STORAGE_KEY = 'site-nav';
-const magnetPrefillScript = (storageKey) => String.raw`
-      <script>
-        (function() {
-          if (typeof window === 'undefined' || typeof document === 'undefined') {
-            return;
-          }
-          var root = document.querySelector('[data-magnet-root][data-magnet-key="${storageKey}"]');
-          if (!root) {
-            return;
-          }
-          var board = root.querySelector('[data-magnet-board]');
-          if (!board) {
-            return;
-          }
-          var LEGACY_STORAGE_KEY = 'magnetPositions:${storageKey}';
-          var bucket = typeof window.matchMedia === 'function' && window.matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop';
-          var STORAGE_KEY = LEGACY_STORAGE_KEY + '@' + bucket;
-          var MIGRATION_KEY = LEGACY_STORAGE_KEY + '@responsive-v1';
-          var raw;
-          try {
-            if (!('localStorage' in window)) {
-              return;
-            }
-            raw = window.localStorage.getItem(STORAGE_KEY);
-            if (!raw && !window.localStorage.getItem(MIGRATION_KEY)) {
-              var legacyRaw = window.localStorage.getItem(LEGACY_STORAGE_KEY);
-              if (legacyRaw) {
-                window.localStorage.setItem(STORAGE_KEY, legacyRaw);
-                raw = legacyRaw;
-              }
-              window.localStorage.setItem(MIGRATION_KEY, bucket);
-            }
-          } catch (error) {
-            return;
-          }
-          if (typeof raw !== 'string' || !raw) {
-            return;
-          }
-          var parsed;
-          try {
-            parsed = JSON.parse(raw);
-          } catch (error) {
-            return;
-          }
-          if (!parsed || typeof parsed !== 'object' || typeof parsed.magnets !== 'object') {
-            return;
-          }
-          var boardRect = board.getBoundingClientRect();
-          var boardWidth = Math.max(boardRect.width || board.clientWidth || 1, 1);
-          var boardStyles = typeof window.getComputedStyle === 'function'
-            ? window.getComputedStyle(board)
-            : null;
-          var cssMinHeight = 0;
-          if (boardStyles && boardStyles.minHeight) {
-            var parsedMin = Number.parseFloat(boardStyles.minHeight);
-            cssMinHeight = Number.isFinite(parsedMin) && parsedMin > 0 ? parsedMin : 0;
-          }
-          var boardHeight = Math.max(
-            boardRect.height || board.clientHeight || cssMinHeight || 1,
-            cssMinHeight || 1
-          );
-          if (typeof parsed.boardHeight === 'number' && parsed.boardHeight > 0) {
-            var storedHeight = Math.max(parsed.boardHeight, cssMinHeight || 0, boardHeight);
-            boardHeight = storedHeight;
-            board.style.height = storedHeight + 'px';
-          }
-          var magnets = board.querySelectorAll('[data-magnet-id]');
-          if (!magnets.length) {
-            return;
-          }
-
-          var restoreTransitions = null;
-          if (
-            board.classList &&
-            !board.classList.contains('no-transitions') &&
-            typeof board.classList.add === 'function'
-          ) {
-            board.classList.add('no-transitions');
-            restoreTransitions = function() {
-              if (!board.classList || typeof board.classList.remove !== 'function') {
-                return;
-              }
-              board.classList.remove('no-transitions');
-            };
-          }
-          var hasMissingVisiblePlacement = false;
-          for (var i = 0; i < magnets.length; i += 1) {
-            var el = magnets[i];
-            if (!el || !el.dataset) {
-              continue;
-            }
-            var id = el.dataset.magnetId;
-            if (!id) {
-              continue;
-            }
-            if (!(id in parsed.magnets)) {
-              var navHidden =
-                el.hidden ||
-                (el.dataset && el.dataset.navHidden === 'true') ||
-                el.getAttribute('aria-hidden') === 'true';
-              if (!navHidden) {
-                hasMissingVisiblePlacement = true;
-              }
-              continue;
-            }
-            var entry = parsed.magnets[id];
-            if (!entry || typeof entry !== 'object') {
-              continue;
-            }
-            var rect = el.getBoundingClientRect();
-            var magnetWidth = rect.width || el.offsetWidth || 0;
-            var magnetHeight = rect.height || el.offsetHeight || 0;
-            var maxX = Math.max(boardWidth - magnetWidth, 0);
-            var maxY = Math.max(boardHeight - magnetHeight, 0);
-            var xPct = typeof entry.xPct === 'number' ? entry.xPct : 0;
-            var yPct = typeof entry.yPct === 'number' ? entry.yPct : 0;
-            var x = Math.min(Math.max(xPct * boardWidth, 0), maxX);
-            var y = Math.min(Math.max(yPct * boardHeight, 0), maxY);
-            el.style.transform = 'translate3d(' + Math.round(x) + 'px,' + Math.round(y) + 'px,0)';
-          }
-
-          if (hasMissingVisiblePlacement) {
-            if (restoreTransitions) {
-              restoreTransitions();
-            }
-            return;
-          }
-
-          if (board && (board.dataset || typeof board.setAttribute === 'function')) {
-            if (board.dataset) {
-              board.dataset.ready = '1';
-            } else {
-              board.setAttribute('data-ready', '1');
-            }
-          }
-
-          if (restoreTransitions) {
-            var raf = typeof window.requestAnimationFrame === 'function'
-              ? window.requestAnimationFrame
-              : null;
-            if (raf) {
-              raf(function() {
-                raf(restoreTransitions);
-              });
-            } else {
-              window.setTimeout(restoreTransitions, 32);
-            }
-          }
-        })();
-      </script>`;
-
-const navVisibilityBootstrapScript = () => String.raw`
-      <script>
-        (function() {
-          if (typeof window === 'undefined' || typeof document === 'undefined') {
-            return;
-          }
-
-          var nav = document.querySelector('[data-magnet-root][data-magnet-key="${NAV_MAGNET_STORAGE_KEY}"]');
-          if (!nav || typeof nav.querySelectorAll !== 'function') {
-            return;
-          }
-
-          var storageKey = 'nvcApp.navSettings';
-          var storages = [];
-
-          try {
-            if (Object.prototype.hasOwnProperty.call(window, 'localStorage') && window.localStorage) {
-              storages.push(window.localStorage);
-            }
-          } catch (error) {
-            return;
-          }
-
-          try {
-            if (Object.prototype.hasOwnProperty.call(window, 'sessionStorage') && window.sessionStorage) {
-              storages.push(window.sessionStorage);
-            }
-          } catch (error) {
-            return;
-          }
-
-          var raw = '';
-          for (var i = 0; i < storages.length; i += 1) {
-            var storage = storages[i];
-            if (!storage || typeof storage.getItem !== 'function') {
-              continue;
-            }
-            try {
-              var candidate = storage.getItem(storageKey);
-              if (typeof candidate === 'string' && candidate.trim()) {
-                raw = candidate.trim();
-                break;
-              }
-            } catch (error) {
-              return;
-            }
-          }
-
-          if (!raw) {
-            return;
-          }
-
-          var parsed;
-          try {
-            parsed = JSON.parse(raw);
-          } catch (error) {
-            return;
-          }
-
-          if (!parsed || typeof parsed !== 'object') {
-            return;
-          }
-
-          // v2 repairs the short-lived first More prototype, which forced the
-          // Inventory magnet off. Restore Inventory before first paint while
-          // keeping Journal secondary by default.
-          var navMoreV2Key = 'allneeds.navMore.v2';
-          var needsNavMoreV2 = true;
-          try {
-            needsNavMoreV2 = !window.localStorage || window.localStorage.getItem(navMoreV2Key) !== '1';
-          } catch (error) {
-            needsNavMoreV2 = true;
-          }
-          if (needsNavMoreV2) {
-            parsed.enabled = parsed.enabled && typeof parsed.enabled === 'object'
-              ? parsed.enabled
-              : {};
-            parsed.enabled.inventory = true;
-            parsed.enabled.journal = false;
-            parsed.updatedAt = Date.now();
-            try {
-              if (window.localStorage) {
-                window.localStorage.setItem(storageKey, JSON.stringify(parsed));
-                window.localStorage.setItem(navMoreV2Key, '1');
-              }
-            } catch (error) {
-              // Continue with the in-memory repaired settings.
-            }
-          }
-
-          var defaults = {
-            home: true,
-            customizer: true,
-            journal: false,
-            inventory: true,
-            observations: true,
-            fauxFeelings: false,
-            feelings: true,
-            needs: true,
-            bodyCues: false,
-            journalDashboard: false,
-          };
-
-          var alwaysEnabled = {
-            home: true,
-            customizer: true,
-          };
-
-          var enabledNavIds = {};
-          for (var key in defaults) {
-            if (Object.prototype.hasOwnProperty.call(defaults, key)) {
-              enabledNavIds[key] = defaults[key];
-            }
-          }
-
-          if (parsed.enabled && typeof parsed.enabled === 'object') {
-            for (var id in parsed.enabled) {
-              if (!Object.prototype.hasOwnProperty.call(parsed.enabled, id)) {
-                continue;
-              }
-              if (Object.prototype.hasOwnProperty.call(alwaysEnabled, id)) {
-                enabledNavIds[id] = true;
-                continue;
-              }
-              enabledNavIds[id] = parsed.enabled[id] !== false;
-            }
-          }
-
-          for (var required in alwaysEnabled) {
-            if (Object.prototype.hasOwnProperty.call(alwaysEnabled, required)) {
-              enabledNavIds[required] = true;
-            }
-          }
-
-          var magnetMap = {
-            home: 'nav-home',
-            customizer: 'nav-customizer',
-            journal: 'nav-journal',
-            inventory: 'nav-inventory',
-            observations: 'nav-observations',
-            fauxFeelings: 'nav-faux-feelings',
-            feelings: 'nav-feelings',
-            needs: 'nav-needs',
-            bodyCues: 'nav-body-cues',
-            journalDashboard: 'nav-journal-dashboard',
-          };
-
-          var magnetEnabled = {};
-          for (var navId in magnetMap) {
-            if (!Object.prototype.hasOwnProperty.call(magnetMap, navId)) {
-              continue;
-            }
-            var magnetId = magnetMap[navId];
-            var isEnabled = Object.prototype.hasOwnProperty.call(enabledNavIds, navId)
-              ? !!enabledNavIds[navId]
-              : true;
-            magnetEnabled[magnetId] = isEnabled;
-          }
-
-          var magnets = nav.querySelectorAll('[data-magnet-id]');
-          if (!magnets || !magnets.length) {
-            return;
-          }
-
-          var supplementalEnabled = false;
-
-          for (var j = 0; j < magnets.length; j += 1) {
-            var el = magnets[j];
-            if (!el || typeof el.getAttribute !== 'function') {
-              continue;
-            }
-
-            var magnetId = el.getAttribute('data-magnet-id');
-            if (!magnetId) {
-              continue;
-            }
-
-            var shouldEnable = Object.prototype.hasOwnProperty.call(magnetEnabled, magnetId)
-              ? magnetEnabled[magnetId]
-              : !(typeof el.hasAttribute === 'function' && el.hasAttribute('data-nav-hidden'));
-
-            if (shouldEnable) {
-              if (el.dataset && Object.prototype.hasOwnProperty.call(el.dataset, 'navStoredTabIndex')) {
-                var stored = el.dataset.navStoredTabIndex;
-                if (stored) {
-                  el.setAttribute('tabindex', stored);
-                } else if (typeof el.removeAttribute === 'function') {
-                  el.removeAttribute('tabindex');
-                }
-                delete el.dataset.navStoredTabIndex;
-              } else if (typeof el.removeAttribute === 'function') {
-                el.removeAttribute('tabindex');
-              }
-
-              if (typeof el.removeAttribute === 'function') {
-                el.removeAttribute('data-nav-hidden');
-                el.removeAttribute('aria-hidden');
-              }
-
-              var isSupplemental = false;
-              if (el.dataset && el.dataset.navSupplemental === 'true') {
-                isSupplemental = true;
-              } else if (typeof el.getAttribute === 'function' && el.getAttribute('data-nav-supplemental') === 'true') {
-                isSupplemental = true;
-              }
-
-              if (isSupplemental) {
-                supplementalEnabled = true;
-              }
-            } else {
-              if (
-                el.dataset &&
-                !Object.prototype.hasOwnProperty.call(el.dataset, 'navStoredTabIndex') &&
-                typeof el.getAttribute === 'function'
-              ) {
-                var existing = el.getAttribute('tabindex');
-                if (existing != null) {
-                  el.dataset.navStoredTabIndex = existing;
-                } else {
-                  el.dataset.navStoredTabIndex = '';
-                }
-              }
-
-              if (typeof el.setAttribute === 'function') {
-                el.setAttribute('tabindex', '-1');
-                el.setAttribute('data-nav-hidden', 'true');
-                el.setAttribute('aria-hidden', 'true');
-              }
-            }
-          }
-
-          if (typeof nav.setAttribute === 'function' && typeof nav.removeAttribute === 'function') {
-            if (supplementalEnabled) {
-              nav.setAttribute('data-nav-expanded', 'true');
-            } else {
-              nav.removeAttribute('data-nav-expanded');
-            }
-          }
-        })();
-      </script>`;
 
 const BRAND_NAME = 'allneeds.app';
 const DEFAULT_DESCRIPTION =
@@ -788,6 +399,12 @@ const customizerShellPlaceholderHtml = `    <div class="palette-corner" data-she
         <span class="visually-hidden">Open customizer</span>
       </button>
     </div>`;
+
+const shellRuntimeLoaderScript = Object.freeze({
+  src: 'scripts/shell-runtime-loader.js',
+  defer: true,
+  beforeBase: true,
+});
 
 function normalizeScripts(scripts, options = {}) {
   const includeInventoryRuntime = options.includeInventoryRuntime !== false;
@@ -1464,7 +1081,7 @@ ${cards}
     title: 'Home',
     depth: 0,
     main,
-    scripts: [{ src: 'scripts/shell-runtime-loader.js', defer: true, beforeBase: true }],
+    scripts: [shellRuntimeLoaderScript],
     activeNav: 'home',
     canonicalPath: '/',
     bodyExtras: customizerShellPlaceholderHtml,
@@ -1706,9 +1323,10 @@ function renderCategory(type, items) {
     ],
     main,
     headExtras: magnetHubStyles,
-    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/magnets.js', type: 'module' }],
     activeNav: type,
     canonicalPath: `${type}/`,
+    includeInventoryRuntime: false,
   });
 
   writePage(`${type}/index.html`, html);
@@ -1835,10 +1453,11 @@ function renderBodyCuesPage() {
     ],
     main,
     headExtras: bodyCuesStyles,
-    scripts: [{ src: 'scripts/body-cues-tool.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/body-cues-tool.js', type: 'module' }],
     activeNav: 'feelings',
     mainClass: 'page body-cues-page',
     canonicalPath: 'feelings/body-cues/',
+    includeInventoryRuntime: false,
   });
 
   writePage('feelings/body-cues/index.html', html);
@@ -1862,9 +1481,10 @@ function renderFauxFeeling(item) {
       { label: item.title }
     ],
     main,
-    scripts: [{ src: 'scripts/magnets.js', type: 'module' }],
+    scripts: [shellRuntimeLoaderScript, { src: 'scripts/magnets.js', type: 'module' }],
     activeNav: 'faux-feelings',
     canonicalPath: `faux-feelings/${item.slug}/`,
+    includeInventoryRuntime: false,
   });
 
   writePage(`faux-feelings/${item.slug}/index.html`, html);
@@ -1923,6 +1543,7 @@ function renderFeeling(item) {
     ],
     main,
     scripts: [
+      shellRuntimeLoaderScript,
       { src: 'scripts/magnets.js', type: 'module' },
       { src: 'scripts/feeling-reverse-inference.js', type: 'module' },
     ],
@@ -1930,6 +1551,7 @@ function renderFeeling(item) {
     activeNav: 'feelings',
     canonicalPath: `feelings/${item.slug}/`,
     description: item.description,
+    includeInventoryRuntime: false,
     headExtras: '    <link rel="stylesheet" href="../../styles/feeling-inference-mobile.css" />',
   });
 
@@ -3509,15 +3131,16 @@ function slugify(value) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 }
 
-function updateSupportLaneNav() {
-  const supportPath = join(rootDir, 'alexithymia-support', 'index.html');
+function updateHandOwnedRouteNav(routeParts, { label, activeNav = null } = {}) {
+  const routePath = join(rootDir, ...routeParts);
+  const routeLabel = label || routeParts.join('/');
   let contents;
 
   try {
-    contents = readFileSync(supportPath, 'utf8');
+    contents = readFileSync(routePath, 'utf8');
   } catch (error) {
     if (typeof console !== 'undefined' && console.warn) {
-      console.warn('Unable to read Alexithymia Support page for nav update', error);
+      console.warn(`Unable to read ${routeLabel} page for nav update`, error);
     }
     return;
   }
@@ -3527,24 +3150,49 @@ function updateSupportLaneNav() {
 
   if (!match) {
     if (typeof console !== 'undefined' && console.warn) {
-      console.warn('Alexithymia Support page is missing the primary nav block; skipped nav sync.');
+      console.warn(`${routeLabel} page is missing the primary nav block; skipped nav sync.`);
     }
     return;
   }
 
   const indent = match[1] ?? '';
-  const navMarkup = renderNav('../', 'feelings');
+  const navMarkup = renderNav('../', activeNav);
   const replacement = indentBlock(navMarkup, indent);
 
-  if (match[0] === replacement) {
-    return;
+  let updated = match[0] === replacement
+    ? contents
+    : contents.replace(navPattern, replacement);
+
+  const criticalStartIndex = updated.indexOf(SHARED_NAV_CRITICAL_START);
+  const criticalEndIndex = updated.indexOf(SHARED_NAV_CRITICAL_END);
+  if (
+    criticalStartIndex === -1
+    || criticalEndIndex === -1
+    || criticalEndIndex < criticalStartIndex
+  ) {
+    throw new Error(`${routeLabel} page is missing shared navigation critical CSS ownership markers.`);
   }
 
-  const updated = contents.replace(navPattern, replacement);
+  const criticalBefore = updated.slice(0, criticalStartIndex + SHARED_NAV_CRITICAL_START.length);
+  const criticalAfter = updated.slice(criticalEndIndex);
+  updated = `${criticalBefore}\n    <style>${navCriticalCss}</style>\n    ${criticalAfter}`;
 
   if (updated !== contents) {
-    writeFileSync(supportPath, updated);
+    writeFileSync(routePath, updated);
   }
+}
+
+function updateSupportLaneNav() {
+  updateHandOwnedRouteNav(['alexithymia-support', 'index.html'], {
+    label: 'Alexithymia Support',
+    activeNav: 'feelings',
+  });
+}
+
+function updateFeedNav() {
+  updateHandOwnedRouteNav(['feed', 'index.html'], {
+    label: 'Shared Strategies',
+  });
 }
 
 function build(scopeSet) {
@@ -3557,6 +3205,7 @@ function build(scopeSet) {
   const buildInventory = shouldBuild('inventory');
   const buildObservationGuide = shouldBuild('observation-guide');
   const buildSupportLane = shouldBuild('support-lane');
+  const buildFeed = shouldBuild('feed');
 
   if (buildHome) {
     renderHome();
@@ -3604,6 +3253,10 @@ function build(scopeSet) {
 
   if (buildSupportLane) {
     updateSupportLaneNav();
+  }
+
+  if (buildFeed) {
+    updateFeedNav();
   }
 }
 

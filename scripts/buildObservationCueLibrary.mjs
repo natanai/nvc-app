@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { normalizeObservationPlaceholders } from '../lib/observationPlaceholders.js';
@@ -704,7 +704,7 @@ function formatTitle(value) {
   return parts.join(' ');
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   try {
     buildObservationCueLibrary();
   } catch (error) {

@@ -15,7 +15,8 @@ Several responsibilities that used to be implicitly global now have smaller owne
 - Home/Feed controller intent loading: `scripts/shell-runtime-loader.js` and the Shared Strategies route loader;
 - magnet persistence/physics: `scripts/magnets.js`;
 - Body Cues and feeling reverse inference: route-specific modules;
-- Need-page strategy deck behavior: `scripts/strategy-deck.js`.
+- Need-page strategy deck behavior: `scripts/strategy-deck.js`;
+- legacy `#journal-dashboard` compatibility routing: `scripts/inventory-legacy-journal-redirect.js`.
 
 ## Completed extraction: Need-page strategy deck
 
@@ -35,17 +36,13 @@ This extraction reduced `scripts/inventory.js` from roughly 234.7 KiB to 226.2 K
 
 ## Remaining seams inside `inventory.js`
 
-### 1. Legacy Journal URL redirect — shell/navigation concern
-
-The `#journal-dashboard` redirect is independent from Inventory data. It can move next, but its execution timing should remain before the Inventory initializer becomes active. Treat this as a navigation-compatibility move, not a cleanup-only deletion.
-
-### 2. Account/data operations — capability owner
+### 1. Account/data operations — capability owner
 
 The shared Menu shell already invokes account/data actions through explicit `window` capability functions. The controller still implements the underlying backup/import/export, backend snapshot, and personal-strategy sharing actions. Those functions are candidates for a dedicated Account & data runtime loaded on intent, provided restore-transaction and magnet-pause invariants stay at the canonical restore boundary.
 
 This seam should reduce ordinary controller work without changing the Menu shell itself.
 
-### 3. Customizer + navigation settings — global shell owner
+### 2. Customizer + navigation settings — global shell owner
 
 Theme palette state, roundness, optional navigation magnets, and their mirrored storage helpers are shell-level state rather than Inventory-workspace state. They remain tightly coupled inside `inventory.js` today.
 
@@ -59,7 +56,7 @@ Do not extract these by merely moving code into another always-loaded file. The 
 
 Because this seam affects first paint and persisted presentation, browser acceptance is more important here than for the strategy deck.
 
-### 4. Journal integration shell — separate from Journal data model
+### 3. Journal integration shell — separate from Journal data model
 
 The Journal data store/model is already modular, but `inventory.js` still coordinates the global Journal panel, edit-location handling, and shell controls. Keep the distinction clear:
 
@@ -67,7 +64,7 @@ The Journal data store/model is already modular, but `inventory.js` still coordi
 - global open/close/edit-shell behavior is a shell capability;
 - dedicated Journal and Alexithymia Support remain explicit eager owners until their visible behavior has an equivalent smaller owner.
 
-### 5. Inventory/strategy workspace — keep in the feature runtime
+### 4. Inventory/strategy workspace — keep in the feature runtime
 
 The following belong together until a later feature-level split has a concrete benefit:
 
@@ -97,7 +94,7 @@ For each extraction:
 Current safe order:
 
 1. **Need strategy deck — complete.** Route ownership is explicit and CI-enforced.
-2. **Legacy Journal redirect** — small navigation compatibility seam; preserve timing.
+2. **Legacy Journal redirect — complete.** Compatibility timing is preserved by `scripts/inventory-legacy-journal-redirect.js` and its regression test.
 3. **Account/data capability implementation** — after mapping the existing exported `window` contract and restore tests.
 4. **Customizer/navigation settings** — after real-device Home canary acceptance because it touches first-paint/persisted presentation state.
 5. **Journal shell integration** — after dedicated Journal/Alexithymia behavior is independently covered.

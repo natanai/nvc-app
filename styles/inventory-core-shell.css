@@ -74,10 +74,15 @@
 
 .inventory-more-menu__header,
 .inventory-more-menu__subheader {
+  position: sticky;
+  top: 0;
+  z-index: 3;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 0.75rem;
   align-items: start;
+  background: color-mix(in srgb, #ffffff 94%, var(--lavender) 6%);
+  border-bottom: 1px solid color-mix(in srgb, var(--outline) 12%, transparent);
 }
 
 .inventory-more-menu__header {
@@ -517,8 +522,9 @@
 
   /* The shared-strategies feed also becomes a viewport-width app surface on phones. */
   body:has(#main [data-feed-list]) #main.page {
-    width: calc(100% + 2rem);
-    margin-inline: -1rem;
+    width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));
+    min-width: 0;
+    margin-inline: var(--page-inline-bleed);
     padding: 1rem 0 2rem;
     border: 0;
     border-radius: 0;

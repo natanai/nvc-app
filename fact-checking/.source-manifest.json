@@ -7,15 +7,15 @@
     "data/Faux Feelings.csv": "ad788b013088ea10afd9eb04cc82b8470cefed3190f42bafa1fb10acc2aeca0a",
     "data/Strategies.csv": "b100d1ab8f50777c8c02153182ccb4aa1b886f6b68f0f24485ef8da0c575bf12",
     "data/color-palettes.csv": "089428e057e1f52d6e73032d65b3dc380c191e0292e6f2d94f3571e11bf73f31",
-    "_evidence/citations.csv": "f575256e1df720332db5518a661ca5c7aafde1a4a8990770889f8eb7e3c6a430",
+    "_evidence/citations.csv": "86c8e9aa7b6397686cc43e3377cde6d2026b803b1e27c4c5f2b2daab77808982",
     "data/reverse-inference-overrides.json": "72b59911e0702aa59d3f72b04b0d639aca42f3cc5bafbfda157a94ce5c88143f",
     "data/body-regions.json": "21363907e63931121e495677faafdf9782ff6f58b4d954499577778996f3021b",
     "data/reverse-inference.json": "47ef4b4d9fb009e8a1064797cdab9068cdcda050b295337afe8a08ee42b620cc",
     "data/observation_taxonomy.json": "ea730a89bfe2bee86f88637c068ac134d6b3b23cca96fa92eae6267e6b1001a1",
     "data/observation_lexicon.json": "b4a346e3edc52e1b2fed91a52331434b4f8cb629ea028fc95f04b92131001bb4",
-    "data/observation_need_templates.json": "2387f913d2142e175c3a759bf3e6e70023c5c6064bcfcbd36fa4173c34f6fa60",
-    "data/observation_module_blueprints.json": "871bd98a8fcbd54e7436939cde9d2f85dce05b655fa9365e9048ae9ee6bb12f5",
-    "data/observation_detector_stats.json": "126cc70b475c78b0f2bdaa99c26fb199a1e71e87eb60eae891d4d7c94323f94c",
-    "data/observation-guide.json": "93f3282c3823c7a767c9bfcef7ae9d9664d01aced96f3c17638a17e34291fbe5"
+    "data/observation_need_templates.json": "832eb25553bf726de8dd74176d2595408ef5469634f21a0675897cf8d1d406de",
+    "data/observation_module_blueprints.json": "4375d543c379cfcc0d930705a6d89a4f203cc065a4d2cf50de3ff1c3e782ba62",
+    "data/observation_detector_stats.json": "264854b648751fa02eed882f460bb17c61a195a67eb14298171fc5de6df45efa",
+    "data/observation-guide.json": "48b85776fd064e16850782329d95908568eaa1c7fe78f915f836d6bd84ac798b"
   }
 }

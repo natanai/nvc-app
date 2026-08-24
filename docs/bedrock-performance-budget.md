@@ -15,56 +15,83 @@ It does **not** include:
 - inline scripts;
 - execution time, long tasks, LCP, INP, CLS, or memory use.
 
-Those require browser/network measurement. The static budget exists to catch architectural regressions such as putting `inventory.js` back on Home first load or letting a shared controller grow indefinitely without an explicit decision.
+Those require browser/network measurement. The static budget exists to catch architectural regressions such as putting `inventory.js` back on lightweight content routes or letting a shared controller grow indefinitely without an explicit decision.
 
-## Current Bedrock route ceilings
+## Post-Bedrock immediate-response canary
 
-The ceilings intentionally leave a small amount of breathing room above the current branch. They are **regression ceilings, not optimization targets**. When a validated optimization lowers a route's normal first-load graph, the ceiling should be ratcheted downward.
+The merged `inventory-core-overhaul` branch remains the Bedrock production baseline. `performance/immediate-response-v1` is the first post-Bedrock live-device performance canary. It expands the proven Home/Shared Strategies intent-loader model to generated category hubs, Feeling detail pages, Faux Feeling detail pages, and Body Cues while preserving immediately visible route-owned behavior.
 
-| Representative route | Current raw direct JS | Ceiling |
+The canary does **not** make `inventory.js` lazy everywhere. Need detail, Inventory, dedicated Journal, and Alexithymia Support remain eager because visible behavior on those routes still depends on the controller.
+
+The latest green Site Quality measurement on the canary reports:
+
+| Representative route | Raw direct JS | Canary ceiling |
 | --- | ---: | ---: |
-| Home | ~101.7 KiB | 110 KB |
-| Shared Strategies | ~115.1 KiB | 125 KB |
-| Need detail | ~335.6 KiB | 355 KB |
-| Feeling detail | ~337.5 KiB | 355 KB |
-| Faux-feeling detail | ~320.5 KiB | 337 KB |
-| Body Cues | ~335.5 KiB | 355 KB |
-| Inventory | ~328.1 KiB | 345 KB |
-| Journal | ~394.5 KiB | 415 KB |
+| Home | 101.9 KiB | 110 KB |
+| Shared Strategies | 115.3 KiB | 125 KB |
+| Feelings index | 101.9 KiB | 115 KB |
+| Needs index | 101.9 KiB | 115 KB |
+| Faux Feelings index | 101.9 KiB | 115 KB |
+| Need detail | 337.3 KiB | 355 KB |
+| Feeling detail | **118.2 KiB** | 130 KB |
+| Faux-feeling detail | **101.9 KiB** | 115 KB |
+| Body Cues | **116.8 KiB** | 130 KB |
+| Inventory | 330.2 KiB | 345 KB |
+| Journal | 399.5 KiB | 415 KB |
 
-The test also requires Home to remain at or below 40% of the representative Need-detail parser graph. This protects the Home lazy-controller canary independently of absolute file-size changes.
+For comparison, immediately before this canary, Feeling detail was about 339.0 KiB, Faux-feeling detail about 322.6 KiB, and Body Cues about 337.6 KiB. The ownership change therefore removes roughly 220 KiB of direct parser-discovered JavaScript from each of those representative content routes without reducing the protected eager route graphs.
 
-Two internal controller extractions have now reduced shared ownership without changing visible route behavior:
+The test now requires the newly intent-loaded generated content routes to stay at or below 40% of the representative Need-detail parser graph, in addition to their absolute ceilings. This makes the performance win a permanent architectural invariant rather than a one-time measurement.
 
-- the Need strategy-card deck moved into `scripts/strategy-deck.js`. Need detail remains essentially flat because that route still needs the deck, while Feeling, Faux Feeling, Body Cues, Inventory, and Journal each stopped parsing roughly 8.3 KiB of unrelated deck behavior;
-- the legacy `#journal-dashboard` Inventory compatibility redirect moved into the Inventory-only `scripts/inventory-legacy-journal-redirect.js`, which executes before `inventory.js`. That removed roughly another 1 KiB from the shared controller while leaving Inventory's own total essentially flat.
+These are source-level and CI measurements. The branch still requires real phone and desktop acceptance before the canary can be treated as production truth.
+
+## Why the reduction is structurally safe
+
+The reduction comes from changing startup ownership, not from deleting product capability:
+
+- `scripts/inventory-core-shell.js` remains eager for Menu/navigation shell behavior.
+- `scripts/magnets.js` remains eager on magnet routes.
+- Feeling detail pages keep `scripts/feeling-reverse-inference.js` eager.
+- Body Cues keeps `scripts/body-cues-tool.js` eager.
+- the small `scripts/shell-runtime-loader.js` loads the canonical Inventory controller when the user asks for Customizer, Journal, Account & data, backup/restore, sharing, import/export, or another controller-owned shell capability, including capture/replay of an early click after controller initialization.
+- Need detail keeps `inventory.js` eager because its personal-strategy form and save/profile controls are immediately visible.
+- Inventory, dedicated Journal, and Alexithymia Support remain eager for the same ownership reason.
+
+The generator is the canonical owner of these route script graphs. Generated HTML was regenerated rather than edited as the source of the optimization.
 
 ## Largest shared-asset ceilings
 
+The canary changes *where* the large controller is required; it does not pretend the controller itself has become small.
+
 | Asset | Current raw size | Ceiling |
 | --- | ---: | ---: |
-| `scripts/inventory.js` | ~225.2 KiB | 238 KB |
-| `scripts/strategy-deck.js` | ~8.4 KiB | 10 KB |
-| `styles.css` | ~166.1 KiB | 175 KB |
-| `scripts/magnets.js` | ~60.1 KiB | 65 KB |
-| `scripts/inventory-core-shell.js` | ~27.5 KiB | 30 KB |
-| `scripts/alexithymia-support.js` | ~81.2 KiB | 85 KB |
+| `scripts/inventory.js` | 227.2 KiB | 238 KB |
+| `scripts/strategy-deck.js` | 8.1 KiB | 10 KB |
+| `styles.css` | 169.7 KiB | 175 KB |
+| `scripts/magnets.js` | 61.6 KiB | 65 KB |
+| `scripts/inventory-core-shell.js` | 26.2 KiB | 30 KB |
+| `scripts/alexithymia-support.js` | 59.4 KiB | 85 KB |
 
 Raising one of these ceilings should be an explicit architectural decision. Prefer reducing ownership scope or extracting a real capability boundary rather than moving code between equally eager files merely to satisfy the test.
 
+Two earlier controller extractions also reduced shared ownership without changing visible route behavior:
+
+- the Need strategy-card deck moved into `scripts/strategy-deck.js`. Need detail remains essentially flat because that route still needs the deck, while unrelated routes stopped parsing that behavior;
+- the legacy `#journal-dashboard` Inventory compatibility redirect moved into the Inventory-only `scripts/inventory-legacy-journal-redirect.js`, which executes before `inventory.js`.
+
 ## CSS and font delivery checkpoint
 
-The shared stylesheet is still broad, but its dependency graph is no longer hidden behind serial CSS imports. `styles.css` contains no `@import` rules. The page compiler now exposes Google Fonts, Feeling magnet icons, Need magnet icons, shared density, and Inventory shell styles directly in HTML before the main stylesheet, preserving the former cascade order while making those requests parser-discoverable immediately.
+The shared stylesheet is still broad, but its dependency graph is no longer hidden behind serial CSS imports. `styles.css` contains no `@import` rules. The page compiler exposes Google Fonts, Feeling magnet icons, Need magnet icons, shared density, and Inventory shell styles directly in HTML before the main stylesheet, preserving cascade order while making those requests parser-discoverable immediately.
 
-The explicit hand-owned surfaces follow the same ownership rule: Feed, Observations, and the standalone Emotions Wheel declare the same blocking dependency order directly; Alexithymia Support declares the same graph through its existing non-blocking `media="print"`/`onload` strategy and mirrors it in its `<noscript>` fallback. The old late `@import './styles/nav-critical.css'` in `styles.css` was also removed because it occurred after ordinary rules and was therefore invalid/dormant; generated pages continue to receive repaired critical navigation CSS from the canonical page compiler.
+The explicit hand-owned surfaces follow the same ownership rule: Feed, Observations, the standalone Emotions Wheel, and Alexithymia Support declare the same blocking dependency order directly. Alexithymia keeps an eager magnet and Journal runtime because those interactions are visible immediately, so its shared layout CSS must also settle before those runtimes measure the page; the former route-only `media="print"`/`onload` exception is retired.
 
-Every page that requests the Google Fonts stylesheet now preconnects to both `fonts.googleapis.com` and `fonts.gstatic.com` first. `tests/font-delivery.test.mjs` enforces that ordering for every committed Google Fonts consumer and for the canonical page compiler, and the normal Site Quality and spreadsheet rebuild workflows run that delivery contract.
+Every page that requests the Google Fonts stylesheet preconnects to both `fonts.googleapis.com` and `fonts.gstatic.com` first. `tests/font-delivery.test.mjs` enforces that ordering for every committed Google Fonts consumer and for the canonical page compiler.
 
-This improves discovery/connection timing without changing typography or layout. Self-hosting, subsetting, or preloading font files would be a separate optimization and is not required merely to call the original Bedrock architecture complete.
+Self-hosting/subsetting fonts and route-level CSS extraction remain possible optimizations, but neither should be attempted by adding late runtime repair or arbitrary bundles. Measure actual browser/route benefit first, then move ownership only where a real seam exists.
 
 ## Live production-delivery verification
 
-A one-shot live-header audit on 2026-08-22 verified the actual published delivery stack instead of assuming repository byte size equals network cost. The temporary audit workflow was removed after measurement.
+A one-shot live-header audit on 2026-08-22 verified the published delivery stack instead of assuming repository byte size equals network cost. The temporary audit workflow was removed after measurement.
 
 Observed behavior from `https://allneeds.app/` and representative static assets:
 
@@ -74,26 +101,28 @@ Observed behavior from `https://allneeds.app/` and representative static assets:
 - CSS, JavaScript, and SVG responses were served compressed with gzip and `Cache-Control: max-age=14400`;
 - a repeated identical CSS request changed Cloudflare's status from `MISS` to `HIT`, confirming active edge caching for static assets.
 
-The exact encoding or cache node may vary by client/edge, but the important Bedrock conclusion is stable: production compression and static edge caching are active. There is no current architectural reason to add a repository-level pseudo-header layer or a second cache system just to satisfy the Bedrock finish line.
+The exact encoding or cache node may vary by client/edge, but the important conclusion is stable: production compression and static edge caching are active. There is no current architectural reason to add a repository-level pseudo-header layer or a second cache system merely to claim performance work.
 
 ## What the current numbers tell us
 
-Bedrock has already removed a large amount of ordinary first-load work from Home and Shared Strategies, and the first controller extractions have produced measurable shared-route reductions. The site still has performance headroom, but not every possible optimization is a Bedrock blocker:
+The canary demonstrates that startup ownership was the highest-value next optimization: ordinary generated content can stay immediately interactive without parsing the ~227 KiB Inventory controller before first use.
 
-1. **The shared Inventory controller remains large.** Need details, Feeling/Faux Feeling details, Inventory, Body Cues, and the dedicated Journal still eagerly load the roughly 225 KiB controller because some visible or shell behavior remains owned there. Further extraction should happen only where a real independent capability boundary exists; backup/restore, profile sync, Journal integration state, and first-paint Customizer state are intentionally not being split merely to make the file smaller.
-2. **The global stylesheet remains broad.** `styles.css` is roughly 166 KiB. Its shared dependencies are now parser-visible rather than nested imports, so future CSS gains should come from measuring actual unused selectors/route ownership rather than adding more discovery wrappers.
-3. **Magnet behavior is substantial.** `scripts/magnets.js` is roughly 60 KiB and is intentionally shared because magnet persistence/physics is a core interaction. Future work should profile its parse/execution cost before splitting it arbitrarily.
-4. **Dedicated feature surfaces are intentionally heavier.** Journal and Alexithymia Support own real interactive behavior. Their goal is not minimum bytes at any cost; it is to avoid loading unrelated capabilities and to keep expensive work off routes that do not need it.
+Meaningful performance headroom still exists:
 
-## Further performance work after Bedrock acceptance
+1. **The shared Inventory controller remains large.** Protected eager routes still genuinely need it. Further extraction should happen only when a clean independent owner exists; backup/restore, profile sync, strategy editing, and Journal integration should not be split merely to make a file smaller.
+2. **The global stylesheet remains broad.** `styles.css` is about 170 KiB raw. Future CSS gains should come from measured unused selectors and route ownership, not late overrides or duplicate route-specific copies.
+3. **Magnet behavior is substantial.** `scripts/magnets.js` is about 62 KiB and intentionally shared because magnet persistence/physics is a core interaction. Profile parse/execution cost before splitting it arbitrarily.
+4. **Dedicated feature surfaces are intentionally heavier.** Journal, Inventory, Need strategy editing, and Alexithymia Support own real interactive behavior. Their goal is not minimum bytes at any cost; it is to avoid unrelated capability and keep startup work aligned with visible function.
 
-These remain useful future optimizations, but they should be driven by measured browser benefit rather than continually moving the original Bedrock completion line:
+## Next performance work after live acceptance
 
-1. extract additional `inventory.js` capabilities only when a clean independent owner exists;
-2. expand lazy-controller ownership only after each candidate route passes explicit browser/device acceptance;
-3. measure unused CSS by route before pruning selectors or creating route-specific bundles;
-4. consider self-hosted/subset fonts only if real browser data shows external font delivery is materially limiting first paint;
-5. consider minification, content-versioned assets, and longer immutable cache lifetimes as a post-Bedrock packaging phase;
-6. use real-browser measurements for LCP, INP, CLS, long tasks, memory, and request waterfalls, then optimize whichever metric is actually limiting users.
+Do not stack additional invasive packaging changes on this canary before its interaction contract is exercised on real devices. Once the canary is accepted, the next work should be measurement-led:
 
-There is no meaningful state where a non-trivial web app is "as efficient as humanly possible." Performance has diminishing returns and tradeoffs. Bedrock's goal is instead to make ownership explicit enough that future performance work is measurable, safe, and local: reduce bytes/work where users benefit, without sacrificing correctness, accessibility, persistence, or maintainability.
+1. audit Observations and any remaining route classes independently before changing their startup graph;
+2. profile real unused CSS by route before extracting stable CSS owners;
+3. capture real-browser LCP, INP, CLS, long tasks, memory, and request waterfalls on cold and repeat phone/desktop loads;
+4. consider deterministic minification and content-versioned assets with longer immutable cache lifetimes if real delivery measurements justify the added build complexity;
+5. consider self-hosted/subset fonts only if external font delivery is materially limiting first paint;
+6. continue decomposing `inventory.js` only at genuine capability boundaries.
+
+There is no meaningful state where a non-trivial web app is "as efficient as humanly possible." The useful target is a measurable architecture in which each route receives the minimum work needed for its immediate function, while correctness, accessibility, persistence, and maintainability remain intact.

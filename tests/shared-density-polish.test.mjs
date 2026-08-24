@@ -149,8 +149,8 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
   assert.ok(css.includes('body:has(#main.inventory-page) .breadcrumbs'));
   assert.ok(css.includes('body:has(#main.inventory-page) .page-wrapper'));
   assert.ok(css.includes('gap: 0.45rem;'));
-  assert.ok(css.includes('width: calc(100% + 2rem);'));
-  assert.ok(css.includes('margin-inline: -1rem;'));
+  assert.ok(css.includes('width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));'));
+  assert.ok(css.includes('margin-inline: var(--page-inline-bleed);'));
   assert.ok(css.includes('grid-template-columns: repeat(2, minmax(0, 1fr));'));
   assert.ok(css.includes('border-left: 0;'));
   assert.ok(css.includes('border-right: 0;'));
@@ -176,4 +176,64 @@ test('mobile Inventory foregrounds the inventory with one phone-layout owner', a
   assert.ok(shell.includes("Inventory's <=640px page presentation is\n   owned by inventory-mobile.css"));
   assert.ok(!shell.includes('body .inventory-page.inventory-page'));
   assert.ok(!buildPages.includes('/* Inventory is the app surface on phones, not a card inside the page. */'));
+});
+
+test('Observations uses one parser-discovered route presentation owner', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
+  const html = await fs.readFile(path.join(root, 'observations/index.html'), 'utf8');
+
+  const link = '<link rel="stylesheet" href="../styles/observations.css" />';
+  assert.ok(html.includes(link));
+  assert.ok(html.indexOf(link) > html.indexOf('<link rel="stylesheet" href="../styles.css" fetchpriority="high" />'));
+  assert.ok(css.includes('single route-specific stylesheet for /observations/'));
+  assert.ok(css.includes('body:has(#main.observations-page) .breadcrumbs'));
+  assert.ok(css.includes('display: none;'));
+  assert.ok(css.includes('body:has(#main.observations-page) {'));
+  assert.ok(css.includes('--page-inline-gutter: 1rem;'));
+  assert.ok(css.includes('padding-inline: var(--page-inline-gutter);'));
+  assert.ok(css.includes('width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));'));
+  assert.ok(css.includes('.observation-editor__slot-row'));
+  assert.ok(css.includes('.need-status-toggle'));
+  assert.ok(css.includes('.observation-suggestions__why-toggle::after'));
+  assert.ok(css.includes(".observation-suggestions__action[data-action='done']"));
+  assert.ok(css.includes('.observation-editor__match-summary-row + .observation-editor__match-summary-row::before'));
+  assert.ok(!css.includes('!important'));
+  await assert.rejects(fs.access(path.join(root, 'styles/observations-critical.css')), { code: 'ENOENT' });
+  await assert.rejects(fs.access(path.join(root, 'styles/observations-mobile.css')), { code: 'ENOENT' });
+});
+
+test('mobile full-bleed app surfaces use the same gutter as the shared body', async () => {
+  const shared = await fs.readFile(path.join(root, 'styles.css'), 'utf8');
+  const inventory = await fs.readFile(path.join(root, 'styles/inventory-mobile.css'), 'utf8');
+  const bodyCues = await fs.readFile(path.join(root, 'styles/body-cues-mobile.css'), 'utf8');
+  const shell = await fs.readFile(path.join(root, 'styles/inventory-core-shell.css'), 'utf8');
+  const observations = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
+  const routeOwners = [inventory, bodyCues, shell, observations];
+
+  assert.ok(shared.includes('--page-inline-gutter: clamp(1rem, 4vw, 2.5rem);'));
+  assert.ok(shared.includes('--page-inline-gutter: 0.75rem;'));
+  assert.equal(shared.match(/--page-inline-bleed: calc\(0px - var\(--page-inline-gutter\)\);/g)?.length, 1);
+  assert.ok(shared.includes('padding: 1.5rem var(--page-inline-gutter) 2.5rem;'));
+
+  for (const css of routeOwners) {
+    assert.ok(css.includes('width: calc(100% + var(--page-inline-gutter) + var(--page-inline-gutter));'));
+    assert.ok(css.includes('var(--page-inline-bleed)'));
+    assert.ok(css.includes('min-width: 0;'));
+    assert.ok(!css.includes('width: calc(100% + 2rem);'));
+    assert.ok(!css.includes('margin-inline: -1rem;'));
+    assert.ok(!css.includes('margin: 0 -1rem;'));
+  }
+});
+
+test('Observation text overlays remain paint-only and re-sync after formula rendering', async () => {
+  const css = await fs.readFile(path.join(root, 'styles/observations.css'), 'utf8');
+  const editor = await fs.readFile(path.join(root, 'assets/js/observation-editor.js'), 'utf8');
+
+  const markRule = css.match(/\.observation-editor__highlight mark\s*\{([\s\S]*?)\}/)?.[1] || '';
+  assert.ok(markRule.includes('color: transparent;'));
+  assert.ok(markRule.includes('-webkit-text-fill-color: transparent;'));
+  assert.ok(css.includes('overflow: auto;'));
+  assert.ok(css.includes('scrollbar-width: none;'));
+  assert.ok(css.includes('.observation-editor__highlight::-webkit-scrollbar'));
+  assert.ok(editor.includes('renderObservationFormula();\n  syncObservationHighlightScroll();\n  renderObservationSlotStatus(state.formula);'));
 });

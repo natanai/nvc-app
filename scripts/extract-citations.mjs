@@ -34,6 +34,14 @@ function csvEscape(s) {
   return str;
 }
 
+function repositoryRelativeFile(file) {
+  const relativeFile = path.relative(REPO_ROOT, file);
+  if (!relativeFile || relativeFile.startsWith(`..${path.sep}`) || path.isAbsolute(relativeFile)) {
+    throw new Error(`Citation source is outside the repository: ${file}`);
+  }
+  return relativeFile.split(path.sep).join("/");
+}
+
 async function* walk(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   for (const ent of entries) {
@@ -136,13 +144,14 @@ function extractHtmlAnchors(file, text, lineOffsets, records) {
 
 async function processFile(file) {
   const text = await fs.readFile(file, "utf8");
+  const repositoryFile = repositoryRelativeFile(file);
   const lines = text.split(/\r?\n/);
   const records = [];
   const lineOffsets = buildLineIndex(text);
   const ext = path.extname(file).toLowerCase();
 
   if (ext === ".html" || ext === ".htm") {
-    extractHtmlAnchors(file, text, lineOffsets, records);
+    extractHtmlAnchors(repositoryFile, text, lineOffsets, records);
   }
 
   // Pass A: strict Markdown [label](url)
@@ -152,7 +161,7 @@ async function processFile(file) {
     while ((m = MD_LINK_RE.exec(line)) !== null) {
       const [ , label, url ] = m;
       pushRecord(records, {
-        file, line: i+1,
+        file: repositoryFile, line: i+1,
         label,
         url,
         how: "md_link",
@@ -183,7 +192,7 @@ async function processFile(file) {
       const mNext = next.match(PARENS_URL_LINE_RE);
       if (labelLine && mNext) {
         pushRecord(records, {
-          file, line: i+1,
+          file: repositoryFile, line: i+1,
           label: labelLine,
           url: mNext[1],
           how: "supporting_block_pair",
@@ -196,7 +205,7 @@ async function processFile(file) {
       const inline = line.match(INLINE_LABEL_URL_RE);
       if (inline) {
         pushRecord(records, {
-          file, line: i+1,
+          file: repositoryFile, line: i+1,
           label: inline[1],
           url: inline[2],
           how: "supporting_block_inline",
@@ -235,7 +244,7 @@ async function processFile(file) {
       }
 
       pushRecord(records, {
-        file, line: i+1,
+        file: repositoryFile, line: i+1,
         label: labelGuess,
         url,
         how: "generic_url_with_label_guess",

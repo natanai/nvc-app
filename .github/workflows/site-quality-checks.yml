@@ -46,47 +46,10 @@ jobs:
         id: data-integrity
         run: npm run test:data-integrity
 
-      - name: Verify customizer preload
-        id: customizer-preload
+      - name: Run the complete committed-site test suite
+        id: all-tests
         if: always()
-        run: npm run test:customizer
-
-      - name: Run flicker and jitter checker
-        id: flicker-jitter
-        if: always()
-        run: npm run test:flicker-jitter
-
-      - name: Verify navigation magnets
-        id: navigation-magnets
-        if: always()
-        run: npm run test:nav-magnets
-
-      - name: Verify static layout contracts
-        id: static-layout-contracts
-        if: always()
-        run: |
-          node --test tests/shared-density-polish.test.mjs
-          node tests/body-cues-static-first.test.mjs
-
-      - name: Verify page generator ownership
-        id: generator-ownership
-        if: always()
-        run: npm run test:generator-ownership
-
-      - name: Verify retired architecture stays retired
-        id: obsolete-architecture
-        if: always()
-        run: npm run test:obsolete
-
-      - name: Verify first-load performance budgets
-        id: performance-budgets
-        if: always()
-        run: npm run test:performance
-
-      - name: Verify delivery contracts
-        id: delivery-contracts
-        if: always()
-        run: npm run test:delivery
+        run: npm run test:all
 
       - name: Verify fact-checking authoring round-trip
         id: fact-checking-roundtrip
@@ -161,29 +124,15 @@ jobs:
         if: always()
         run: |
           echo "Committed data integrity: ${{ steps.data-integrity.outcome }}"
-          echo "Committed customizer preload: ${{ steps.customizer-preload.outcome }}"
-          echo "Committed flicker/jitter: ${{ steps.flicker-jitter.outcome }}"
-          echo "Committed navigation magnets: ${{ steps.navigation-magnets.outcome }}"
-          echo "Committed static layout contracts: ${{ steps.static-layout-contracts.outcome }}"
-          echo "Page generator ownership: ${{ steps.generator-ownership.outcome }}"
-          echo "Retired architecture guard: ${{ steps.obsolete-architecture.outcome }}"
-          echo "First-load performance budgets: ${{ steps.performance-budgets.outcome }}"
-          echo "Delivery contracts: ${{ steps.delivery-contracts.outcome }}"
+          echo "Complete committed-site suite: ${{ steps.all-tests.outcome }}"
           echo "Fact-checking round-trip: ${{ steps.fact-checking-roundtrip.outcome }}"
           echo "Authoring build: ${{ steps.build-site.outcome }}"
           echo "Build reproducibility: ${{ steps.generated-artifacts.outcome }}"
 
           if [ "${{ steps.data-integrity.outcome }}" = "success" ] \
-            && [ "${{ steps.customizer-preload.outcome }}" = "success" ] \
-            && [ "${{ steps.flicker-jitter.outcome }}" = "success" ] \
-            && [ "${{ steps.navigation-magnets.outcome }}" = "success" ] \
-            && [ "${{ steps.static-layout-contracts.outcome }}" = "success" ] \
-            && [ "${{ steps.generator-ownership.outcome }}" = "success" ] \
-            && [ "${{ steps.obsolete-architecture.outcome }}" = "success" ] \
-            && [ "${{ steps.performance-budgets.outcome }}" = "success" ] \
-            && [ "${{ steps.delivery-contracts.outcome }}" = "success" ] \
+            && [ "${{ steps.all-tests.outcome }}" = "success" ] \
             && [ "${{ steps.fact-checking-roundtrip.outcome }}" = "success" ]; then
-            echo "Committed static-site runtime, generator ownership, architecture tombstones, performance-budget, delivery, and fact-checking round-trip checks passed."
+            echo "The exhaustive committed-site suite, data validators, and fact-checking round-trip passed."
           else
             echo "One or more committed-site/authoring checks failed; inspect those before publishing this branch."
           fi

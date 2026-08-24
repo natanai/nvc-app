@@ -1,5 +1,7 @@
 # Bedrock desktop finalization
 
+> Historical acceptance record. See `README.md` for current status and `docs/README.md` for current contracts.
+
 The final desktop acceptance pass exposed four viewport/consistency defects that are now part of the Bedrock ownership contract rather than one-off presentation fixes.
 
 ## Dedicated Journal hierarchy

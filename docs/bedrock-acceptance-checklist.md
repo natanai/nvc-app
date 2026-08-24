@@ -28,7 +28,7 @@ The live delivery stack was separately measured on 2026-08-22: Cloudflare is ser
 
 ## Phone acceptance pass
 
-Use the published `bedrock/production-finalization-v2` canary. The goal is to catch things static CI cannot: first paint, touch timing, mobile compositing, persistence across real reloads, and first-interaction behavior.
+Use the published `performance/immediate-response-v1` canary until its acceptance is closed. The goal is to catch things static CI cannot: first paint, touch timing, mobile compositing, persistence across real reloads, and first-interaction behavior.
 
 The broad phone pass is accepted as complete. After the final Journal single-owner refactor, only the two Journal-context checks called out in section 7 need a quick phone recheck; the earlier full-site phone pass does not need to be repeated unless those checks expose a regression.
 

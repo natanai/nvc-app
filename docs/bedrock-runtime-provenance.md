@@ -1,5 +1,7 @@
 # Bedrock runtime provenance
 
+> Historical migration record. The durable rules live in `docs/bedrock-runtime-contract.md` and permanent regression tests.
+
 Bedrock uses one decision rule for browser mutations: **if the correct markup or presentation is knowable from the route/build, it must be emitted by its canonical compiler/style owner.** Runtime code is reserved for values that genuinely depend on saved user state, fetched data, authentication, permissions, device capabilities, or interaction state.
 
 ## Audit scope

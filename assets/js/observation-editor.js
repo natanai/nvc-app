@@ -471,6 +471,7 @@ function analyze(raw, options = {}) {
   renderHighlight();
   renderDetectionStatus();
   renderObservationFormula();
+  syncObservationHighlightScroll();
   renderObservationSlotStatus(state.formula);
   autoResolveValidity();
 }
@@ -1051,6 +1052,7 @@ function finalizeObservation() {
   state.lastSubmitted = trimmed;
   const direct = buildSuggestions(trimmed);
   state.directSuggestions = direct;
+  syncLoadedMatchProvenance(direct, trimmed);
   const hasDirect = hasSuggestions(direct);
   state.fallback = createFallbackState();
   state.fallback.shouldPrompt = !hasDirect;
@@ -1196,12 +1198,12 @@ function renderSuggestions() {
         message += ` Showing the top ${cueLabels.length} groups to keep things focused.`;
       }
       if (slotSupportSummary) {
-        message += `. They reinforce your ${slotSupportSummary} in the observation formula.`;
+        message += ` They reinforce your ${slotSupportSummary} in the observation formula.`;
         if (slotGapSummary) {
           message += ` You're still missing the ${slotGapSummary}.`;
         }
       } else if (slotGapSummary) {
-        message += `. Focus next on the ${slotGapSummary}.`;
+        message += ` Focus next on the ${slotGapSummary}.`;
       }
       whyHost.textContent = message;
     } else if (!hasDirect && state.fallback.message && !state.fallback.shouldPrompt && !state.fallback.running) {
@@ -1840,6 +1842,33 @@ function hasSuggestions(set) {
   return feelingCount + needCount > 0;
 }
 
+function syncLoadedMatchProvenance(suggestions, source) {
+  const normalizedSource = typeof source === 'string' ? source.trim() : '';
+  const moduleCount = Array.isArray(suggestions?.modules) ? suggestions.modules.length : 0;
+  const exactTotal = moduleCount || Math.max(Number(suggestions?.total) || 0, 0);
+  const sameSource = state.detectionSource === normalizedSource;
+  const fallbackQueue = sameSource && Array.isArray(state.detectionFallbackQueue)
+    ? state.detectionFallbackQueue
+    : [];
+
+  state.detectionSource = normalizedSource;
+  state.detectionMatches = exactTotal;
+  state.detectionMatchLimit = Math.max(exactTotal, 1);
+
+  if (exactTotal > 0) {
+    state.detectionStatus = 'match';
+    state.detectionFallbacks = 0;
+    state.detectionFallbackQueue = [];
+  } else {
+    state.detectionFallbackQueue = fallbackQueue;
+    state.detectionFallbacks = fallbackQueue.length;
+    state.detectionNearLimit = Math.max(fallbackQueue.length, DETECTION_NEAR_LIMIT);
+    state.detectionStatus = fallbackQueue.length ? 'near' : 'none';
+  }
+
+  renderDetectionSummary();
+}
+
 function handlePrimaryAction() {
   const submitButton = document.getElementById('observation-submit');
   if (submitButton?.dataset?.action === 'done') {
@@ -1878,45 +1907,55 @@ function handleSubmit() {
 
 function renderJournalConversion() {
   const convertButton = document.getElementById('observation-journal-convert');
-  if (!convertButton) {
+  const handoff = document.getElementById('observation-journal-handoff');
+  if (!convertButton || !handoff) {
     return;
   }
   const hasSubmission = Boolean((state.lastSubmitted || '').trim());
   const isReady = hasSubmission && state.validityStatus === 'valid';
-  convertButton.hidden = !isReady;
+  handoff.hidden = !isReady;
+  handoff.ariaHidden = isReady ? 'false' : 'true';
   convertButton.tabIndex = isReady ? 0 : -1;
-  convertButton.ariaHidden = isReady ? 'false' : 'true';
   convertButton.disabled = !isReady;
 }
 
-function convertObservationToJournal() {
+async function convertObservationToJournal() {
   const convertButton = document.getElementById('observation-journal-convert');
   const notes = (state.lastSubmitted || '').trim();
   if (!convertButton || !notes) {
     return;
   }
   convertButton.disabled = true;
-  convertButton.textContent = 'Opening journal…';
-
-  const journalButton = document.querySelector('[data-support-journal-open]');
+  convertButton.textContent = 'Preparing journal…';
   blurObservationEditor();
-  const applyNotesToJournal = () => {
-    const notesField = document.querySelector('[data-journal-notes]');
-    if (notesField instanceof HTMLTextAreaElement) {
-      notesField.value = notes;
-      notesField.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-  };
 
-  applyNotesToJournal();
-  if (journalButton instanceof HTMLElement) {
+  try {
+    await import('./journal/module.js');
+    const journalButton = document.querySelector('[data-support-journal-open][data-journal-overlay-bound="true"]')
+      || document.querySelector('[data-support-journal-open]');
+    if (!(journalButton instanceof HTMLElement)) {
+      throw new Error('Journal opener is unavailable');
+    }
+
     journalButton.click();
-  }
-  window.setTimeout(() => {
-    applyNotesToJournal();
-    convertButton.textContent = 'Convert into journal entry';
+    const notesField = document.querySelector('[data-journal-notes]');
+    if (!(notesField instanceof HTMLTextAreaElement)) {
+      throw new Error('Journal form did not initialize');
+    }
+
+    notesField.value = notes;
+    notesField.dispatchEvent(new Event('input', { bubbles: true }));
+  } catch (error) {
+    console.warn('Unable to prepare Journal from Observation', error);
+    const journalLayer = document.querySelector('[data-support-journal-layer]');
+    if (journalLayer?.getAttribute('data-state') === 'open') {
+      document.querySelector('[data-support-journal-close]')?.click();
+    }
+    setValidityStatus('error', 'Journal unavailable. Refresh and try again.');
+  } finally {
+    convertButton.textContent = 'Open in Journal';
     convertButton.disabled = false;
-  }, 200);
+  }
 }
 
 function handleClear() {
@@ -2255,6 +2294,12 @@ function renderDetectionSummary() {
     return;
   }
 
+  const isResults = state.mode === 'results';
+  summary.hidden = !isResults;
+  if (!isResults) {
+    return;
+  }
+
   const status = state.detectionStatus || 'loading';
   const flagged = Boolean(state.detectionHasFlagged);
   const matchLimit = Math.max(Number(state.detectionMatchLimit) || DETECTION_MATCH_LIMIT, 1);
@@ -2265,8 +2310,14 @@ function renderDetectionSummary() {
   let nearCount = 0;
   const allowCounts = status !== 'loading' && status !== 'short' && status !== 'idle';
   if (allowCounts) {
-    exactCount = Math.min(Number(state.detectionMatches) || 0, matchLimit);
-    nearCount = Math.min(Number(state.detectionFallbacks) || 0, nearLimit || Number(state.detectionFallbacks) || 0);
+    const loadedExactTotal = Math.max(Number(state.directSuggestions?.total) || 0, 0);
+    const loadedNearTotal = state.fallback?.active && Array.isArray(state.fallback.queue)
+      ? state.fallback.queue.length
+      : Math.max(Number(state.detectionFallbacks) || 0, 0);
+    exactCount = Math.min(loadedExactTotal, matchLimit);
+    nearCount = exactCount
+      ? 0
+      : Math.min(loadedNearTotal, nearLimit || loadedNearTotal);
   }
 
   if (exactValue) {

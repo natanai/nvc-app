@@ -281,6 +281,7 @@ async function runBootstrapAssertions(htmlPath) {
       enabled: enabledNavIds,
     }),
   );
+  localStorage.setItem('allneeds.navMore.v2', '1');
   const sessionStorage = new FakeStorage();
 
   const sandbox = {

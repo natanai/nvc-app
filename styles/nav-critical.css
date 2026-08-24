@@ -482,7 +482,10 @@ button.site-nav__magnet {
   }
 
   .site-nav[data-nav-expanded='true'] .site-nav__board {
-    min-height: clamp(12rem, 45vw, 12rem);
+    /* Supplemental mobile navigation needs a real canvas, not another
+       compressed row. Scale with the phone width so normalized user
+       positions restore against the same usable aspect ratio after reload. */
+    min-height: clamp(20rem, 105vw, 23rem);
     padding-block-end: 0.75rem;
   }
 

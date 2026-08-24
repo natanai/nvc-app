@@ -57,6 +57,16 @@ assert.equal(
   'node scripts/build-data.mjs',
   'build:data must invoke the canonical compiler directly.',
 );
+assert.match(
+  packageJson.scripts.build,
+  /build:data.*build:observation-cues.*build:pages/,
+  'the canonical full build must verify observation cue artifacts between data and page generation.',
+);
+assert.match(
+  packageJson.scripts['build:observation-cues'],
+  /generateNeedObservationBlueprint\.mjs.*buildObservationCueLibrary\.mjs.*calculateObservationFeelingCoverage\.mjs/,
+  'observation cue generation must refresh its blueprint, compiled artifacts, and detector statistics together.',
+);
 assert.equal(existsSync(join(root, 'scripts/build-data-safe.mjs')), false, 'data safe-builder must be retired.');
 assert.equal(
   existsSync(join(root, 'scripts/finalize-generated-data.mjs')),
@@ -65,9 +75,47 @@ assert.equal(
 );
 
 const buildDataSource = readFileSync(join(root, 'scripts/build-data.mjs'), 'utf8');
+assert.match(
+  buildDataSource,
+  /fileURLToPath\(new URL\('\.\.', import\.meta\.url\)\)/,
+  'the canonical data compiler must resolve its repository root as a filesystem path on every supported OS.',
+);
+assert.doesNotMatch(
+  buildDataSource,
+  /new URL\('\.\.', import\.meta\.url\)\.pathname/,
+  'URL pathname strings are not valid Windows filesystem roots.',
+);
 assert.match(buildDataSource, /reverse-inference-overrides\.json/);
 assert.match(buildDataSource, /applyReverseInferenceOverrides/);
 assert.match(buildDataSource, /PAGE_TO_MODEL_KEY/);
+
+const cueCompilerSource = readFileSync(join(root, 'scripts/buildObservationCueLibrary.mjs'), 'utf8');
+assert.match(
+  cueCompilerSource,
+  /fileURLToPath\(import\.meta\.url\) === resolve\(process\.argv\[1\]\)/,
+  'the observation cue compiler entrypoint must run on Windows and POSIX paths.',
+);
+
+const citationExtractorSource = readFileSync(join(root, 'scripts/extract-citations.mjs'), 'utf8');
+assert.match(
+  citationExtractorSource,
+  /path\.relative\(REPO_ROOT, file\)/,
+  'citation extraction must derive source labels relative to the repository root.',
+);
+assert.match(
+  citationExtractorSource,
+  /relativeFile\.split\(path\.sep\)\.join\("\/"\)/,
+  'citation source labels must use portable repository separators.',
+);
+
+const citationRecords = readJson('_evidence/citations.json');
+assert.ok(citationRecords.length > 0, 'citation evidence must not be empty.');
+for (const record of citationRecords) {
+  assert.equal(typeof record.file, 'string', 'citation evidence must identify its repository source.');
+  assert.doesNotMatch(record.file, /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/, 'citation evidence must not expose an absolute path.');
+  assert.doesNotMatch(record.file, /\\/, 'citation evidence paths must use forward slashes.');
+  assert.match(record.file, /^needs\//, 'citation evidence sources must remain inside the scanned needs tree.');
+}
 
 const feelingsCsv = readFileSync(join(root, 'data/Feelings.csv'), 'utf8').replace(/^\ufeff/, '');
 const cueRows = parseCsv(feelingsCsv).filter(
