@@ -99,6 +99,77 @@ if (staleContrastAttribute.length) {
   issues.push(`Found deprecated data-theme-contrast attribute in: ${staleContrastAttribute.join(', ')}`);
 }
 
+const presetCsv = readFileSync(join(rootDir, 'data', 'color-palettes.csv'), 'utf8').trim();
+const [presetHeaderLine, ...presetLines] = presetCsv.split(/\r?\n/);
+const presetHeaders = presetHeaderLine.split(',').map((value) => value.trim());
+const presetRows = presetLines
+  .filter((line) => line.trim())
+  .map((line) => {
+    const values = line.split(',');
+    return Object.fromEntries(presetHeaders.map((header, index) => [header, (values[index] || '').trim()]));
+  });
+
+const expectedPresetNames = ['Default', 'Refrigerator', 'Pixel Art', 'Matrix', 'Sticker Book'];
+const actualPresetNames = presetRows.map((row) => row.name);
+if (JSON.stringify(actualPresetNames) !== JSON.stringify(expectedPresetNames)) {
+  issues.push(
+    `Customizer presets must be exactly ${expectedPresetNames.join(', ')} in that order; found ${actualPresetNames.join(', ')}.`,
+  );
+}
+
+if (!presetHeaders.includes('roundness')) {
+  issues.push('Customizer preset source must include the roundness column.');
+}
+
+const colorKeys = ['plum', 'lavender', 'ink', 'inkSoft', 'rose', 'mint', 'gold', 'sky', 'outline'];
+const defaultPreset = presetRows.find((row) => row.name === 'Default');
+if (!defaultPreset) {
+  issues.push('Customizer presets must include Default.');
+} else {
+  const authoredDefaultColors = colorKeys.filter((key) => defaultPreset[key]);
+  if (authoredDefaultColors.length) {
+    issues.push(
+      `Default must inherit the canonical site palette rather than duplicate it in color-palettes.csv; found values for ${authoredDefaultColors.join(', ')}.`,
+    );
+  }
+  if (defaultPreset.roundness !== '100') {
+    issues.push(`Default preset roundness must remain 100; found ${defaultPreset.roundness || 'blank'}.`);
+  }
+}
+
+for (const row of presetRows.filter((preset) => preset.name !== 'Default')) {
+  for (const key of colorKeys) {
+    if (!/^#[0-9A-F]{6}$/i.test(row[key] || '')) {
+      issues.push(`${row.name || 'Unnamed preset'} must provide a six-digit hex value for ${key}.`);
+    }
+  }
+  const roundness = Number(row.roundness);
+  if (!Number.isInteger(roundness) || roundness < 0 || roundness > 200) {
+    issues.push(`${row.name || 'Unnamed preset'} must provide roundness from 0 through 200.`);
+  }
+}
+
+const refrigeratorPreset = presetRows.find((row) => row.name === 'Refrigerator');
+if (
+  !refrigeratorPreset ||
+  refrigeratorPreset.roundness !== '0' ||
+  refrigeratorPreset.lavender.toUpperCase() !== '#FFFFFF' ||
+  refrigeratorPreset.ink.toUpperCase() !== '#111111'
+) {
+  issues.push('Refrigerator must stay a square, white-panel, dark-ink word-magnet preset.');
+}
+
+const runtimeSource = readFileSync(join(rootDir, 'scripts', 'inventory.js'), 'utf8');
+if (!runtimeSource.includes("const roundnessIndex = headerMap.get('roundness');")) {
+  issues.push('Customizer runtime must read preset roundness from the canonical color-palettes.csv source.');
+}
+if (!runtimeSource.includes('setCornerRoundness(selectedPreset.roundness, { persist: false });')) {
+  issues.push('Customizer runtime must apply a selected preset\'s authored corner roundness.');
+}
+if (!runtimeSource.includes('const nextColors = { ...paletteState.defaultColors };')) {
+  issues.push('Default preset fallback must continue to inherit the canonical site palette.');
+}
+
 if (issues.length) {
   const message = issues.join('\n');
   throw new Error(`Customizer integrity check failed:\n${message}`);
@@ -106,5 +177,5 @@ if (issues.length) {
 
 console.log(
   `Customizer integrity check passed for ${htmlFiles.length - standaloneHtmlFiles.size} app-shell HTML files ` +
-    `(${standaloneHtmlFiles.size} explicit standalone tool excluded).`,
+    `(${standaloneHtmlFiles.size} explicit standalone tool excluded) and ${presetRows.length} canonical presets.`,
 );

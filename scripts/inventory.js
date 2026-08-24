@@ -2547,7 +2547,19 @@ function buildPaletteUi() {
 
     const selectedPreset = paletteState.presets.find((preset) => preset.name === selectedName);
     if (selectedPreset) {
-      applyColors(selectedPreset.colors, { presetName: selectedPreset.name, replace: true });
+      applyColors(selectedPreset.colors, {
+        presetName: selectedPreset.name,
+        replace: true,
+        persist: false,
+      });
+      if (typeof selectedPreset.roundness === 'number' && Number.isFinite(selectedPreset.roundness)) {
+        setCornerRoundness(selectedPreset.roundness, { persist: false });
+      }
+      saveTheme({
+        values: paletteState.currentColors,
+        preset: selectedPreset.name,
+        roundness: paletteState.cornerRoundness,
+      });
     }
   });
 
@@ -3567,6 +3579,7 @@ function parseColorPaletteCsv(text) {
   });
 
   const nameIndex = headerMap.get('name');
+  const roundnessIndex = headerMap.get('roundness');
   if (typeof nameIndex !== 'number') {
     return [];
   }
@@ -3590,9 +3603,18 @@ function parseColorPaletteCsv(text) {
       }
     });
 
+    const rawRoundness =
+      typeof roundnessIndex === 'number' ? cells[roundnessIndex]?.trim() : '';
+    const parsedRoundness = rawRoundness ? Number.parseFloat(rawRoundness) : Number.NaN;
+    const roundness = Number.isFinite(parsedRoundness) ? clampRoundness(parsedRoundness) : null;
+
     const sanitized = sanitizeColorsMap(colors);
-    if (Object.keys(sanitized).length) {
-      presets.push({ name: rawName, colors: sanitized });
+    if (Object.keys(sanitized).length || roundness !== null) {
+      presets.push({
+        name: rawName,
+        colors: sanitized,
+        ...(roundness !== null ? { roundness } : {}),
+      });
     }
   });
 
