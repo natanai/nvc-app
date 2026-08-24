@@ -74,6 +74,13 @@ test('Equivalent Observation disclosures use one chevron language on phones', as
   assert.ok(guide.includes('observation-guide__toggle-icon" aria-hidden="true">›</span>'));
   assert.ok(css.includes('.observation-editor__example-toggle::after'));
   assert.ok(css.includes('.observation-editor__recipe-toggle::after'));
+  assert.match(
+    html,
+    /<button[\s\S]*?class="observation-editor__recipe-toggle"[\s\S]*?<span class="observation-editor__recipe-heading">[\s\S]*?Observation recipe[\s\S]*?<\/button>/,
+  );
+  assert.ok(css.includes('grid-template-columns: minmax(0, 1fr) 52px;'));
+  assert.ok(css.includes('grid-template-columns: minmax(0, 1fr) 44px;'));
+  assert.ok(css.includes('width: 100%;'));
   assert.ok(!css.includes("content: '<';"));
   assert.ok(css.includes('.observation-suggestions__why-toggle::after'));
   assert.ok(css.includes('.observation-guide__mobile-summary::after'));

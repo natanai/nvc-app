@@ -2308,7 +2308,7 @@
   }
 
   .observation-editor__recipe {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0;
     padding: 0;
     border-style: solid;
@@ -2328,17 +2328,26 @@
   }
 
   .observation-editor__recipe-toggle {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 52px;
     align-items: center;
-    justify-content: center;
-    min-width: 52px;
+    width: 100%;
+    min-width: 0;
     min-height: 58px;
     padding: 0;
     border: 0;
     background: transparent;
+    text-align: left;
     cursor: pointer;
+  }
+
+  .observation-editor__recipe-toggle::after {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
   }
 
   .observation-editor__recipe-body {
@@ -2960,7 +2969,7 @@
     min-height: 52px;
     padding: 0;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 44px;
+    grid-template-columns: minmax(0, 1fr);
     gap: 0;
     border: 1px solid var(--obs-group-border);
     border-radius: var(--radius-xl);
@@ -2994,14 +3003,16 @@
   }
 
   #main.observations-page .observation-editor__recipe-toggle {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
     align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 52px;
-    min-width: 44px;
+    justify-content: stretch;
+    justify-self: stretch;
+    width: 100%;
+    height: auto;
+    min-width: 0;
     min-height: 44px;
     margin: 0;
     padding: 0;
@@ -3009,6 +3020,14 @@
     border-radius: 0;
     background: transparent;
     box-shadow: none;
+    text-align: left;
+  }
+
+  #main.observations-page .observation-editor__recipe-toggle::after {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-self: center;
   }
 
   #main.observations-page .observation-editor__recipe-body {
